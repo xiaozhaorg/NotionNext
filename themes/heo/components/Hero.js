@@ -16,21 +16,7 @@ import CONFIG from '../config'
  * @returns
  */
 const Hero = props => {
-  const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
-  return (
-    <div
-      id='hero-wrapper'
-      className='recent-top-post-group w-full overflow-hidden select-none px-5 mb-4'>
-      <div
-        id='hero'
-        style={{ zIndex: 1 }}
-        className={`${HEO_HERO_REVERSE ? 'xl:flex-row-reverse' : ''}
-           recent-post-top rounded-[12px] 2xl:px-5 recent-top-post-group max-w-[86rem] overflow-x-scroll w-full mx-auto flex-row flex-nowrap flex relative`}>
-        {/* 置顶文章组 */}
-        <TopGroup {...props} />
-      </div>
-    </div>
-  )
+  return null
 }
 
 /**
