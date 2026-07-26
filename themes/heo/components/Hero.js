@@ -26,13 +26,7 @@ const Hero = props => {
         style={{ zIndex: 1 }}
         className={`${HEO_HERO_REVERSE ? 'xl:flex-row-reverse' : ''}
            recent-post-top rounded-[12px] 2xl:px-5 recent-top-post-group max-w-[86rem] overflow-x-scroll w-full mx-auto flex-row flex-nowrap flex relative`}>
-        {/* 左侧banner组 */}
-        <BannerGroup {...props} />
-
-        {/* 中间留白 */}
-        <div className='px-1.5 h-full'></div>
-
-        {/* 右侧置顶文章组 */}
+        {/* 置顶文章组 */}
         <TopGroup {...props} />
       </div>
     </div>
