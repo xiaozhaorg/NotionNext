@@ -19,7 +19,7 @@ const LatestPostsGroup = ({ latestPosts, siteInfo }) => {
       {latestPosts.map(post => {
         const headerImage = post?.pageCoverThumbnail
           ? post.pageCoverThumbnail
-          : siteInfo?.pageCover
+          : 'https://bing.biturl.top/?resolution=1920&format=image'
 
         return (
           <SmartLink

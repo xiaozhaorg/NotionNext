@@ -29,7 +29,15 @@ const BlogPostArchive = ({ posts = [], archiveTitle, siteInfo }) => {
               !post.pageCoverThumbnail &&
               siteConfig('HEO_POST_LIST_COVER_DEFAULT', null, CONFIG)
             ) {
-              post.pageCoverThumbnail = siteInfo?.pageCover
+              const randomImages = [
+                'https://bing.biturl.top/?resolution=1920&format=image',
+                'https://picsum.photos/800/600?random=' + post.id,
+                'https://source.unsplash.com/random/800x600?nature,tech,city',
+                'https://source.unsplash.com/random/800x600?abstract,code,space',
+                'https://source.unsplash.com/random/800x600?ocean,mountain,forest'
+              ]
+              const index = post.id ? parseInt(post.id.slice(-4), 16) % randomImages.length : 0
+              post.pageCoverThumbnail = randomImages[index]
             }
             const showPageCover =
               siteConfig('HEO_POST_LIST_COVER', null, CONFIG) &&

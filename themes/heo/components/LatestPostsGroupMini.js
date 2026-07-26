@@ -30,7 +30,7 @@ export default function LatestPostsGroupMini({ latestPosts, siteInfo }) {
           currentPath === `${SUB_PATH}/${post.slug}`
         const headerImage = post?.pageCoverThumbnail
           ? post.pageCoverThumbnail
-          : siteInfo?.pageCover
+          : 'https://bing.biturl.top/?resolution=1920&format=image'
 
         return (
           <SmartLink
