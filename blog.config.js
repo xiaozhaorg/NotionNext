@@ -17,7 +17,7 @@ const BLOG = {
   APPEARANCE_DARK_TIME: process.env.NEXT_PUBLIC_APPEARANCE_DARK_TIME || [18, 6], // 夜间模式起至时间，false时关闭根据时间自动切换夜间模式
 
   TITLE: process.env.NEXT_PUBLIC_TITLE || '小吒博客', // 网站标题
-  AUTHOR: process.env.NEXT_PUBLIC_AUTHOR || '小吒', // 博主昵称
+  AUTHOR: process.env.NEXT_PUBLIC_AUTHOR || '小吒博客', // 博主昵称
   BIO: process.env.NEXT_PUBLIC_BIO || '一个除了域名不多花一分钱的个人博客', // 作者简介
   LINK: process.env.NEXT_PUBLIC_LINK || 'https://xiaozha.org', // 网站地址
   KEYWORDS: process.env.NEXT_PUBLIC_KEYWORD || '技术博客,AI工具,云计算,自托管,开源应用,Docker,Cloudflare,NAS,编程开发,免费资源,个人博客', // 网站关键词 英文逗号隔开
