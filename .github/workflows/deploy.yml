@@ -1,8 +1,8 @@
 name: Deploy to Cloudflare Pages
 
 on:
-  push:
-    branches: [main]
+  # 部署走 Cloudflare Pages Git 集成（push 到 main 自动触发）
+  # 此 workflow 仅作备选手动部署入口，需先配置 CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID Secrets
   workflow_dispatch:
 
 permissions:
@@ -33,6 +33,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: xiaozha-blog
+          projectName: blog
           directory: out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
