@@ -29,7 +29,7 @@ ogImage: "https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea
 --
 -
 
-### 一、肖恩AI 是什么?肖恩AI(官网 [https://free.supxh.xin](https://free.supxh.xin))是一个面向中文用户的公益大模型 API 中转平台。
+### 一、肖恩AI 是什么?肖恩AI(官网 [https://free.supxh.xin](https://free.supxh.xin?ic=019f071f-eb85-7351-b410-3084056207f8))是一个面向中文用户的公益大模型 API 中转平台。
 
 它聚合了数百款主流大模型,提供统一的 API 接入地址,你用一个 sk
 - 开头的密钥就能调用所有模型。
@@ -49,7 +49,7 @@ ogImage: "https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea
 
 方式 1:新用户注册送 5000 额度访问注册链接,使用 QQ 邮箱即可注册:
 
-[free.supxh.xinhttps://free.supxh.xin/register?code=LZ25QS](https://free.supxh.xin/register?code=LZ25QS)
+[free.supxh.xinhttps://free.supxh.xin/register?code=LZ25QS&ic=019f071f-eb85-7351-b410-3084056207f8](https://free.supxh.xin/register?code=LZ25QS&ic=019f071f-eb85-7351-b410-3084056207f8)
 
 填写信息:
 
@@ -234,7 +234,7 @@ QQ 邮箱即可
 - 处理敏感数据(用户隐私、商业机密)
 - 需要长期稳定调用,不容许中断🔗
 
-本文邀请链接: [https://free.supxh.xin/register?code=LZ25QS](https://free.supxh.xin/register?code=LZ25QS)
+本文邀请链接: [https://free.supxh.xin/register?code=LZ25QS&ic=019f071f-eb85-7351-b410-3084056207f8](https://free.supxh.xin/register?code=LZ25QS&ic=019f071f-eb85-7351-b410-3084056207f8)
 通过此链接注册,你和我各得 2000 额度,等于互相帮助。
 
 感谢支持!
