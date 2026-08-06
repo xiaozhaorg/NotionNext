@@ -1,0 +1,251 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import RightSidebar from "@/components/RightSidebar.astro";
+import Footer from "@/components/Footer.astro";
+import Giscus from "@/components/Giscus.astro";
+import { SITE } from "@/config";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const url = `/${SITE.post.urlPrefix}/${post.id}`;
+---
+<Layout
+  title={post.data.title.includes(SITE.title) ? post.data.title : `${post.data.title} | ${SITE.title}`}
+  description={post.data.description}
+  image={post.data.ogImage}
+  type="article"
+  publishedTime={post.data.pubDatetime}
+  tags={post.data.tags}
+>
+  <Header />
+  <div class="layout">
+    <main>
+      <article class="post" data-pagefind-body data-pagefind-meta="title:{post.data.title};tags:{post.data.tags.join(',')}">
+        <header class="post-header">
+          <div class="breadcrumb">
+            <a href="/">首页</a>
+            <span class="sep">/</span>
+            <span>{post.data.title}</span>
+          </div>
+          <h1 data-pagefind-meta="title">{post.data.title}</h1>
+          <div class="post-meta">
+            <span class="meta-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <time datetime={post.data.pubDatetime.toISOString()}>
+                {post.data.pubDatetime.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+              </time>
+            </span>
+            <span class="meta-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>{post.data.author}</span>
+            </span>
+            {post.data.tags.length > 0 && (
+              <span class="meta-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                <span>{post.data.tags.length} 个标签</span>
+              </span>
+            )}
+          </div>
+          {post.data.ogImage && (
+            <img src={post.data.ogImage} alt={post.data.title} class="post-cover" loading="lazy" />
+          )}
+        </header>
+        <div class="prose">
+          <Content />
+        </div>
+        {post.data.tags.length > 0 && (
+          <div class="post-tags">
+            {post.data.tags.map((tag) => (
+              <a href={`/tags/${tag}`} class="tag-item">{tag}</a>
+            ))}
+          </div>
+        )}
+        <Giscus />
+      </article>
+    </main>
+    <RightSidebar />
+  </div>
+  <Footer />
+</Layout>
+
+<style>
+  .post {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow-xs);
+  }
+  .breadcrumb {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .breadcrumb a {
+    color: var(--color-text-muted);
+    transition: color var(--transition-base);
+  }
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+  .breadcrumb .sep {
+    color: var(--color-text-disabled);
+  }
+  .post-header h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+  .post-meta {
+    color: var(--color-text-muted);
+    font-size: 0.825rem;
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .meta-item svg {
+    color: var(--color-text-disabled);
+  }
+  .post-cover {
+    width: 100%;
+    border-radius: var(--radius-md);
+    margin: 0 0 2rem;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+    box-shadow: var(--shadow-sm);
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .prose :global(h2) {
+    font-size: 1.4rem;
+    margin: 2.2rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-border);
+    font-weight: 700;
+  }
+  .prose :global(h3) {
+    font-size: 1.2rem;
+    margin: 1.8rem 0 0.8rem;
+    font-weight: 600;
+  }
+  .prose :global(h4) {
+    font-size: 1.05rem;
+    margin: 1.4rem 0 0.6rem;
+    font-weight: 600;
+  }
+  .prose :global(p) {
+    line-height: 1.8;
+    margin: 0.9rem 0;
+  }
+  .prose :global(pre) {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1.2rem 0;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+  .prose :global(code) {
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    color: var(--color-primary);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  .prose :global(pre code) {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+  }
+  .prose :global(blockquote) {
+    margin: 1.2rem 0;
+    padding: 0.6rem 1rem;
+    border-left: 4px solid var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+    color: var(--color-text-muted);
+    border-radius: 0 8px 8px 0;
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+  .prose :global(table) {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: 0.9rem;
+  }
+  .prose :global(th) {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    font-weight: 600;
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    border: 1px solid var(--color-border);
+  }
+  .prose :global(td) {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--color-border);
+  }
+  .prose :global(tr:nth-child(even) td) {
+    background: color-mix(in srgb, var(--color-text) 2%, transparent);
+  }
+  .prose :global(a) {
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--color-primary);
+  }
+  .prose :global(a:hover) {
+    border-bottom-style: solid;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.5rem;
+    line-height: 1.9;
+    margin: 0.9rem 0;
+  }
+  .prose :global(ul li) { list-style: disc; }
+  .prose :global(ol li) { list-style: decimal; }
+  .prose :global(li + li) { margin-top: 0.3rem; }
+  .prose :global(hr) {
+    border: none;
+    border-top: 1px dashed var(--color-border);
+    margin: 2rem 0;
+  }
+</style>

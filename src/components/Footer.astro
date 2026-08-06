@@ -1,0 +1,225 @@
+---
+import { SITE } from "@/config";
+const year = new Date().getFullYear();
+const copyright = SITE.since && SITE.since < year ? `${SITE.since}–${year}` : year;
+---
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      {/* 站点信息 */}
+      <div class="footer-col footer-brand">
+        <div class="footer-logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+              <defs>
+                <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#4f6df5" />
+                  <stop offset="100%" stop-color="#8b5cf6" />
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="28" height="28" rx="8" fill="url(#footerLogoGrad)" />
+              <path d="M10 12h12M10 16h8M10 20h12" stroke="#fff" stroke-width="2.2" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="logo-text">{SITE.title}</span>
+        </div>
+        <p class="footer-slogan">{SITE.description}</p>
+        <div class="footer-socials">
+          <a href={SITE.social.github} target="_blank" rel="noopener" aria-label="GitHub" class="social-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+          </a>
+          <a href={SITE.social.rss} aria-label="RSS" class="social-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248-1.796 0-3.252-1.454-3.252-3.248 0-1.794 1.456-3.248 3.252-3.248 1.795.001 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.121 8.586 19.171 19.188h4.829c-.05-13.25-10.753-23.954-24-24v4.812z" />
+            </svg>
+          </a>
+          <a href="mailto:hi@xiaozha.org" aria-label="Email" class="social-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 7-10 5L2 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      {/* 快速链接 */}
+      <div class="footer-col">
+        <h4 class="footer-title">导航</h4>
+        <ul class="footer-list">
+          <li><a href="/">首页</a></li>
+          <li><a href="/tags/">标签</a></li>
+          <li><a href="/tags/">归档</a></li>
+          <li><a href="/about/">关于</a></li>
+        </ul>
+      </div>
+
+      {/* 资源 */}
+      <div class="footer-col">
+        <h4 class="footer-title">资源</h4>
+        <ul class="footer-list">
+          <li><a href="/rss.xml">RSS 订阅</a></li>
+          <li><a href="/sitemap-index.xml">站点地图</a></li>
+          <li><a href={SITE.social.github} target="_blank" rel="noopener">GitHub 源码</a></li>
+        </ul>
+      </div>
+
+      {/* 友链 */}
+      <div class="footer-col">
+        <h4 class="footer-title">友链</h4>
+        <ul class="footer-list">
+          <li><a href="https://fx123.cc" target="_blank" rel="noopener">fx123.cc</a></li>
+          <li><a href="https://atomcode.atomgit.com/" target="_blank" rel="noopener">AtomCode</a></li>
+          <li><a href="https://monkeycode-ai.com/" target="_blank" rel="noopener">MonkeyCode</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">
+        © {copyright} <a href={SITE.url}>{SITE.author}</a>. All rights reserved.
+      </p>
+      <p class="powered-by">
+        Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> ·
+        Hosted on <a href="https://pages.cloudflare.com" target="_blank" rel="noopener">Cloudflare Pages</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 2rem;
+    background: var(--color-bg-elevated);
+    border-top: 1px solid var(--color-border);
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 1.5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* 品牌列 */
+  .footer-brand {
+    max-width: 320px;
+  }
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .logo-mark {
+    display: flex;
+    filter: drop-shadow(0 2px 6px rgba(var(--color-primary-rgb), 0.3));
+  }
+  .logo-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .footer-slogan {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin: 0 0 1rem;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .social-btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    transition: all var(--transition-base);
+  }
+  .social-btn:hover {
+    color: #fff;
+    background: var(--gradient-primary);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary);
+  }
+
+  /* 链接列 */
+  .footer-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.875rem;
+  }
+  .footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .footer-list a {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    transition: color var(--transition-base);
+  }
+  .footer-list a:hover {
+    color: var(--color-primary);
+  }
+
+  /* 底部 */
+  .footer-bottom {
+    padding-top: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .copyright,
+  .powered-by {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  .copyright a,
+  .powered-by a {
+    color: var(--color-text-secondary);
+    transition: color var(--transition-base);
+  }
+  .copyright a:hover,
+  .powered-by a:hover {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .footer-brand {
+      grid-column: 1 / -1;
+      max-width: none;
+    }
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

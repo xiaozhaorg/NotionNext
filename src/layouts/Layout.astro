@@ -1,0 +1,301 @@
+---
+import { SITE } from "@/config";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  tags?: string[];
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  image,
+  type = "website",
+  publishedTime,
+  tags,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image
+  ? new URL(image, Astro.site)
+  : new URL("/og-default.svg", Astro.site);
+const keywords = SITE.keywords.join(", ");
+
+// JSON-LD 结构化数据
+const baseSchema = {
+  "@context": "https://schema.org",
+};
+const schemas: Record<string, unknown>[] = [];
+
+// WebSite schema（所有页共享）
+schemas.push({
+  ...baseSchema,
+  "@type": "WebSite",
+  name: SITE.title,
+  url: SITE.url,
+  description: SITE.description,
+  inLanguage: SITE.lang,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE.url}/#q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+});
+
+if (type === "article") {
+  schemas.push({
+    ...baseSchema,
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    image: ogImage.toString(),
+    datePublished: publishedTime?.toISOString(),
+    dateModified: publishedTime?.toISOString(),
+    author: {
+      "@type": "Person",
+      name: SITE.author,
+      url: SITE.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.title,
+      url: SITE.url,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalURL.toString(),
+    },
+    keywords: tags?.join(", "),
+    inLanguage: SITE.lang,
+  });
+}
+---
+<!DOCTYPE html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- TDK -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content={SITE.author} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:site" content="@xiaozhaorg" />
+
+    <!-- RSS / Sitemap -->
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    <!-- JSON-LD 结构化数据 -->
+    <script
+      type="application/ld+json"
+      set:html={schemas.map((s) => JSON.stringify(s)).join("")}
+      is:inline
+    />
+
+    <!-- 暗色模式：防闪烁，提前设置 class -->
+    <script is:inline>
+      (function () {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const isDark = stored ? stored === "dark" : prefersDark;
+          document.documentElement.classList.toggle("dark", isDark);
+        } catch (_) {}
+      })();
+    </script>
+
+    <!-- 51la 站点统计 -->
+    {SITE.analytics.laId && (
+      <>
+        <script is:inline charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+        <script is:inline define:vars={{ laId: SITE.analytics.laId, laCk: SITE.analytics.laCk }}>
+          window.LA = window.LA || {};
+          window.addEventListener("load", function () {
+            try { LA.init({ id: laId, ck: laCk }); } catch (_) {}
+          });
+        </script>
+      </>
+    )}
+
+    <!-- Cloudflare Web Analytics -->
+    {SITE.analytics.cloudflareToken && (
+      <script defer is:inline
+        src={`https://static.cloudflareinsights.com/beacon.min.js`}
+        data-cf-beacon={`{"token": "${SITE.analytics.cloudflareToken}"}`}>
+      </script>
+    )}
+
+    <!-- Pagefind 静态搜索（astro-pagefind 集成会自动生成 /pagefind 资源） -->
+    <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Pagefind UI 初始化：统一由 [data-search-trigger] 触发 -->
+    <script is:inline>
+      (function () {
+        function initPagefind() {
+          if (!window.PagefindUI) return;
+
+          const wrap = document.getElementById("pagefind-search-ui");
+          if (!wrap) return;
+
+          // 用 /pagefind 资源初始化；保持主题跟随站点暗/亮模式
+          new PagefindUI({
+            element: "#pagefind-search-ui",
+            showSubResults: true,
+            excerptLength: 40,
+            showImages: false,
+            baseUrl: "/",
+          });
+
+          function openSearch() {
+            wrap.classList.add("active");
+            // 聚焦 Pagefind 内部输入框
+            setTimeout(function () {
+              const pfInput = document.querySelector(".pagefind-ui__search-input");
+              if (pfInput) {
+                pfInput.focus();
+                pfInput.select();
+              }
+            }, 60);
+          }
+
+          function closeSearch() {
+            wrap.classList.remove("active");
+          }
+
+          // 所有带 data-search-trigger 的元素：点击即打开搜索
+          document.querySelectorAll("[data-search-trigger]").forEach(function (el) {
+            el.addEventListener("click", function (e) {
+              e.preventDefault();
+              openSearch();
+            });
+          });
+
+          // 点击 UI 外部关闭（避开触发器自身）
+          document.addEventListener("click", function (e) {
+            if (
+              wrap.classList.contains("active") &&
+              !wrap.contains(e.target) &&
+              !e.target.closest("[data-search-trigger]")
+            ) {
+              closeSearch();
+            }
+          });
+
+          // 快捷键：Ctrl/Cmd + K 打开，ESC 关闭
+          document.addEventListener("keydown", function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+              e.preventDefault();
+              openSearch();
+            }
+            if (e.key === "Escape") {
+              closeSearch();
+            }
+          });
+        }
+
+        function loadPagefind() {
+          if (window.PagefindUI) {
+            initPagefind();
+            return;
+          }
+          // /pagefind/pagefind-ui.js 由 astro-pagefind 注入到构建产物，
+          // 这里用 dynamic import 加载（dev 模式下由集成自动提供 fallback）
+          const s = document.createElement("script");
+          s.src = "/pagefind/pagefind-ui.js";
+          s.onload = initPagefind;
+          s.onerror = function () {
+            console.warn("[Pagefind] 搜索索引加载失败，构建后才会生成 /pagefind 资源");
+            document.querySelectorAll("[data-search-trigger]").forEach(function (el) {
+              el.addEventListener("click", function () {
+                alert("搜索功能在构建后启用（dev 模式无索引）");
+              });
+            });
+          };
+          document.body.appendChild(s);
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", loadPagefind);
+        } else {
+          loadPagefind();
+        }
+      })();
+    </script>
+
+    <!-- Pagefind UI 挂载点（相对定位在搜索框下方） -->
+    <div id="pagefind-search-ui"></div>
+  </body>
+</html>
+
+<style is:global>
+  /* Pagefind UI 弹出层样式 */
+  #pagefind-search-ui {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 100;
+    background: color-mix(in srgb, #000 40%, transparent);
+    backdrop-filter: blur(2px);
+    padding: 5vh 1rem;
+  }
+  #pagefind-search-ui.active {
+    display: block;
+  }
+  #pagefind-search-ui .pagefind-ui {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.3);
+    color: var(--color-text);
+  }
+  #pagefind-search-ui .pagefind-ui::after {
+    content: "按 ESC 关闭 · Ctrl+K 打开";
+    display: block;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+  }
+  /* 覆盖 pagefind 默认主题色为站点 CSS 变量 */
+  #pagefind-search-ui .pagefind-ui {
+    --pagefind-ui-primary: var(--color-primary);
+    --pagefind-ui-text: var(--color-text);
+    --pagefind-ui-text-strong: var(--color-text);
+    --pagefind-ui-text-muted: var(--color-text-muted);
+    --pagefind-ui-background: var(--color-card);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-border-strong: var(--color-primary);
+  }
+</style>

@@ -1,0 +1,139 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import RightSidebar from "@/components/RightSidebar.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  const tagSet = new Set<string>();
+  posts.forEach((p) => p.data.tags.forEach((t) => tagSet.add(t)));
+  return [
+    { params: { tag: undefined } }, // /tags/ 标签聚合页
+    ...[...tagSet].map((tag) => ({ params: { tag } })),
+  ];
+}
+
+const { tag } = Astro.params;
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
+);
+
+// 统计每个标签的文章数
+const tagMap = new Map<string, number>();
+posts.forEach((p) => p.data.tags.forEach((t) => tagMap.set(t, (tagMap.get(t) ?? 0) + 1)));
+const allTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+
+// 过滤当前标签的文章（tag 为空时显示全部）
+const filtered = tag
+  ? posts.filter((p) => p.data.tags.includes(tag as string))
+  : posts;
+
+const title = tag ? `标签：${tag} | 小吒博客` : "所有标签 | 小吒博客";
+const desc = tag
+  ? `标签「${tag}」下的所有文章，共 ${filtered.length} 篇`
+  : `浏览所有文章标签，共 ${allTags.length} 个标签，${posts.length} 篇文章`;
+---
+<Layout title={title} description={desc}>
+  <Header />
+  <div class="layout">
+    <main>
+      {!tag ? (
+        <>
+          <h1 class="page-title">🏷️ 所有标签</h1>
+          <p class="tag-total">共 {allTags.length} 个标签 · {posts.length} 篇文章</p>
+          <div class="tags-grid">
+            {allTags.map(([t, count]) => (
+              <a href={`/tags/${t}`} class="tag-card">
+                <span class="tag-name">#{t}</span>
+                <span class="tag-count">{count} 篇</span>
+              </a>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div class="tag-header">
+            <a href="/tags/" class="back-link">← 所有标签</a>
+            <h1 class="page-title">#{tag}</h1>
+            <p class="tag-total">共 {filtered.length} 篇文章</p>
+          </div>
+          <div class="post-list">
+            {filtered.map((post) => (
+              <Card post={post} />
+            ))}
+          </div>
+        </>
+      )}
+    </main>
+    <RightSidebar />
+  </div>
+  <Footer />
+</Layout>
+
+<style>
+  .page-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .tag-total {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem;
+  }
+  .tags-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+  .tag-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all .2s ease;
+  }
+  .tag-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px -10px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+  .tag-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .tag-count {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+  }
+  .tag-header {
+    margin-bottom: 1.5rem;
+  }
+  .back-link {
+    display: inline-block;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    transition: color .2s ease;
+  }
+  .back-link:hover {
+    color: var(--color-primary);
+  }
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>
