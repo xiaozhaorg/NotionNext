@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-cloud-mail"
-ogImage: "/images/cloudflare-cloud-mail-cover.jpg"
+ogImage: "/images/cloudflare-cloud-mail-real.jpg"
 ---
 
 前言拥有一个 `@你的域名.com` 的专业邮箱，不仅能提升个人或企业形象，还能更好地管理邮件。

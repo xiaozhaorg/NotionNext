@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-edgeone"
-ogImage: "/images/tencent-edgeone-cover.jpg"
+ogImage: "/images/tencent-edgeone-real.jpg"
 ---
 
 引言对于国内网站来说，CDN 加速是提升访问速度的必备手段。

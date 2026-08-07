@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/rust-vs-go"
-ogImage: "/images/rust-vs-go-cover.jpg"
+ogImage: "/images/rust-vs-go-real.jpg"
 ---
 
 引言在后端开发领域，Rust 和 Go 是近年来最受关注的两门语言。

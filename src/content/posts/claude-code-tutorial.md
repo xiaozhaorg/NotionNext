@@ -13,7 +13,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/claude-code-tutorial"
-ogImage: "/images/claude-code-tutorial-cover.jpg"
+ogImage: "/images/claude-code-tutorial-real.jpg"
 ---
 
 ⚡

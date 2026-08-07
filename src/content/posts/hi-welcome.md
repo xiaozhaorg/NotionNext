@@ -8,7 +8,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/hi-welcome"
-ogImage: "/images/hi-welcome-cover.jpg"
+ogImage: "/images/hi-welcome-real.jpg"
 ---
 
 Hi!

@@ -7,7 +7,7 @@ tags:
   - "公告"
   - "建站"
 featured: true
-ogImage: "/images/hello-astro-cover.jpg"
+ogImage: "/images/hello-astro-real.jpg"
 ---
 
 ## 为什么要迁移

@@ -13,7 +13,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/shawn-ai-free-api"
-ogImage: "/images/shawn-ai-free-api-cover.jpg"
+ogImage: "/images/shawn-ai-free-api-real.jpg"
 ---
 
 🎁 本文推荐一个我亲测可用的免费大模型 API 中转站——肖恩AI。

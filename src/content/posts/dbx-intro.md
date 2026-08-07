@@ -12,7 +12,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/dbx-intro"
-ogImage: "/images/dbx-intro-cover.jpg"
+ogImage: "/images/dbx-intro-real.jpg"
 ---
 
 ## 

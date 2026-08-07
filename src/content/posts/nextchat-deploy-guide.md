@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/nextchat-deploy-guide"
-ogImage: "/images/nextchat-deploy-guide-cover.jpg"
+ogImage: "/images/nextchat-deploy-guide-real.jpg"
 ---
 
 一、NextChat 是什么？

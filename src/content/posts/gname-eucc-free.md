@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gname-eucc-free"
-ogImage: "/images/gname-eucc-free-cover.jpg"
+ogImage: "/images/gname-eucc-free-real.jpg"
 ---
 
 - 白嫖福利！

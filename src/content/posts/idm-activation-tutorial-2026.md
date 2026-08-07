@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/idm-activation-tutorial-2026"
-ogImage: "/images/idm-activation-tutorial-2026-cover.jpg"
+ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
 ---
 
 ![image](https://xiaozha.org/images/idm-tutorial-cover.jpg?t=3acc55d5-e9ea-817e-86f7-e8ef31b6b147)

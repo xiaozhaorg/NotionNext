@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/chatgpt-vs-claude-vs-gemini"
-ogImage: "/images/chatgpt-vs-claude-vs-gemini-cover.jpg"
+ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.jpg"
 ---
 
 引言2026年，AI 大模型市场竞争白热化。
