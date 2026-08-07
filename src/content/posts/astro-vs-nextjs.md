@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/astro-vs-nextjs"
 ogImage: "/images/astro-vs-nextjs-real.jpg"
+coverAlt: "MacBook 屏幕上显示着编程代码的编辑器界面"
 ---
 
 引言在静态网站和博客构建领域，Astro 和 Next.js 是2026年最热门的两个框架。

@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-ip-optimization"
 ogImage: "/images/cloudflare-ip-optimization-real.jpg"
+coverAlt: "数据中心服务器机架上闪烁的网络指示灯"
 ---
 
 前言Cloudflare 是全球最大的免费 CDN 服务商，但在中国大陆访问时经常遇到高延迟、丢包的问题。

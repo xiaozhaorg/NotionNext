@@ -14,6 +14,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/claude-code-tutorial"
 ogImage: "/images/claude-code-tutorial-real.jpg"
+coverAlt: "开发者双手放在笔记本键盘上编写代码的特写"
 ---
 
 ⚡

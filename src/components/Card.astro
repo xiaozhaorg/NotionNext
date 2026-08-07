@@ -39,11 +39,13 @@ const gradientStyle = `background: linear-gradient(135deg, ${c1} 0%, ${c2} 100%)
 
 // 取标题首字作为占位文字
 const placeholderText = data.title.charAt(0);
+// 封面图 alt：优先用描述性 coverAlt，回退到标题
+const coverAlt = data.coverAlt || data.title;
 ---
 <article class="post-card">
   <a href={url} class="post-thumb" aria-label={data.title}>
     {data.ogImage ? (
-      <img src={data.ogImage} alt={data.title} class="post-thumb-img" loading="lazy" />
+      <img src={data.ogImage} alt={coverAlt} class="post-thumb-img" loading="lazy" />
     ) : (
       <div class="post-thumb-placeholder" style={gradientStyle}>
         <span>{placeholderText}</span>

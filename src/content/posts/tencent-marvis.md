@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-marvis"
 ogImage: "/images/tencent-marvis-real.jpg"
+coverAlt: "整洁办公桌面上的笔记本电脑与工作笔记"
 ---
 
 腾讯应用宝团队于2026年5月正式发布了Marvis（马维斯），这是一款致敬钢铁侠Jarvis的操作系统层级AI助手。

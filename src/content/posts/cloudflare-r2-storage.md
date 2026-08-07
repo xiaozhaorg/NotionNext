@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-r2-storage"
 ogImage: "/images/cloudflare-r2-storage-real.jpg"
+coverAlt: "云端服务器机房的蓝色存储阵列灯光"
 ---
 
 ![image](https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8130-990e-e9fc5d09cd05&q=50&width=1080&fmt=webp&fm=webp)

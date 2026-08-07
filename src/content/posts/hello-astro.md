@@ -8,6 +8,7 @@ tags:
   - "建站"
 featured: true
 ogImage: "/images/hello-astro-real.jpg"
+coverAlt: "MacBook 笔记本上的博客写作场景，旁边放有咖啡杯"
 ---
 
 ## 为什么要迁移

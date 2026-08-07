@@ -9,6 +9,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/bt-panel-404"
 ogImage: "/images/bt-panel-404-real.jpg"
+coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 ---
 
 问题今天首先突然发现自己的另一个word press网站白屏，想着通过宝塔面板登陆进去查看以下原因，结果发现登陆宝塔面板居然报404

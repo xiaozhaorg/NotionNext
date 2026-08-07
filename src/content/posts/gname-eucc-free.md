@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gname-eucc-free"
 ogImage: "/images/gname-eucc-free-real.jpg"
+coverAlt: "网络域名解析与全球互联网连接的概念图"
 ---
 
 - 白嫖福利！

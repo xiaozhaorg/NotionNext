@@ -9,6 +9,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/xunfei-coding-plan"
 ogImage: "/images/xunfei-coding-plan-real.jpg"
+coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 ---
 
 「养虾」正在成为许多开发者的新日常。

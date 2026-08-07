@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-extensions-2026"
 ogImage: "/images/vscode-extensions-2026-real.jpg"
+coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
 ---
 
 ![image](https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81bf-a2c7-f9da89bb119e&q=50&width=1080&fmt=webp&fm=webp)

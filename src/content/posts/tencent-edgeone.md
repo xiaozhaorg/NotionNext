@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-edgeone"
 ogImage: "/images/tencent-edgeone-real.jpg"
+coverAlt: "云层之上的 CDN 内容分发网络抽象图"
 ---
 
 引言对于国内网站来说，CDN 加速是提升访问速度的必备手段。

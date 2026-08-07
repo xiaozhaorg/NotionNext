@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/self-host-apps"
 ogImage: "/images/self-host-apps-real.jpg"
+coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 ---
 
 ![image](https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ff-8660-df563aac375c&q=50&width=1080&fmt=webp&fm=webp)

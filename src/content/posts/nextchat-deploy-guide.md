@@ -12,6 +12,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/nextchat-deploy-guide"
 ogImage: "/images/nextchat-deploy-guide-real.jpg"
+coverAlt: "屏幕上发光的 AI 对话聊天界面"
 ---
 
 一、NextChat 是什么？

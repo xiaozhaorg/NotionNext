@@ -18,6 +18,8 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const url = `/${SITE.post.urlPrefix}/${post.id}`;
+// 封面图 alt：优先用描述性 coverAlt，回退到标题
+const coverAlt = post.data.coverAlt || post.data.title;
 ---
 <Layout
   title={post.data.title.includes(SITE.title) ? post.data.title : `${post.data.title} | ${SITE.title}`}
@@ -57,7 +59,7 @@ const url = `/${SITE.post.urlPrefix}/${post.id}`;
             )}
           </div>
           {post.data.ogImage && (
-            <img src={post.data.ogImage} alt={post.data.title} class="post-cover" loading="lazy" />
+            <img src={post.data.ogImage} alt={coverAlt} class="post-cover" loading="lazy" />
           )}
         </header>
         <div class="prose">

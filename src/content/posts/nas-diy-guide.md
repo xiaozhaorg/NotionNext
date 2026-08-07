@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/nas-diy-guide"
 ogImage: "/images/nas-diy-guide-real.jpg"
+coverAlt: "团队成员在桌前协作交流的温馨工作场景"
 ---
 
 ![image](https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8171-8b2e-f2c55a20568e&q=50&width=1080&fmt=webp&fm=webp)

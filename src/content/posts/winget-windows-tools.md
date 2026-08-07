@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/winget-windows-tools"
 ogImage: "/images/winget-windows-tools-real.jpg"
+coverAlt: "绿色电路板上密布的芯片与数据线特写"
 ---
 
 ![image](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8197-92b8-c6b67432a22e&q=50&width=1080&fmt=webp&fm=webp)

@@ -12,6 +12,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/ollama-local-llm"
 ogImage: "/images/ollama-local-llm-real.jpg"
+coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
 ---
 
 ![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8187-bb29-fbb8f38b05aa&q=50&width=1080&fmt=webp&fm=webp)

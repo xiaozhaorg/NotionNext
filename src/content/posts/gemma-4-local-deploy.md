@@ -12,6 +12,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gemma-4-local-deploy"
 ogImage: "/images/gemma-4-local-deploy-real.jpg"
+coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 ---
 
 ![Gemma 4 本地部署](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&q=50&width=1080&fmt=webp)

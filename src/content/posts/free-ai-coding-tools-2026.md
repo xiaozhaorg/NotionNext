@@ -12,6 +12,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/free-ai-coding-tools-2026"
 ogImage: "/images/free-ai-coding-tools-2026-real.jpg"
+coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 ---
 
 ![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81d7-a194-c4aed70d81d1&q=50&width=1080&fmt=webp&fm=webp)

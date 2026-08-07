@@ -13,6 +13,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/codebase-memory-mcp"
 ogImage: "/images/codebase-memory-mcp-real.jpg"
+coverAlt: "MacBook 屏幕上显示着编程代码的编辑器界面"
 ---
 
 ## 

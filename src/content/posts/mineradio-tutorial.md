@@ -12,6 +12,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/mineradio-tutorial"
 ogImage: "/images/mineradio-tutorial-real.jpg"
+coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
 ---
 
 核心结论经过实际测试：

@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/idm-activation-tutorial-2026"
 ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
+coverAlt: "服务器机房中排列整齐的机柜与网线"
 ---
 
 ![image](https://xiaozha.org/images/idm-tutorial-cover.jpg?t=3acc55d5-e9ea-817e-86f7-e8ef31b6b147)

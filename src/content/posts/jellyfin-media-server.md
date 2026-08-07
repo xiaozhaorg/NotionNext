@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/jellyfin-media-server"
 ogImage: "/images/jellyfin-media-server-real.jpg"
+coverAlt: "整洁办公桌面上的笔记本电脑与工作笔记"
 ---
 
 ![image](https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8188-b27c-cc39f7923a8e&q=50&width=1080&fmt=webp&fm=webp)

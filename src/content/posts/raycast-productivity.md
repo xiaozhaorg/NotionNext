@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/raycast-productivity"
 ogImage: "/images/raycast-productivity-real.jpg"
+coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
 ---
 
 ![image](https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81b6-bd2b-f79ff084c402&q=50&width=1080&fmt=webp&fm=webp)

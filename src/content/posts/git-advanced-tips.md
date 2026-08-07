@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/git-advanced-tips"
 ogImage: "/images/git-advanced-tips-real.jpg"
+coverAlt: "程序员在双显示器上编写代码的俯拍工作台"
 ---
 
 ![image](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ba-a635-f8ba5d9b496f&q=50&width=1080&fmt=webp&fm=webp)

@@ -13,6 +13,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/dbx-intro"
 ogImage: "/images/dbx-intro-real.jpg"
+coverAlt: "绿色电路板上密布的芯片与数据线特写"
 ---
 
 ## 

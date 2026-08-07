@@ -17,6 +17,7 @@ const posts = defineCollection({
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
     ogImage: z.string().optional(),
+    coverAlt: z.string().optional(),
     category: z.string().optional(),
     notionPageId: z.string().optional(),
   }),

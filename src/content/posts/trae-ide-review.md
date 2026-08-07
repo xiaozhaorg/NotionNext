@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/trae-ide-review"
 ogImage: "/images/trae-ide-review-real.jpg"
+coverAlt: "深色主题代码编辑器中色彩高亮的程序源码"
 ---
 
 ![image](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ef-9532-d72f74add626&q=50&width=1080&fmt=webp&fm=webp)

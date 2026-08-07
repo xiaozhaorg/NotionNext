@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cursor-vs-vscode"
 ogImage: "/images/cursor-vs-vscode-real.jpg"
+coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 ---
 
 ![image](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a6-9372-c0328b3220a5&q=50&width=1080&fmt=webp&fm=webp)

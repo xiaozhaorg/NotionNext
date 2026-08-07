@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/chatgpt-vs-claude-vs-gemini"
 ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.jpg"
+coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
 ---
 
 引言2026年，AI 大模型市场竞争白热化。

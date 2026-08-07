@@ -13,6 +13,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/siliconflow-intro"
 ogImage: "/images/siliconflow-intro-real.jpg"
+coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 ---
 
 ## 

@@ -10,6 +10,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/ubuntu-server-setup"
 ogImage: "/images/ubuntu-server-setup-real.jpg"
+coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 ---
 
 ![image](https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8114-abc6-ecf95b105f02&q=50&width=1080&fmt=webp&fm=webp)

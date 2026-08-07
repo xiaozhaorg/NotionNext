@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-copilot-free"
 ogImage: "/images/github-copilot-free-real.jpg"
+coverAlt: "程序员在双显示器上编写代码的俯拍工作台"
 ---
 
 引言GitHub Copilot 是微软和 OpenAI 联合推出的 AI 编程助手，自2021年发布以来已成为开发者最熟悉的 AI 工具之一。2026年，GitHub 推出了免费版 Copilot，让更多开发者可以零成本体验 AI 编程。

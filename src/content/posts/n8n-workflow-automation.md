@@ -11,6 +11,7 @@ featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/n8n-workflow-automation"
 ogImage: "/images/n8n-workflow-automation-real.jpg"
+coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 ---
 
 ![image](https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8104-9038-c3d44c94eee7&q=50&width=1080&fmt=webp&fm=webp)
