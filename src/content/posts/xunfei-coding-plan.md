@@ -8,7 +8,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/xunfei-coding-plan"
-ogImage: "/images/xunfei-coding-plan-cover.jpg"
+ogImage: "/images/xunfei-coding-plan-real.jpg"
 ---
 
 「养虾」正在成为许多开发者的新日常。

@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/bitwarden-self-host"
-ogImage: "/images/bitwarden-self-host-cover.jpg"
+ogImage: "/images/bitwarden-self-host-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81fe-9173-f6132acdd060&q=50&width=1080&fmt=webp&fm=webp)

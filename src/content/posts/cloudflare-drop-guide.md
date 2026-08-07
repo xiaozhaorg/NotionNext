@@ -12,7 +12,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-drop-guide"
-ogImage: "/images/cloudflare-drop-guide-cover.jpg"
+ogImage: "/images/cloudflare-drop-guide-real.jpg"
 ---
 
 ## 

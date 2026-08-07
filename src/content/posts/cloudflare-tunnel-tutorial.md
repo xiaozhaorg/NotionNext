@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-tunnel-tutorial"
-ogImage: "/images/cloudflare-tunnel-tutorial-cover.jpg"
+ogImage: "/images/cloudflare-tunnel-tutorial-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a9-b99e-deafcdc9e314&q=50&width=1080&fmt=webp&fm=webp)

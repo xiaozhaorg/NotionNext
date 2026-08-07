@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-tunnel"
-ogImage: "/images/cloudflare-tunnel-cover.jpg"
+ogImage: "/images/cloudflare-tunnel-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8146-a4b1-fc79a42610d8&q=50&width=1080&fmt=webp&fm=webp)

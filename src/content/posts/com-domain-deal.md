@@ -8,7 +8,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/com-domain-deal"
-ogImage: "/images/com-domain-deal-cover.jpg"
+ogImage: "/images/com-domain-deal-real.jpg"
 ---
 
 耳听为虚，眼见为实！

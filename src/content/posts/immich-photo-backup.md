@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/immich-photo-backup"
-ogImage: "/images/immich-photo-backup-cover.jpg"
+ogImage: "/images/immich-photo-backup-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8141-a5ba-e4bb8ee56188&q=50&width=1080&fmt=webp&fm=webp)

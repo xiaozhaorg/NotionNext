@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-workers-blog"
-ogImage: "/images/cloudflare-workers-blog-cover.jpg"
+ogImage: "/images/cloudflare-workers-blog-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-814d-878a-f9f28c01d539&q=50&width=1080&fmt=webp&fm=webp)

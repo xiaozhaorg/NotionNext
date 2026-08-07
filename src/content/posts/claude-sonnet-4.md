@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/claude-sonnet-4"
-ogImage: "/images/claude-sonnet-4-cover.jpg"
+ogImage: "/images/claude-sonnet-4-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8106-8277-c9325f4f5ef6&q=50&width=1080&fmt=webp&fm=webp)

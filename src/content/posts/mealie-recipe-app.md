@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/mealie-recipe-app"
-ogImage: "/images/mealie-recipe-app-cover.jpg"
+ogImage: "/images/mealie-recipe-app-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8162-93a9-c2f838fcb4be&q=50&width=1080&fmt=webp&fm=webp)

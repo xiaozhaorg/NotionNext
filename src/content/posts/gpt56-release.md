@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gpt56-release"
-ogImage: "/images/gpt56-release-cover.jpg"
+ogImage: "/images/gpt56-release-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81c2-a567-d25ae2d6fbea&q=50&width=1080&fmt=webp&fm=webp)

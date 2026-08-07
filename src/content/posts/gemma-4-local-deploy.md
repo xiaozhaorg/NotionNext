@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gemma-4-local-deploy"
-ogImage: "/images/gemma-4-local-deploy-cover.jpg"
+ogImage: "/images/gemma-4-local-deploy-real.jpg"
 ---
 
 ![Gemma 4 本地部署](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&q=50&width=1080&fmt=webp)

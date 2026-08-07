@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/docker-mirror-2026"
-ogImage: "/images/docker-mirror-2026-cover.jpg"
+ogImage: "/images/docker-mirror-2026-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81f5-93f9-e4973f7bf19a&q=50&width=1080&fmt=webp&fm=webp)

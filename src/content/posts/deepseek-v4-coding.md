@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/deepseek-v4-coding"
-ogImage: "/images/deepseek-v4-coding-cover.jpg"
+ogImage: "/images/deepseek-v4-coding-real.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1707343843982-f8275f3994c5?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8184-b8e2-d4db3d13fe6e&q=50&width=1080&fmt=webp&fm=webp)
