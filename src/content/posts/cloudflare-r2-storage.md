@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-r2-storage"
-ogImage: "https://xiaozha.org/images/cloudflare-r2-storage-cover.jpg?t=3a9c55d5-e9ea-81e9-89fd-d36fcd3c582e"
+ogImage: "/images/cloudflare-r2-storage-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8130-990e-e9fc5d09cd05&q=50&width=1080&fmt=webp&fm=webp)

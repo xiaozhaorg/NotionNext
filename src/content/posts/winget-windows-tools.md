@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/winget-windows-tools"
-ogImage: "https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e"
+ogImage: "/images/winget-windows-tools-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8197-92b8-c6b67432a22e&q=50&width=1080&fmt=webp&fm=webp)

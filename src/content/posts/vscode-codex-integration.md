@@ -12,7 +12,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-codex-integration"
-ogImage: "https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b"
+ogImage: "/images/vscode-codex-integration-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8177-9ecb-ee9e983840b5&q=50&width=1080&fmt=webp&fm=webp)

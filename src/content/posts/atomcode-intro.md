@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/atomcode-intro"
-ogImage: "https://xiaozha.org/images/atomcode-intro-cover.jpg?t=3a9c55d5-e9ea-81a2-a624-ff1c519f968e"
+ogImage: "/images/atomcode-intro-cover.jpg"
 ---
 
 发现宝藏工具作为一个经常在终端里折腾的开发者，我一直在寻找一款能够在命令行中使用的 AI 编码工具。

@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/ollama-local-llm"
-ogImage: "https://xiaozha.org/images/ollama-local-llm-cover.jpg?t=3a9c55d5-e9ea-81d5-9ecd-e42f83a2ae3e"
+ogImage: "/images/ollama-local-llm-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8187-bb29-fbb8f38b05aa&q=50&width=1080&fmt=webp&fm=webp)

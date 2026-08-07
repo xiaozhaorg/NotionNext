@@ -18,6 +18,9 @@ const IMAGES_DIR = join(process.cwd(), "public", "images");
 const FORCE = process.argv.includes("--force");
 const SLUG_ARG = process.argv.find((a) => a.startsWith("--slug="));
 const ONLY_SLUG = SLUG_ARG ? SLUG_ARG.split("=")[1] : null;
+// --only=slug1,slug2,slug3 仅生成指定 slug 列表（用于补生成失效的文章）
+const ONLY_ARG = process.argv.find((a) => a.startsWith("--only="));
+const ONLY_SET = ONLY_ARG ? new Set(ONLY_ARG.split("=")[1].split(",").map(s => s.trim()).filter(Boolean)) : null;
 
 // ===== 12 套主题渐变（与 Card.astro 保持一致）=====
 const GRADIENTS = [
@@ -232,6 +235,7 @@ async function main() {
   for (const file of files) {
     const slug = file.replace(/\.md$/, "");
     if (ONLY_SLUG && ONLY_SLUG !== slug) continue;
+    if (ONLY_SET && !ONLY_SET.has(slug)) continue;
 
     const outPath = join(IMAGES_DIR, `${slug}-cover.jpg`);
     if (existsSync(outPath) && !FORCE) {

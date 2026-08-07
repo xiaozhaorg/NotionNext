@@ -12,7 +12,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/kimi-k3-open-source"
-ogImage: "https://xiaozha.org/images/kimi-k3-open-source-cover.jpg?t=3a9c55d5-e9ea-81ab-a321-e256217a22bc"
+ogImage: "/images/kimi-k3-open-source-cover.jpg"
 ---
 
 ## 

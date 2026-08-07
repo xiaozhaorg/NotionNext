@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/git-advanced-tips"
-ogImage: "https://xiaozha.org/images/git-advanced-tips-cover.jpg?t=3a9c55d5-e9ea-81be-b5ee-d3565e8b2e9a"
+ogImage: "/images/git-advanced-tips-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ba-a635-f8ba5d9b496f&q=50&width=1080&fmt=webp&fm=webp)

@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/trae-ide-review"
-ogImage: "https://xiaozha.org/images/trae-ide-review-cover.jpg?t=3a9c55d5-e9ea-811a-a308-e6fca0fd4ea9"
+ogImage: "/images/trae-ide-review-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ef-9532-d72f74add626&q=50&width=1080&fmt=webp&fm=webp)

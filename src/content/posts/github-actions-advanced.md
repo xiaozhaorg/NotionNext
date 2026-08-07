@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-actions-advanced"
-ogImage: "https://xiaozha.org/images/github-actions-advanced-cover.jpg?t=3a9c55d5-e9ea-81a8-8b12-dcf2f6f56c08"
+ogImage: "/images/github-actions-advanced-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81e3-82b4-d0c061c32ebe&q=50&width=1080&fmt=webp&fm=webp)

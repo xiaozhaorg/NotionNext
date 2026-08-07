@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/self-host-apps"
-ogImage: "https://xiaozha.org/images/self-host-apps-cover.jpg?t=3a9c55d5-e9ea-816c-99b6-e4d25f79c8bd"
+ogImage: "/images/self-host-apps-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ff-8660-df563aac375c&q=50&width=1080&fmt=webp&fm=webp)

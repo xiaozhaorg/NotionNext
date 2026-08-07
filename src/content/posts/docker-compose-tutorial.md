@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/docker-compose-tutorial"
-ogImage: "https://xiaozha.org/images/docker-compose-tutorial-cover.jpg?t=3a9c55d5-e9ea-8100-a867-cff2903206ba"
+ogImage: "/images/docker-compose-tutorial-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8143-b8b3-d6c4fa31ce13&q=50&width=1080&fmt=webp&fm=webp)

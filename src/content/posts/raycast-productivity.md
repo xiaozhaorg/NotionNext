@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/raycast-productivity"
-ogImage: "https://xiaozha.org/images/raycast-productivity-cover.jpg?t=3a9c55d5-e9ea-81dd-8a83-e043a31de52f"
+ogImage: "/images/raycast-productivity-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81b6-bd2b-f79ff084c402&q=50&width=1080&fmt=webp&fm=webp)

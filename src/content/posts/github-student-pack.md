@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-student-pack"
-ogImage: "https://xiaozha.org/images/github-student-pack-cover.jpg?t=3a9c55d5-e9ea-819e-9bc0-dcd4c453dea5"
+ogImage: "/images/github-student-pack-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a7-9075-e33d9367aab3&q=50&width=1080&fmt=webp&fm=webp)

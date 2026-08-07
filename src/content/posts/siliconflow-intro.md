@@ -12,7 +12,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/siliconflow-intro"
-ogImage: "https://xiaozha.org/images/siliconflow-intro-cover.jpg?t=3a9c55d5-e9ea-8156-9815-cf8b1e9fa609"
+ogImage: "/images/siliconflow-intro-cover.jpg"
 ---
 
 ## 

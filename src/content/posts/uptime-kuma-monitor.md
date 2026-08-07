@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/uptime-kuma-monitor"
-ogImage: "https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg?t=3a9c55d5-e9ea-813d-b32e-dc4fada13b4b"
+ogImage: "/images/uptime-kuma-monitor-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a5-aa0f-d18e601cfd94&q=50&width=1080&fmt=webp&fm=webp)

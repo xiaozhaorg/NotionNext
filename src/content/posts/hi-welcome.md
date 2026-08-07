@@ -8,7 +8,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/hi-welcome"
-ogImage: "https://www.notion.so/images/page-cover/nasa_robert_stewart_spacewalk_2.jpg"
+ogImage: "/images/hi-welcome-cover.jpg"
 ---
 
 Hi!

@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/zed-vs-vscode"
-ogImage: "https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007"
+ogImage: "/images/zed-vs-vscode-cover.jpg"
 ---
 
 引言Zed 是2024年发布的新一代代码编辑器，由 Atom 编辑器原班人马打造。

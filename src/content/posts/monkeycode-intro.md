@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/monkeycode-intro"
-ogImage: "https://xiaozha.org/images/monkeycode-intro-cover.jpg?t=3a9c55d5-e9ea-813b-a366-fb2084a72762"
+ogImage: "/images/monkeycode-intro-cover.jpg"
 ---
 
 故事的开始上周，我突发奇想想要做一个简单的个人项目，但又不想在本地折腾环境配置——Node.js 版本、依赖冲突、端口占用……这些问题想想就头大。

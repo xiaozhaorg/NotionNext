@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/vercel-vs-cloudflare"
-ogImage: "https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg?t=3a9c55d5-e9ea-81b2-aadf-c0eaf5d9912f"
+ogImage: "/images/vercel-vs-cloudflare-cover.jpg"
 ---
 
 引言静态网站部署平台的选择直接影响网站的访问速度、全球可用性和维护成本。

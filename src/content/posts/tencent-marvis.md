@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-marvis"
-ogImage: "https://xiaozha.org/images/tencent-marvis-cover.jpg?t=3a9c55d5-e9ea-818f-9424-f0412536178b"
+ogImage: "/images/tencent-marvis-cover.jpg"
 ---
 
 腾讯应用宝团队于2026年5月正式发布了Marvis（马维斯），这是一款致敬钢铁侠Jarvis的操作系统层级AI助手。

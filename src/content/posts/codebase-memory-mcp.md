@@ -12,7 +12,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/codebase-memory-mcp"
-ogImage: "https://xiaozha.org/images/codebase-memory-mcp-cover.jpg?t=3a9c55d5-e9ea-815c-8f93-daa4f9b45229"
+ogImage: "/images/codebase-memory-mcp-cover.jpg"
 ---
 
 ## 

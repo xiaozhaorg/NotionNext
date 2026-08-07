@@ -11,7 +11,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/mineradio-tutorial"
-ogImage: "https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37"
+ogImage: "/images/mineradio-tutorial-cover.jpg"
 ---
 
 核心结论经过实际测试：

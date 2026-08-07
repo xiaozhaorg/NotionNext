@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/ubuntu-server-setup"
-ogImage: "https://xiaozha.org/images/ubuntu-server-setup-cover.jpg?t=3a9c55d5-e9ea-8115-9890-d1b675f657ab"
+ogImage: "/images/ubuntu-server-setup-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8114-abc6-ecf95b105f02&q=50&width=1080&fmt=webp&fm=webp)

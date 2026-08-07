@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/nas-diy-guide"
-ogImage: "https://xiaozha.org/images/nas-diy-guide-cover.jpg?t=3a9c55d5-e9ea-811f-be14-fe2b90477c6c"
+ogImage: "/images/nas-diy-guide-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8171-8b2e-f2c55a20568e&q=50&width=1080&fmt=webp&fm=webp)

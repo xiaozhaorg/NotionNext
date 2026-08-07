@@ -9,7 +9,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cursor-vs-vscode"
-ogImage: "https://xiaozha.org/images/cursor-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-815b-8148-c21c15e9e3aa"
+ogImage: "/images/cursor-vs-vscode-cover.jpg"
 ---
 
 ![image](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a6-9372-c0328b3220a5&q=50&width=1080&fmt=webp&fm=webp)
