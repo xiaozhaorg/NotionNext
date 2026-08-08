@@ -30,19 +30,6 @@ export const SITE = {
     previewChars: 120,
   },
 
-  /** 评论系统：Giscus（基于 GitHub Discussions，零后端） */
-  giscus: {
-    // 去 https://giscus.app/zh-CN 生成配置，留空则显示设置指引
-    repo: "xiaozhaorg/Blog",
-    repoId: "", // giscus 生成，形如 "R_kgDOxxxxxx"
-    category: "Announcements",
-    categoryId: "", // giscus 生成，形如 "DIC_kwDOxxxxxx"
-    mapping: "pathname",
-    reactionsEnabled: "1",
-    inputPosition: "bottom",
-    lang: "zh-CN",
-  },
-
   /** 访问统计 */
   analytics: {
     // 51la 站点统计（沿用旧站 ID）
