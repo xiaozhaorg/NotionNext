@@ -78,10 +78,6 @@ const copyright = SITE.since && SITE.since < year ? `${SITE.since}–${year}` : 
       <p class="copyright">
         © {copyright} <a href={SITE.url}>{SITE.author}</a>. All rights reserved.
       </p>
-      <p class="powered-by">
-        Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> ·
-        Hosted on <a href="https://pages.cloudflare.com" target="_blank" rel="noopener">Cloudflare Pages</a>
-      </p>
     </div>
   </div>
 </footer>
@@ -190,19 +186,16 @@ const copyright = SITE.since && SITE.since < year ? `${SITE.since}–${year}` : 
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  .copyright,
-  .powered-by {
+  .copyright {
     font-size: 0.78rem;
     color: var(--color-text-muted);
     margin: 0;
   }
-  .copyright a,
-  .powered-by a {
+  .copyright a {
     color: var(--color-text-secondary);
     transition: color var(--transition-base);
   }
-  .copyright a:hover,
-  .powered-by a:hover {
+  .copyright a:hover {
     color: var(--color-primary);
   }
 
