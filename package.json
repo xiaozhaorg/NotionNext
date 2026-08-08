@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "astro check",
-    "migrate": "node scripts/migrate-notion.mjs"
+    "migrate": "node scripts/migrate-notion.mjs",
+    "new-post": "node scripts/new-post.mjs",
+    "deploy:worker": "npx wrangler deploy -c worker/wrangler.toml"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",

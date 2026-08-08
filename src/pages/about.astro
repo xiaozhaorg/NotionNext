@@ -1,0 +1,123 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import RightSidebar from "@/components/RightSidebar.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+---
+<Layout
+  title={`关于 | ${SITE.title}`}
+  description={`${SITE.title}：${SITE.description}`}
+>
+  <Header />
+  <div class="layout">
+    <main>
+      <article class="about-card">
+        <header class="about-header">
+          <h1 class="page-title">👋 关于我</h1>
+          <p class="about-subtitle">{SITE.description}</p>
+        </header>
+
+        <section class="about-section">
+          <h2>🧑‍💻 我是谁</h2>
+          <p>
+            你好，我是 <strong>{SITE.author}</strong>，一名热爱折腾技术的开发者。
+            这个博客记录我在 AI 工具、云计算、自托管与开源应用上的实践与踩坑，
+            希望能给同样在折腾路上的你一些参考。
+          </p>
+        </section>
+
+        <section class="about-section">
+          <h2>📌 站点定位</h2>
+          <ul class="about-list">
+            <li>🤖 AI 工具与大模型：最新模型的使用教程与深度评测</li>
+            <li>☁️ 云计算与 Cloudflare 生态：Pages、Workers、R2、Tunnel 实战</li>
+            <li>🏠 自托管应用：Jellyfin、Immich、n8n、Mealie 等开源应用自建指南</li>
+            <li>🎁 免费资源：域名优惠、GitHub 学生包、免费 API 额度等羊毛信息</li>
+          </ul>
+        </section>
+
+        <section class="about-section">
+          <h2>📮 联系我</h2>
+          <ul class="about-list contact-list">
+            <li>📧 邮箱：<a href="mailto:mail@xiaozha.org">mail@xiaozha.org</a></li>
+            {SITE.social.github && (
+              <li>🐙 GitHub：<a href={SITE.social.github} target="_blank" rel="noopener">{SITE.social.github}</a></li>
+            )}
+            <li>📡 RSS：<a href={SITE.social.rss}>订阅本站</a></li>
+          </ul>
+        </section>
+
+        <section class="about-section">
+          <h2>📜 版权声明</h2>
+          <p>
+            本站文章默认采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
+          </p>
+        </section>
+      </article>
+    </main>
+    <RightSidebar />
+  </div>
+  <Footer />
+</Layout>
+
+<style>
+  .about-card {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow-xs);
+  }
+  .about-header {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 0.6rem;
+    color: var(--color-text);
+  }
+  .about-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .about-section {
+    margin-bottom: 1.5rem;
+  }
+  .about-section h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+    color: var(--color-text);
+  }
+  .about-section p {
+    line-height: 1.8;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+  }
+  .about-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.9;
+  }
+  .about-list li + li {
+    margin-top: 0.25rem;
+  }
+  .about-list a {
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--color-primary);
+  }
+  .about-list a:hover {
+    border-bottom-style: solid;
+  }
+</style>

@@ -1,0 +1,235 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+
+// 仓库信息：GitHub Contents API 直写 src/content/posts/
+const GH_OWNER = "xiaozhaorg";
+const GH_REPO = "NotionNext";
+const GH_BRANCH = "main";
+---
+<Layout title={`写作后台 | ${SITE.title}`} description="新建文章的简易写作后台">
+  <Header />
+  <div class="layout">
+    <main>
+      <article class="admin-card">
+        <header class="admin-header">
+          <h1 class="page-title">✍️ 写作后台</h1>
+          <p class="admin-subtitle">新建一篇文章，提交后自动推送到仓库并触发 Cloudflare Pages 构建。</p>
+        </header>
+
+        <form id="post-form" class="post-form">
+          <label class="field">
+            <span class="field-label">GitHub Token（内容写权限，仅存于本地浏览器）</span>
+            <input type="password" id="token" placeholder="ghp_xxx" autocomplete="off" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">文章标题 *</span>
+            <input type="text" id="title" required placeholder="例如：Docker 镜像加速完全指南" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">slug（URL，英文小写连字符；留空则从标题自动生成）</span>
+            <input type="text" id="slug" placeholder="docker-mirror-2026" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">文章描述（description，SEO 用）*</span>
+            <input type="text" id="description" required placeholder="一句话概括文章内容" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">标签（逗号分隔）</span>
+            <input type="text" id="tags" placeholder="教程, Docker, 免费工具" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">正文（Markdown）*</span>
+            <textarea id="body" rows="16" required placeholder="在这里写正文…"></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" id="submit-btn" class="submit-btn">🚀 发布文章</button>
+            <span id="status" class="status"></span>
+          </div>
+        </form>
+      </article>
+    </main>
+  </div>
+  <Footer />
+</Layout>
+
+<script is:inline define:vars={{ GH_OWNER, GH_REPO, GH_BRANCH }}>
+  (function () {
+    const form = document.getElementById("post-form");
+    const status = document.getElementById("status");
+    const btn = document.getElementById("submit-btn");
+
+    function toSlug(s) {
+      return s.toLowerCase().trim().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
+    }
+
+    // UTF-8 安全的 base64 编码（避免 btoa 对中文抛错）
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = "";
+      bytes.forEach(function (b) { bin += String.fromCharCode(b); });
+      return btoa(bin);
+    }
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const token = document.getElementById("token").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const body = document.getElementById("body").value;
+      const tagsRaw = document.getElementById("tags").value.trim();
+      const manualSlug = document.getElementById("slug").value.trim();
+
+      if (!token) { status.textContent = "❌ 请填写 GitHub Token"; return; }
+
+      // 生成 slug：优先手动，否则英文标题自动，中文标题需手动指定
+      let slug = manualSlug || toSlug(title);
+      if (!slug || /[\u4e00-\u9fa5]/.test(slug)) {
+        status.textContent = "❌ 中文标题无法自动生成 slug，请手动填写 slug 字段";
+        return;
+      }
+
+      const tags = tagsRaw ? tagsRaw.split(/[,，]/).map((t) => t.trim()).filter(Boolean) : [];
+
+      const frontmatter = [
+        "---",
+        `title: ${title}`,
+        `pubDatetime: "${new Date().toISOString()}"`,
+        `description: ${description}`,
+        "author: 小吒",
+        "tags:",
+        ...(tags.length ? tags.map((t) => `  - ${t}`) : ["  []"]),
+        "featured: false",
+        "draft: false",
+        "---",
+        "",
+        body.trim(),
+        "",
+      ].join("\n");
+
+      btn.disabled = true;
+      status.textContent = "⏳ 正在提交…";
+      try {
+        const path = "src/content/posts/" + slug + ".md";
+        const res = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/" + path, {
+          method: "PUT",
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: "feat: add post " + slug,
+            content: utf8ToBase64(frontmatter),
+            branch: GH_BRANCH,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+          status.textContent = "✅ 已提交，Cloudflare Pages 构建中…";
+          btn.disabled = false;
+        } else {
+          status.textContent = "❌ 提交失败: " + (data.message || res.status);
+          btn.disabled = false;
+        }
+      } catch (err) {
+        status.textContent = "❌ 网络错误: " + err.message;
+        btn.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .admin-card {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow-xs);
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .admin-header {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 0.6rem;
+    color: var(--color-text);
+  }
+  .admin-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  .post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+  .field-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+  .field input,
+  .field textarea {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.6rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    font-family: inherit;
+    transition: border-color var(--transition-base);
+  }
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  .field textarea {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    line-height: 1.6;
+    resize: vertical;
+  }
+  .form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .submit-btn {
+    background: var(--gradient-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-full);
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity var(--transition-base);
+  }
+  .submit-btn:hover { opacity: 0.9; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .status {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+</style>

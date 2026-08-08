@@ -1,0 +1,9 @@
+name = "xiaozha-blog-views"
+main = "index.js"
+compatibility_date = "2026-01-01"
+
+# 在 Cloudflare 控制台创建 KV namespace 后填入 ID：
+# Workers → 你的 Worker → Settings → KV Namespace Bindings
+[[kv_namespaces]]
+binding = "BLOG_VIEWS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

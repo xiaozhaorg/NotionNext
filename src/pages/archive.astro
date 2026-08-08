@@ -1,0 +1,183 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import RightSidebar from "@/components/RightSidebar.astro";
+import Footer from "@/components/Footer.astro";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
+);
+
+// 按年 → 月分组
+const byYear = new Map<string, Map<string, typeof posts>>();
+posts.forEach((post) => {
+  const d = post.data.pubDatetime;
+  const year = d.getFullYear().toString();
+  const month = `${year}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  if (!byYear.has(year)) byYear.set(year, new Map());
+  const months = byYear.get(year)!;
+  if (!months.has(month)) months.set(month, []);
+  months.get(month)!.push(post);
+});
+const years = [...byYear.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+const total = posts.length;
+---
+<Layout
+  title={`归档 | ${"小吒博客"}`}
+  description={`全部文章归档，共 ${total} 篇`}
+>
+  <Header />
+  <div class="layout">
+    <main>
+      <div class="archive-header">
+        <h1 class="page-title">🗂️ 归档</h1>
+        <p class="archive-total">共 {total} 篇文章</p>
+      </div>
+
+      <div class="archive-list">
+        {years.map(([year, months]) => (
+          <section class="archive-year">
+            <h2 class="year-title">{year} 年</h2>
+            {[...months.entries()].map(([month, list]) => (
+              <div class="archive-month">
+                <span class="month-label">{month}</span>
+                <ul class="month-posts">
+                  {list.map((post) => (
+                    <li class="archive-item">
+                      <time datetime={post.data.pubDatetime.toISOString()} class="item-date">
+                        {post.data.pubDatetime.toLocaleDateString("zh-CN", {
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                      <a href={`/article/${post.id}`} class="item-title">{post.data.title}</a>
+                      {post.data.tags.length > 0 && (
+                        <span class="item-tags">
+                          {post.data.tags.slice(0, 3).map((tag) => (
+                            <a href={`/tags/${tag}`} class="item-tag">#{tag}</a>
+                          ))}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </section>
+        ))}
+      </div>
+    </main>
+    <RightSidebar />
+  </div>
+  <Footer />
+</Layout>
+
+<style>
+  .archive-header {
+    margin-bottom: 1.5rem;
+  }
+  .page-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .archive-total {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .archive-year {
+    margin-bottom: 1.5rem;
+  }
+  .year-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+
+  .archive-month {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .month-label {
+    flex-shrink: 0;
+    width: 3.5rem;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    padding-top: 0.35rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .month-posts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+  }
+  .archive-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    padding: 0.3rem 0;
+  }
+  .item-date {
+    flex-shrink: 0;
+    width: 3.2rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .item-title {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition-base);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-title:hover {
+    color: var(--color-primary);
+  }
+  .item-tags {
+    display: inline-flex;
+    gap: 0.375rem;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .item-tag {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 0.05rem 0.5rem;
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+  .item-tag:hover {
+    color: var(--color-primary);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+  }
+
+  @media (max-width: 640px) {
+    .archive-month {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .month-label {
+      width: auto;
+      padding-top: 0;
+      font-weight: 600;
+    }
+    .item-tags {
+      display: none;
+    }
+  }
+</style>
