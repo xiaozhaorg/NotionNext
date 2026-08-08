@@ -9,6 +9,8 @@ tags:
   - 效率工具
 featured: false
 draft: false
+ogImage: "/images/traework-intro-real.jpg"
+coverAlt: "蓝色科技感的 AI 神经网络概念图，象征 TraeWork 云端 AI 任务处理"
 ---
 
 字节旗下的 TRAE 系列大家应该不陌生——TraeCode 是 AI 原生 IDE，而它的"另一半" **TraeWork** 则是一个专注办公场景的 AI 平台。简单说：**你把任务交给它，它在云端帮你干完**，从文档整理、数据处理到做网页、做 PPT，都属于它的工作范围。
