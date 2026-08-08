@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import { SITE } from "@/config";
 
 const posts = await getCollection("posts", ({ data }) => !data.draft);
 console.log("[RightSidebar] 服务端数据加载完成，posts 总数 =", posts.length);

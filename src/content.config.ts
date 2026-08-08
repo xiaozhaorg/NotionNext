@@ -1,5 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 /**
  * 文章集合
@@ -20,6 +21,7 @@ const posts = defineCollection({
     coverAlt: z.string().optional(),
     category: z.string().optional(),
     notionPageId: z.string().optional(),
+    sourceUrl: z.string().optional(),
   }),
 });
 

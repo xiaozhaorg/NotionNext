@@ -14,7 +14,7 @@ ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
 coverAlt: "服务器机房中排列整齐的机柜与网线"
 ---
 
-![image](https://xiaozha.org/images/idm-tutorial-cover.jpg?t=3acc55d5-e9ea-817e-86f7-e8ef31b6b147)
+![image](/images/idm-activation-tutorial-2026-real.jpg)
 
 Internet Download Manager (IDM) 是一款功能强大的下载加速工具，支持多线程下载、视频嗅探、站点抓取等功能。
 

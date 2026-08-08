@@ -250,7 +250,7 @@ Mineradio 占用资源大吗？3D 界面会比普通播放器多消耗一些显�
 
 相关文章
 
-[IDM 安装激活完整教程（2026年最新）![image](https://xiaozha.org/images/idm-tutorial-cover.jpg?t=3acc55d5-e9ea-8114-a3b8-c9381ca0d6e3)](/article/idm-activation-tutorial-2026)[Uptime Kuma 自建监控：
+[IDM 安装激活完整教程（2026年最新）![image](/images/idm-activation-tutorial-2026-real.jpg)](/article/idm-activation-tutorial-2026)[Uptime Kuma 自建监控：
 
 免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg?t=3a9c55d5-e9ea-813d-b32e-dc4fada13b4b)](/article/uptime-kuma-monitor)[自托管 20 个必备开源应用：
 

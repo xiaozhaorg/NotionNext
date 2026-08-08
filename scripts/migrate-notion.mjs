@@ -14,20 +14,10 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const POSTS_DIR = path.join(ROOT, "src/content/posts");
-const IMG_DIR = path.join(ROOT, "public/images/notion");
 
 const SITE = "https://xiaozha.org";
 
 // ===== 工具函数 =====
-
-function slugify(str) {
-  return (
-    str
-      .toLowerCase()
-      .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
-      .replace(/^-+|-+$/g, "") || `post-${Date.now()}`
-  );
-}
 
 /** 从 HTML 字符串提取文本内容 */
 function textOf(html) {

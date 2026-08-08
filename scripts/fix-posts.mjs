@@ -143,7 +143,7 @@ function cleanBody(body) {
     .replace(/&#39;/g, "'")
     .replace(/&nbsp;/g, " ");
   // 去掉图片 src 中的 amp; 参数残留（&amp; → &）
-  body = body.replace(/\((https?:\/\/[^)]+)\)/g, (m, u) => `(${u.replace(/&amp;/g, "&")})`);
+  body = body.replace(/\((https?:\/\/[^)]+)\)/g, (_, u) => `(${u.replace(/&amp;/g, "&")})`);
   // 清理多余空行
   body = body.replace(/\n{4,}/g, "\n\n");
   return body.trim() + "\n";

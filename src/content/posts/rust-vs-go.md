@@ -105,8 +105,6 @@ Rust 2024 Edition 带来了更简洁的异步语法和改进的错误提示，�
 
 Go 用于快速搭建服务，Rust 用于性能关键模块。
 
-![image](https://picsum.photos/1200/600?random=test&t=3aac55d5-e9ea-8154-b5d7-c9c07a09d33d)
-
 [上一篇自托管 20 个必备开源应用：
 
 告别云服务订阅，掌控自己的数据](/article/self-host-apps)[下一篇Raycast 效率神器完全指南：

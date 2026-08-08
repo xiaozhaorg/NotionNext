@@ -15,7 +15,7 @@ coverAlt: "网络域名解析与全球互联网连接的概念图"
 
 - 白嫖福利！
 
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡 | 小吒博客![image](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F0725218e-d37f-47be-b9c1-acf8511d291b%2F29db38d2-d5fa-4fa6-8a92-3b527cfe80d1%2Ffavicon.svg?table=collection&id=12fc55d5-e9ea-81c3-9f41-000b3af08fce&t=12fc55d5-e9ea-81c3-9f41-000b3af08fce)小吒博客
+Gname 免费注册 3 个 eu.cc 域名，无需信用卡 | 小吒博客
 
 [](/about)
 
@@ -44,8 +44,6 @@ Gname 免费注册 3 个 eu.cc 域名，无需信用卡
 你好！
 
 我是
-
-![image](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F0725218e-d37f-47be-b9c1-acf8511d291b%2F29db38d2-d5fa-4fa6-8a92-3b527cfe80d1%2Ffavicon.svg?table=collection&id=12fc55d5-e9ea-81c3-9f41-000b3af08fce&t=12fc55d5-e9ea-81c3-9f41-000b3af08fce)
 
 ## 小吒博客
 

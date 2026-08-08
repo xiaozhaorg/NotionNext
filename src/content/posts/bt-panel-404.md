@@ -50,4 +50,4 @@ coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 
 [Hi！
 
-欢迎访问本站！![image](https://bing.biturl.top/?resolution=1920&format=image)](/article/hi-welcome)
+欢迎访问本站！![image](/images/hi-welcome-real.jpg)](/article/hi-welcome)
