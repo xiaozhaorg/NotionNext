@@ -11,7 +11,7 @@ coverAlt: "Data center server rack with blinking network LEDs"
 zhSlug: "cloudflare-tunnel-tutorial"
 ---
 
-![image](https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a9-b99e-deafcdc9e314&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1558494949-ef010cbdcc31.webp)
 
 In 2026, more and more developers are running large language models, AI coding assistants, and tools like NextChat on their own machines. But a question quickly follows:
 

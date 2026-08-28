@@ -12,9 +12,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/github-student-pack"
 ogImage: "/images/github-student-pack-real.jpg"
 coverAlt: "绿色电路板上密布的芯片与数据线特写"
+enSlug: "github-student-pack"
 ---
 
-![image](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a7-9075-e33d9367aab3&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1518770660439-4636190af475.webp)
 
 GitHub Student Developer Pack 是学生党的福利，几十个付费服务全部免费，总价值超过 $1000。
 
@@ -69,36 +70,14 @@ GitHub Student Developer Pack 是学生党的福利，几十个付费服务全�
 - Figma + Canva（设计）
 - 全部组合可省下大笔费用
 
-[上一篇白嫖福利！
+[Claude Code 实战指南：
 
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡](/article/gname-eucc-free)[下一篇GitHub Copilot 免费版深度体验：
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-够用吗？
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
 
-实测告诉你答案](/article/github-copilot-free)
+号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[💰 3.9 元 Tokens 不限量！
 
-[下一篇GitHub Copilot 免费版深度体验：
+讯飞星辰 Coding Plan 全面升级![image](https://xiaozha.org/images/xunfei-coding-plan-cover.jpg)](/article/xunfei-coding-plan)[Windows 包管理器 winget 完全指南：
 
-够用吗？
-
-实测告诉你答案](/article/github-copilot-free)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/github-student-pack](https://xiaozha.org/article/github-student-pack)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)[💰 3.9 元 Tokens 不限量！
-
-讯飞星辰 Coding Plan 全面升级![image](https://xiaozha.org/images/xunfei-coding-plan-cover.jpg?t=3a9c55d5-e9ea-817c-8b47-dfa69c0a63b5)](/article/xunfei-coding-plan)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)

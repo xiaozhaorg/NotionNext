@@ -11,7 +11,7 @@ coverAlt: "Close-up of a glowing AI chip on a circuit board, symbolizing the com
 zhSlug: "claude-sonnet-4"
 ---
 
-![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8106-8277-c9325f4f5ef6&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1655720828018-edd2daec9349.webp)
 
 Anthropic has officially released Claude Sonnet 4, and its coding ability now tops the leaderboard across a wide range of benchmarks.
 

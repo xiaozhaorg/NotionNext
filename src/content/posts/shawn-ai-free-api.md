@@ -15,6 +15,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/shawn-ai-free-api"
 ogImage: "/images/shawn-ai-free-api-real.jpg"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
+enSlug: "shawn-ai-free-api"
 ---
 
 🎁 本文推荐一个我亲测可用的免费大模型 API 中转站——肖恩AI。

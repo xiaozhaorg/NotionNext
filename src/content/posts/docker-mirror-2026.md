@@ -13,9 +13,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/docker-mirror-2026"
 ogImage: "/images/docker-mirror-2026-real.jpg"
 coverAlt: "云层与服务器机房的云计算抽象图"
+enSlug: "docker-mirror-2026"
 ---
 
-![image](https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81f5-93f9-e4973f7bf19a&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1518432031352-d6fc5c10da5a.webp)
 
 如果你在国内使用 Docker，肯定遇到过这种崩溃瞬间：`docker pull nginx` 卡在 `Pulling fs layer` 半天不动，最后报一个 `i/o timeout` 或 `TLS handshake timeout`。
 
@@ -201,28 +202,14 @@ Q3：
 
 后续「小吒の博客」会继续分享 Docker、K8s、云原生相关的实战经验，欢迎收藏关注。
 
-[上一篇2026 免费 AI 编程助手横评：
+[Claude Code 实战指南：
 
-Codeium、Trae、CodeGeeX 谁更强？](/article/free-ai-coding-tools-2026)[下一篇Docker Compose 入门到实战：5 分钟学会容器编排](/article/docker-compose-tutorial)
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-[下一篇Docker Compose 入门到实战：5 分钟学会容器编排](/article/docker-compose-tutorial)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/docker-mirror-2026](https://xiaozha.org/article/docker-mirror-2026)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
+号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
 
-相关文章
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
 
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
-
-让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg?t=3a9c55d5-e9ea-816d-a569-f20405ad6185)](/article/vscode-extensions-2026)
+让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg)](/article/vscode-extensions-2026)

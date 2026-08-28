@@ -11,6 +11,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/astro-vs-nextjs"
 ogImage: "/images/astro-vs-nextjs-real.jpg"
 coverAlt: "MacBook 屏幕上显示着编程代码的编辑器界面"
+enSlug: "astro-vs-nextjs"
 ---
 
 引言在静态网站和博客构建领域，Astro 和 Next.js 是2026年最热门的两个框架。
@@ -132,32 +133,14 @@ Next.js 15 则专注于 React 19 整合和 Turbopack 稳定版，构建速度提
 
 对于中等复杂度的项目，两者都能胜任，可以根据团队熟悉度决定。
 
-[上一篇AtomCode：
+[Claude Code 实战指南：
 
-终端里的 AI 编码代理，开源免费且强大](/article/atomcode-intro)[下一篇薅羊毛！
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）](/article/shawn-ai-free-api)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
 
-[下一篇薅羊毛！
+号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
 
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）](/article/shawn-ai-free-api)
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/astro-vs-nextjs](https://xiaozha.org/article/astro-vs-nextjs)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
-
-让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg?t=3a9c55d5-e9ea-816d-a569-f20405ad6185)](/article/vscode-extensions-2026)
+让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg)](/article/vscode-extensions-2026)

@@ -11,7 +11,7 @@ coverAlt: "Close-up of chips and data cables densely packed on a green circuit b
 zhSlug: "github-student-pack"
 ---
 
-![image](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a7-9075-e33d9367aab3&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1518770660439-4636190af475.webp)
 
 The GitHub Student Developer Pack is one of the best perks available to students. Dozens of paid services become completely free with it — the combined value easily tops $1,000. Here's a complete guide to getting the pack, covering who qualifies, how to apply, and which benefits are actually worth grabbing.
 

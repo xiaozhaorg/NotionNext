@@ -13,9 +13,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/free-ai-coding-tools-2026"
 ogImage: "/images/free-ai-coding-tools-2026-real.jpg"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
+enSlug: "free-ai-coding-tools-2026"
 ---
 
-![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81d7-a194-c4aed70d81d1&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1555255707-c07966088b7b.webp)
 
 AI 编程助手已经不是什么新鲜事，但 GitHub Copilot 每月 $10 的订阅费让不少个人开发者望而却步。
 
@@ -294,26 +295,12 @@ Tabnine
 
 选好工具，把精力放在真正有价值的创造上。
 
-[上一篇强到可怕！
+[Claude Code 实战指南：
 
-Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token](/article/gemma-4-local-deploy)[下一篇🐳 2026 最新 Docker 国内镜像源加速配置指南，提速 10 倍不再拉取超时](/article/docker-mirror-2026)
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)](/article/mineradio-tutorial)[NextChat 部署指南：
 
-[下一篇🐳 2026 最新 Docker 国内镜像源加速配置指南，提速 10 倍不再拉取超时](/article/docker-mirror-2026)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/free-ai-coding-tools-2026](https://xiaozha.org/article/free-ai-coding-tools-2026)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
+号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
 
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37)](/article/mineradio-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)

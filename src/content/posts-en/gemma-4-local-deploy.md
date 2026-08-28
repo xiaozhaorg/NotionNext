@@ -11,7 +11,7 @@ coverAlt: "AI neural network concept art in a blue glow"
 zhSlug: "gemma-4-local-deploy"
 ---
 
-![Gemma 4 local deployment](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&q=50&width=1080&fmt=webp)
+![Gemma 4 local deployment](/images/remote/1677442136019-21780ecad995.webp)
 
 Gemma is Google's open-source LLM family built on the Gemini technology stack. Released in 2026, **Gemma 4** is a clear step up from its predecessor in code generation, reasoning, and multilingual understanding. The headline feature: **the 8B model runs smoothly on a consumer GPU with just 16GB of VRAM**.
 

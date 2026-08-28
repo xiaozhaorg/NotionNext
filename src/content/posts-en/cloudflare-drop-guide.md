@@ -15,7 +15,7 @@ zhSlug: "cloudflare-drop-guide"
 
 **Cloudflare Drop: Complete Guide** — deploy a static website by drag-and-drop, zero barrier, no account required.
 
-![image](https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8142-bff7-d0c879b811ff&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1563986768609-322da13575f3.webp)
 
 ## 1. Introduction
 

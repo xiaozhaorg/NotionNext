@@ -11,7 +11,7 @@ coverAlt: "Cloud computing abstract image with clouds and server room"
 zhSlug: "docker-mirror-2026"
 ---
 
-![Cloud computing abstract image with clouds and server room](https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81f5-93f9-e4973f7bf19a&q=50&width=1080&fmt=webp&fm=webp)
+![Cloud computing abstract image with clouds and server room](/images/remote/1518432031352-d6fc5c10da5a.webp)
 
 If you use Docker in China, you have probably hit this wall: `docker pull nginx` hangs on `Pulling fs layer` forever and finally throws an `i/o timeout` or `TLS handshake timeout`. Access to Docker Hub from inside the country is hit-or-miss and seriously hurts developer productivity.
 

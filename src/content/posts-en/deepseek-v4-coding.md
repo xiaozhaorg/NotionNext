@@ -11,7 +11,7 @@ coverAlt: "Close-up of a glowing AI chip and circuit board, symbolizing large-mo
 zhSlug: "deepseek-v4-coding"
 ---
 
-![image](https://images.unsplash.com/photo-1707343843982-f8275f3994c5?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8184-b8e2-d4db3d13fe6e&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1707343843982-f8275f3994c5.webp)
 
 DeepSeek V4's coding ability has improved by a large margin, and it costs only one-tenth as much as GPT-5.6.
 

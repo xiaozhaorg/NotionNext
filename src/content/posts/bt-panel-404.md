@@ -10,6 +10,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/bt-panel-404"
 ogImage: "/images/bt-panel-404-real.jpg"
 coverAlt: "服务器机房中排列整齐的机柜与网络设备"
+enSlug: "bt-panel-404"
 ---
 
 问题今天首先突然发现自己的另一个word press网站白屏，想着通过宝塔面板登陆进去查看以下原因，结果发现登陆宝塔面板居然报404
@@ -18,36 +19,16 @@ coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 
 使用HTTPS访问提示"此网站无法提供安全连接"，使用HTTP访问提示"404 Not Found"
 
-![image](https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81dc-a86d-d261d7dc56e2&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1484480974693-6ca0a78fb36b.webp)
 
-![image](https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-815b-88ca-d7787bebc62a&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1499750310107-5fef28a66643.webp)
 
 解决方案在通过查询网站无果后，采用带AI助手的SSH终端进行查询解决，最终发现了问题
 
-![image](https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8113-81d5-d7b14fa9d5ee&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1484480974693-6ca0a78fb36b.webp)
 
 原来是宝塔面板端口被占用，然后再次检查是被哪个服务占用，结果告诉我是Nginx占用
 
-![image](https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-811e-b542-ed1b9ac83ec8&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1499750310107-5fef28a66643.webp)
 
 找到问题就好解决了，将宝塔面板的登陆端口改一下，我这边改成8888测试，然后再将服务器管理后台的宝塔安全防火墙入口8888开放，然后就正常了
-
-[上一篇ChatGPT vs Claude vs Gemini 2026 大横评：
-
-谁是综合最强 AI？](/article/chatgpt-vs-claude-vs-gemini)[下一篇Vaultwarden 自托管密码管理器：
-
-告别 1Password 年费，数据自己掌控](/article/bitwarden-self-host)
-
-[下一篇Vaultwarden 自托管密码管理器：
-
-告别 1Password 年费，数据自己掌控](/article/bitwarden-self-host)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/bt-panel-404](https://xiaozha.org/article/bt-panel-404)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[Hi！
-
-欢迎访问本站！![image](/images/hi-welcome-real.jpg)](/article/hi-welcome)

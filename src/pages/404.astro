@@ -9,7 +9,7 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime())
   .slice(0, 6);
 ---
-<Layout title="页面不存在 | 小吒博客" description="您访问的页面不存在或已被删除。">
+<Layout title="页面不存在 | 小吒博客" description="您访问的页面不存在或已被删除。" noindex>
   <Header />
   <div class="layout">
     <main>

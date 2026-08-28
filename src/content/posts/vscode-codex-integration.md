@@ -14,9 +14,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-codex-integration"
 ogImage: "/images/vscode-codex-integration-real.jpg"
 coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
+enSlug: "vscode-codex-integration"
 ---
 
-![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8177-9ecb-ee9e983840b5&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1655720828018-edd2daec9349.webp)
 
 AI 编程助手已经从「尝鲜玩具」进化为「生产力工具」。2026 年最值得关注的组合之一，就是 VS Code + OpenAI Codex 的深度集成。
 
@@ -304,32 +305,14 @@ Agent 模式修改了不该改的文件？
 
 后续「小吒の博客」会继续分享 AI 编程工具的深度使用技巧，包括如何用 Codex + MCP 工具搭建自动化开发流水线，敬请关注。
 
-[上一篇2026 年 VS Code 必备插件推荐：
+[Claude Code 实战指南：
 
-让开发效率翻倍的 20 个神器](/article/vscode-extensions-2026)[下一篇Vercel vs Cloudflare Pages：
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-静态网站部署终极对比，2026 谁更胜一筹？](/article/vercel-vs-cloudflare)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Trae IDE 深度体验：
 
-[下一篇Vercel vs Cloudflare Pages：
+字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg)](/article/trae-ide-review)[腾讯马维斯Marvis体验：
 
-静态网站部署终极对比，2026 谁更胜一筹？](/article/vercel-vs-cloudflare)
+装上就有6个AI牛马帮你干活![image](https://xiaozha.org/images/tencent-marvis-cover.jpg)](/article/tencent-marvis)[硅基流动（SiliconFlow）是什么？
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/vscode-codex-integration](https://xiaozha.org/article/vscode-codex-integration)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Trae IDE 深度体验：
-
-字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg?t=3a9c55d5-e9ea-811a-a308-e6fca0fd4ea9)](/article/trae-ide-review)[腾讯马维斯Marvis体验：
-
-装上就有6个AI牛马帮你干活![image](https://xiaozha.org/images/tencent-marvis-cover.jpg?t=3a9c55d5-e9ea-818f-9424-f0412536178b)](/article/tencent-marvis)[硅基流动（SiliconFlow）是什么？
-
-一文读懂这个 AI 基础设施新星![image](https://xiaozha.org/images/siliconflow-intro-cover.jpg?t=3a9c55d5-e9ea-8156-9815-cf8b1e9fa609)](/article/siliconflow-intro)
+一文读懂这个 AI 基础设施新星![image](https://xiaozha.org/images/siliconflow-intro-cover.jpg)](/article/siliconflow-intro)

@@ -11,7 +11,7 @@ coverAlt: "A warm team collaboration scene at a work desk"
 zhSlug: "github-actions-advanced"
 ---
 
-![image](https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81e3-82b4-d0c061c32ebe&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1522202176988-66273c2fd55f.webp)
 
 GitHub Actions is much more than just CI/CD.
 

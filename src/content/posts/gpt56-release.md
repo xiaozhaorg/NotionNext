@@ -12,9 +12,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/gpt56-release"
 ogImage: "/images/gpt56-release-real.jpg"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
+enSlug: "gpt56-release"
 ---
 
-![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81c2-a567-d25ae2d6fbea&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1555255707-c07966088b7b.webp)
 
 2026 年 7 月 9 日，OpenAI 正式发布了 GPT-5.6 系列大模型。
 
@@ -151,32 +152,14 @@ $1.5 / 1M tokens
 
 建议根据自己的实际需求和预算来做决策。
 
-[上一篇Hi！
+[Claude Code 实战指南：
 
-欢迎访问本站！](/article/hi-welcome)[下一篇白嫖福利！
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡](/article/gname-eucc-free)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
 
-[下一篇白嫖福利！
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[⚡ VS Code + OpenAI Codex 深度集成：
 
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡](/article/gname-eucc-free)
+开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Vercel vs Cloudflare Pages：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/gpt56-release](https://xiaozha.org/article/gpt56-release)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b)](/article/vscode-codex-integration)[Vercel vs Cloudflare Pages：
-
-静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg?t=3a9c55d5-e9ea-81b2-aadf-c0eaf5d9912f)](/article/vercel-vs-cloudflare)
+静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg)](/article/vercel-vs-cloudflare)

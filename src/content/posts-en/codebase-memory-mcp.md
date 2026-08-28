@@ -11,7 +11,7 @@ coverAlt: "MacBook screen showing a programming editor with code"
 zhSlug: "codebase-memory-mcp"
 ---
 
-![image](https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ce-b547-cb611e4fd400&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1498050108023-c5249f4df085.webp)
 
 ## Introduction
 

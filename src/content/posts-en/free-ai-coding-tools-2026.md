@@ -11,7 +11,7 @@ coverAlt: "Concept art of an AI neural network in a blue glow"
 zhSlug: "free-ai-coding-tools-2026"
 ---
 
-![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81d7-a194-c4aed70d81d1&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1555255707-c07966088b7b.webp)
 
 AI coding assistants are nothing new at this point, but GitHub Copilot's $10/month subscription has kept plenty of individual developers on the sidelines.
 

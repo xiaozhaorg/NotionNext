@@ -11,7 +11,7 @@ coverAlt: "A MacBook with headphones and a music player interface beside it"
 zhSlug: "vscode-extensions-2026"
 ---
 
-![image](https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81bf-a2c7-f9da89bb119e&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1516116216624-53e697fedbea.webp)
 
 The real power of VS Code comes from its rich extension ecosystem.
 

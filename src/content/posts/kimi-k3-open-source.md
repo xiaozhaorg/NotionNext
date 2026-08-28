@@ -14,11 +14,12 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/kimi-k3-open-source"
 ogImage: "/images/kimi-k3-open-source-real.jpg"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
+enSlug: "kimi-k3-open-source"
 ---
 
 ## 
 
-🧠 Kimi K3 深度解析：2.8万亿参数，全球最大开源大模型来了![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81fb-852d-c1ed20307dd5&q=50&width=1080&fmt=webp&fm=webp)
+🧠 Kimi K3 深度解析：2.8万亿参数，全球最大开源大模型来了![image](/images/remote/1555255707-c07966088b7b.webp)
 
 一、引言：
 
@@ -332,30 +333,12 @@ API 定价会是多少？
 - [Kimi 智能助手](https://kimi.moonshot.cn)
 - [2026 世界人工智能大会](https://www.worldaic.com.cn)
 
-[上一篇Mealie 自建菜谱应用：
+[Claude Code 实战指南：
 
-告别下厨房广告，掌控你的私人厨房](/article/mealie-recipe-app)[下一篇Jellyfin 影音库搭建指南：
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)](/article/mineradio-tutorial)[NextChat 部署指南：
 
-Plex 免费替代，4K 硬解全平台](/article/jellyfin-media-server)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
 
-[下一篇Jellyfin 影音库搭建指南：
+开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Uptime Kuma 自建监控：
 
-Plex 免费替代，4K 硬解全平台](/article/jellyfin-media-server)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/kimi-k3-open-source](https://xiaozha.org/article/kimi-k3-open-source)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37)](/article/mineradio-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b)](/article/vscode-codex-integration)[Uptime Kuma 自建监控：
-
-免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg?t=3a9c55d5-e9ea-813d-b32e-dc4fada13b4b)](/article/uptime-kuma-monitor)
+免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg)](/article/uptime-kuma-monitor)

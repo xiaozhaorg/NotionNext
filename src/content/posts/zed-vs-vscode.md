@@ -11,6 +11,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/zed-vs-vscode"
 ogImage: "/images/zed-vs-vscode-real.jpg"
 coverAlt: "深色主题代码编辑器中色彩高亮的程序源码"
+enSlug: "zed-vs-vscode"
 ---
 
 引言Zed 是2024年发布的新一代代码编辑器，由 Atom 编辑器原班人马打造。
@@ -96,32 +97,14 @@ SSH 远程编辑功能较弱
 
 对于依赖大量插件的开发者，建议继续观望，等生态更完善后再迁移。
 
-[上一篇NextChat 部署指南：
+[Claude Code 实战指南：
 
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型](/article/nextchat-deploy-guide)[下一篇💰 3.9 元 Tokens 不限量！
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-讯飞星辰 Coding Plan 全面升级](/article/xunfei-coding-plan)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
 
-[下一篇💰 3.9 元 Tokens 不限量！
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
 
-讯飞星辰 Coding Plan 全面升级](/article/xunfei-coding-plan)
+让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg)](/article/vscode-extensions-2026)[Vercel vs Cloudflare Pages：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/zed-vs-vscode](https://xiaozha.org/article/zed-vs-vscode)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
-
-让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg?t=3a9c55d5-e9ea-816d-a569-f20405ad6185)](/article/vscode-extensions-2026)[Vercel vs Cloudflare Pages：
-
-静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg?t=3a9c55d5-e9ea-81b2-aadf-c0eaf5d9912f)](/article/vercel-vs-cloudflare)
+静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg)](/article/vercel-vs-cloudflare)

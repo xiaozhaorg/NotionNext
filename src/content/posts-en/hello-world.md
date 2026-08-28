@@ -6,7 +6,7 @@ author: "Xiaozha"
 tags: ["announcement", "about"]
 featured: true
 ogImage: "/images/og-default.svg"
-zhSlug: "hello-world"
+zhSlug: "hi-welcome"
 ---
 
 Welcome to **Xiaozha Blog**! This is the English version of my tech blog, where I share practical guides and tutorials on:

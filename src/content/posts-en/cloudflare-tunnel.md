@@ -11,7 +11,7 @@ coverAlt: "Data center server rack with blinking network LEDs"
 zhSlug: "cloudflare-tunnel"
 ---
 
-![image](https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8146-a4b1-fc79a42610d8&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1558494949-ef010cbdcc31.webp)
 
 Cloudflare Tunnel (formerly Argo Tunnel) is the best free way to expose your local network services to the public internet. You don't need a public IP address, and you don't need to set up port forwarding on your router — you can have it up and running in about five minutes.
 

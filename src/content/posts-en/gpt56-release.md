@@ -11,7 +11,7 @@ coverAlt: "Conceptual image of an AI neural network glowing in blue light"
 zhSlug: "gpt56-release"
 ---
 
-![image](https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81c2-a567-d25ae2d6fbea&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1555255707-c07966088b7b.webp)
 
 On July 9, 2026, OpenAI officially released the GPT-5.6 family of large language models.
 

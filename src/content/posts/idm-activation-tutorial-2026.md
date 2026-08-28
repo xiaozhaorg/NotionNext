@@ -12,9 +12,8 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/idm-activation-tutorial-2026"
 ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
 coverAlt: "服务器机房中排列整齐的机柜与网线"
+enSlug: "idm-activation-tutorial-2026"
 ---
-
-![image](/images/idm-activation-tutorial-2026-real.jpg)
 
 Internet Download Manager (IDM) 是一款功能强大的下载加速工具，支持多线程下载、视频嗅探、站点抓取等功能。
 
@@ -121,19 +120,3 @@ Step 3：
 在 PowerShell 中先执行以下命令，临时允许脚本运行：
 
 然后再执行激活脚本。
-
-[上一篇Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步](/article/mineradio-tutorial)[下一篇NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型](/article/nextchat-deploy-guide)
-
-[下一篇NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型](/article/nextchat-deploy-guide)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/idm-activation-tutorial-2026](https://xiaozha.org/article/idm-activation-tutorial-2026)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37)](/article/mineradio-tutorial)

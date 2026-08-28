@@ -10,6 +10,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/hi-welcome"
 ogImage: "/images/hi-welcome-real.jpg"
 coverAlt: "团队成员在桌前协作交流的温馨工作场景"
+enSlug: "hello-world"
 ---
 
 Hi!
@@ -23,25 +24,3 @@ Hi!
 关于本人站长是个看起来好像什么都会点，但是好像又什么不会的人。
 
 可以说，跟大多数的个人站长一样，懂点建站，也懂点基础代码，但是要说能完全靠这个吃饭又达不到，所以是一个为了兴趣纯爱发电的站长，至于这个博客后面会写什么，边发展边写吧
-
-[上一篇Immich 自建相册：
-
-Google Photos 的完美替代，AI 自动分类人脸识别](/article/immich-photo-backup)[下一篇GPT-5.6 正式发布！
-
-OpenAI 最新大模型到底强在哪？
-
-全面解析来了](/article/gpt56-release)
-
-[下一篇GPT-5.6 正式发布！
-
-OpenAI 最新大模型到底强在哪？
-
-全面解析来了](/article/gpt56-release)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/hi-welcome](https://xiaozha.org/article/hi-welcome)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[登陆宝塔面板访问404![image](https://xiaozha.org/images/bt-panel-404-cover.jpg?t=3a9c55d5-e9ea-812c-b898-df7bc7ef458e)](/article/bt-panel-404)

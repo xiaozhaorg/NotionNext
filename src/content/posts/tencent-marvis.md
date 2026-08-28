@@ -12,6 +12,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-marvis"
 ogImage: "/images/tencent-marvis-real.jpg"
 coverAlt: "整洁办公桌面上的笔记本电脑与工作笔记"
+enSlug: "tencent-marvis"
 ---
 
 腾讯应用宝团队于2026年5月正式发布了Marvis（马维斯），这是一款致敬钢铁侠Jarvis的操作系统层级AI助手。
@@ -90,32 +91,14 @@ Search Agent从公开资源中搜索信息并附带引用来源。
 
 当AI能够真正理解并操控你的电脑时，传统的图形界面交互方式或许将被彻底改变。
 
-[上一篇Trae IDE 深度体验：
+[Claude Code 实战指南：
 
-字节出品的 AI 原生编辑器，到底值不值得用？](/article/trae-ide-review)[下一篇腾讯云 EdgeOne 体验：
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-国内免费 CDN 加速，Cloudflare 的最佳替代品](/article/tencent-edgeone)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
 
-[下一篇腾讯云 EdgeOne 体验：
+开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Trae IDE 深度体验：
 
-国内免费 CDN 加速，Cloudflare 的最佳替代品](/article/tencent-edgeone)
+字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg)](/article/trae-ide-review)[硅基流动（SiliconFlow）是什么？
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/tencent-marvis](https://xiaozha.org/article/tencent-marvis)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b)](/article/vscode-codex-integration)[Trae IDE 深度体验：
-
-字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg?t=3a9c55d5-e9ea-811a-a308-e6fca0fd4ea9)](/article/trae-ide-review)[硅基流动（SiliconFlow）是什么？
-
-一文读懂这个 AI 基础设施新星![image](https://xiaozha.org/images/siliconflow-intro-cover.jpg?t=3a9c55d5-e9ea-8156-9815-cf8b1e9fa609)](/article/siliconflow-intro)
+一文读懂这个 AI 基础设施新星![image](https://xiaozha.org/images/siliconflow-intro-cover.jpg)](/article/siliconflow-intro)

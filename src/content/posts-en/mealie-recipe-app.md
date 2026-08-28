@@ -11,7 +11,7 @@ coverAlt: "Blue tech lighting of cloud computing and a server room"
 zhSlug: "mealie-recipe-app"
 ---
 
-![image](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8162-93a9-c2f838fcb4be&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1460925895917-afdab827c52f.webp)
 
 Mealie is an open-source, self-hosted recipe app that helps you manage all of your favorite recipes in one place. If you're tired of the endless ads on Xiachufang (下厨房) or Douguo (豆果美食) and want full ownership of your personal recipe collection, Mealie is the perfect replacement — your data stays on your own server, under your control.
 

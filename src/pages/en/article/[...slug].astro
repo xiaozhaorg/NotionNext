@@ -32,7 +32,7 @@ const hasWebp = webpSrc !== post.data.ogImage;
   type="article"
   publishedTime={post.data.pubDatetime}
   tags={post.data.tags}
-  altURL={post.data.zhSlug ? `/article/${post.data.zhSlug}` : undefined}
+  altURL={post.data.zhSlug ? `/article/${post.data.zhSlug}` : null}
 >
   <Header locale="en" />
   <div class="layout">

@@ -12,6 +12,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-ip-optimization"
 ogImage: "/images/cloudflare-ip-optimization-real.jpg"
 coverAlt: "数据中心服务器机架上闪烁的网络指示灯"
+enSlug: "cloudflare-ip-optimization"
 ---
 
 前言Cloudflare 是全球最大的免费 CDN 服务商，但在中国大陆访问时经常遇到高延迟、丢包的问题。
@@ -457,30 +458,14 @@ TTFB 从 200ms+ 降到 100ms 以内
 - [DNSPod 分线路解析](https://docs.dnspod.cn/api/) - API 文档
 - [Cloudflare SSL/TLS 设置](https://developers.cloudflare.com/ssl/) - 官方文档
 
-[上一篇Cloudflare R2 对象存储完全指南：10GB 免费存储，替代 S3 的最佳选择](/article/cloudflare-r2-storage)[下一篇🚀 Cloudflare Drop 完全指南：
+[Claude Code 实战指南：
 
-零门槛拖拽部署静态网站，无需注册账号](/article/cloudflare-drop-guide)
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-[下一篇🚀 Cloudflare Drop 完全指南：
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
 
-零门槛拖拽部署静态网站，无需注册账号](/article/cloudflare-drop-guide)
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[Vercel vs Cloudflare Pages：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/cloudflare-ip-optimization](https://xiaozha.org/article/cloudflare-ip-optimization)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
+静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg)](/article/vercel-vs-cloudflare)[Uptime Kuma 自建监控：
 
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)[Vercel vs Cloudflare Pages：
-
-静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg?t=3a9c55d5-e9ea-81b2-aadf-c0eaf5d9912f)](/article/vercel-vs-cloudflare)[Uptime Kuma 自建监控：
-
-免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg?t=3a9c55d5-e9ea-813d-b32e-dc4fada13b4b)](/article/uptime-kuma-monitor)
+免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg)](/article/uptime-kuma-monitor)

@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { SITE } from "@/config";
 import { t, type Locale } from "@/locales/ui";
 
-type Props = { post: CollectionEntry<"posts">; pinned?: boolean; locale?: Locale };
+type Props = { post: CollectionEntry<"posts"> | CollectionEntry<"posts-en">; pinned?: boolean; locale?: Locale };
 const { post, pinned = false, locale = "zh" } = Astro.props;
 const { data, id } = post;
 const urlPrefix = locale === "en" ? "/en/article" : "/article";
@@ -12,9 +12,16 @@ const tagPrefix = locale === "en" ? "/en/tags" : "/tags";
 const dateLocale = locale === "en" ? "en-US" : "zh-CN";
 const pinnedText = locale === "en" ? "📌 Pinned" : "📌 置顶";
 
-// 阅读时长估算（中文按字符数，英文按词数）
-const wordCount = post.body?.length ?? 0;
-const readingTime = Math.max(1, Math.ceil(wordCount / 400));
+// 阅读时长估算（中文按字符数 ~350字/分，英文按词数 ~220词/分）
+const rawText = (post.body ?? "")
+  .replace(/```[\s\S]*?```/g, " ")
+  .replace(/!?\[[^\]]*\]\([^)]*\)/g, " ")
+  .replace(/[#*`>|~\-_]/g, " ")
+  .replace(/\s+/g, " ");
+const readingTime =
+  locale === "en"
+    ? Math.max(1, Math.ceil(rawText.split(" ").filter(Boolean).length / 220))
+    : Math.max(1, Math.ceil(rawText.replace(/\s/g, "").length / 350));
 
 // 基于标题 hash 生成稳定的渐变色（无封面图时用）
 function hashStr(s: string): number {
@@ -47,17 +54,21 @@ const placeholderText = data.title.charAt(0);
 // 封面图 alt：优先用描述性 coverAlt，回退到标题
 const coverAlt = data.coverAlt || data.title;
 
-// 生成 WebP 路径：/images/xxx.jpg → /images/xxx.webp
+// 生成 WebP 路径：/images/xxx.jpg → /images/xxx.webp（缩略图用 480w 的 -thumb.webp）
 const webpSrc = data.ogImage
   ? data.ogImage.replace(/\.(jpe?g|png)$/i, ".webp")
   : "";
+const thumbWebp = data.ogImage
+  ? data.ogImage.replace(/\.(jpe?g|png)$/i, "-thumb.webp")
+  : "";
 const hasWebp = webpSrc !== data.ogImage;
+const fallbackId = `thumb-fallback-${id}`;
 ---
 <article class="post-card">
   <a href={url} class="post-thumb" aria-label={data.title}>
     {data.ogImage ? (
       <picture>
-        {hasWebp && <source srcset={webpSrc} type="image/webp" />}
+        {hasWebp && <source srcset={thumbWebp} type="image/webp" />}
         <img
           src={data.ogImage}
           alt={coverAlt}
@@ -66,7 +77,8 @@ const hasWebp = webpSrc !== data.ogImage;
           height="138"
           loading="lazy"
           decoding="async"
-          onerror="this.style.display='none';this.parentElement.nextElementSibling.style.display='flex'"
+          data-thumb
+          data-fallback={fallbackId}
         />
       </picture>
     ) : (
@@ -75,7 +87,7 @@ const hasWebp = webpSrc !== data.ogImage;
       </div>
     )}
     {data.ogImage && (
-      <div class="post-thumb-placeholder post-thumb-fallback" style={`${gradientStyle};display:none`}>
+      <div id={fallbackId} class="post-thumb-placeholder post-thumb-fallback" style={`${gradientStyle};display:none`}>
         <span>{placeholderText}</span>
       </div>
     )}
@@ -107,6 +119,22 @@ const hasWebp = webpSrc !== data.ogImage;
     )}
   </div>
 </article>
+
+<script>
+  // 缩略图加载失败回退到渐变占位（事件委托，捕获阶段捕获 error）
+  document.addEventListener(
+    "error",
+    (e) => {
+      const img = e.target;
+      if (img instanceof HTMLImageElement && img.dataset.thumb) {
+        img.style.display = "none";
+        const fb = document.getElementById(img.dataset.fallback || "");
+        if (fb) fb.style.display = "flex";
+      }
+    },
+    true
+  );
+</script>
 
 <style>
   .post-card {

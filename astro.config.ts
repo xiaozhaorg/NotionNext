@@ -3,7 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
-import sitemap from "@astrojs/sitemap";
+import sitemap, { ChangeFreqEnum } from "@astrojs/sitemap";
+import type { SitemapItem } from "@astrojs/sitemap";
 import pagefind from "astro-pagefind";
 import { SITE } from "./src/config";
 
@@ -21,25 +22,29 @@ export default defineConfig({
   integrations: [
     sitemap({
       // 按页面类型分配合适的权重与更新频率，避免搜索引擎抓错重点
-      serialize(item) {
+      serialize(item): SitemapItem {
         const p = new URL(item.url).pathname;
-        // 只有首页 / 权重最高
-        if (p === "/" || p === "") {
-          return { ...item, changefreq: "daily", priority: 1.0 };
-        }
-        // 一级栏目页（/about/、/archive/、/tags/ 聚合页）
-        if (/^\/(about|archive|tags)\/?$/.test(p)) {
-          return { ...item, changefreq: "daily", priority: 0.8 };
-        }
-        // 具体某篇文章
-        if (p.startsWith("/article/")) {
-          return { ...item, changefreq: "weekly", priority: 0.85 };
-        }
-        // 具体标签聚合页（避免和正文抢权重）
-        if (p.startsWith("/tags/")) {
-          return { ...item, changefreq: "monthly", priority: 0.35 };
-        }
-        return { ...item, changefreq: "weekly", priority: 0.7 };
+        const cf: ChangeFreqEnum =
+          p === "/" || p === ""
+            ? "daily"
+            : /^\/(about|archive|tags)\/?$/.test(p)
+              ? "daily"
+              : p.startsWith("/article/")
+                ? "weekly"
+                : p.startsWith("/tags/")
+                  ? "monthly"
+                  : "weekly";
+        const pr =
+          p === "/" || p === ""
+            ? 1.0
+            : /^\/(about|archive|tags)\/?$/.test(p)
+              ? 0.8
+              : p.startsWith("/article/")
+                ? 0.85
+                : p.startsWith("/tags/")
+                  ? 0.35
+                  : 0.7;
+        return { ...item, changefreq: cf, priority: pr };
       },
     }),
     pagefind(),

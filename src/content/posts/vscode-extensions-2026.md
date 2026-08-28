@@ -11,9 +11,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-extensions-2026"
 ogImage: "/images/vscode-extensions-2026-real.jpg"
 coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
+enSlug: "vscode-extensions-2026"
 ---
 
-![image](https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81bf-a2c7-f9da89bb119e&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1516116216624-53e697fedbea.webp)
 
 VS Code 的真正威力来自丰富的插件生态。
 
@@ -49,32 +50,14 @@ VS Code 的真正威力来自丰富的插件生态。
 - Remote - SSH - 远程开发
 - Live Server - 本地服务器
 
-[上一篇Windows 包管理器 winget 完全指南：
+[Claude Code 实战指南：
 
-告别手动下载安装软件](/article/winget-windows-tools)[下一篇⚡ VS Code + OpenAI Codex 深度集成：
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-开启 AI 结对编程新时代](/article/vscode-codex-integration)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
 
-[下一篇⚡ VS Code + OpenAI Codex 深度集成：
+号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
 
-开启 AI 结对编程新时代](/article/vscode-codex-integration)
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[Vercel vs Cloudflare Pages：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/vscode-extensions-2026](https://xiaozha.org/article/vscode-extensions-2026)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)[Vercel vs Cloudflare Pages：
-
-静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg?t=3a9c55d5-e9ea-81b2-aadf-c0eaf5d9912f)](/article/vercel-vs-cloudflare)
+静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg)](/article/vercel-vs-cloudflare)

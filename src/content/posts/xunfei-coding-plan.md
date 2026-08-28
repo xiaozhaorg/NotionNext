@@ -10,6 +10,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/xunfei-coding-plan"
 ogImage: "/images/xunfei-coding-plan-real.jpg"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
+enSlug: "xunfei-coding-plan"
 ---
 
 「养虾」正在成为许多开发者的新日常。
@@ -26,7 +27,7 @@ coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 
 不仅彻底重构了计费模式，更率先引入智谱最新一代旗舰模型 GLM-5.1，同时新增 Qwen3.5-397B-A17B 等多款顶尖模型，让开发者能够更高效、更自由「养虾」，创造更多AI应用。
 
-![image](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ef-9dc3-d40fff27a4da&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1677442136019-21780ecad995.webp)
 
 3.9元不限量
 
@@ -38,7 +39,7 @@ coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 
 看似只是计费单位的调整，但对开发者来说，本质是一次使用范式的切换——从关注「消耗了多少资源」，变成关注「完成了多少次调用」。
 
-![image](https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8179-aa65-d45038fcaee2&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1531403009284-440f080d1e12.webp)
 
 ▲ 升级版的Coding Plan套餐类型
 
@@ -102,28 +103,10 @@ PC端进入星辰MaaS平台官网（[https://maas.xfyun.cn/packageSubscription?i
 
 邀请码【MAAS-C4669BE4】
 
-[上一篇Zed 编辑器体验：
+[GitHub Student Developer Pack 完整攻略：
 
-号称最快的代码编辑器，到底有多强？](/article/zed-vs-vscode)[下一篇Windows 包管理器 winget 完全指南：
+学生党免费撸 $1000+ 服务![image](https://xiaozha.org/images/github-student-pack-cover.jpg)](/article/github-student-pack)[强到可怕！
 
-告别手动下载安装软件](/article/winget-windows-tools)
+Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token![image](https://xiaozha.org/images/gemma-4-local-deploy-cover.jpg)](/article/gemma-4-local-deploy)[20块买一年的.COM顶级域名！
 
-[下一篇Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件](/article/winget-windows-tools)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/xunfei-coding-plan](https://xiaozha.org/article/xunfei-coding-plan)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[白嫖福利！
-
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡![image](https://xiaozha.org/images/gname-eucc-free-cover.jpg?t=3a9c55d5-e9ea-810c-9b43-d177c14fe495)](/article/gname-eucc-free)[GitHub Student Developer Pack 完整攻略：
-
-学生党免费撸 $1000+ 服务![image](https://xiaozha.org/images/github-student-pack-cover.jpg?t=3a9c55d5-e9ea-819e-9bc0-dcd4c453dea5)](/article/github-student-pack)[强到可怕！
-
-Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token![image](https://xiaozha.org/images/gemma-4-local-deploy-cover.jpg?t=3a9c55d5-e9ea-8134-b701-e2a15c04f02e)](/article/gemma-4-local-deploy)[20块买一年的.COM顶级域名！
-
-错过拍大腿！![image](https://xiaozha.org/images/com-domain-deal-cover.jpg?t=3a9c55d5-e9ea-810b-b35d-f31e4045cb27)](/article/com-domain-deal)
+错过拍大腿！![image](https://xiaozha.org/images/com-domain-deal-cover.jpg)](/article/com-domain-deal)

@@ -11,7 +11,7 @@ coverAlt: "Blue tech lighting over cloud computing and server room racks"
 zhSlug: "bitwarden-self-host"
 ---
 
-![image](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81fe-9173-f6132acdd060&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1460925895917-afdab827c52f.webp)
 
 1Password costs $36 a year?
 

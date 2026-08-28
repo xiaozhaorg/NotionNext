@@ -10,7 +10,7 @@ const posts = (await getCollection("posts-en", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime())
   .slice(0, 6);
 ---
-<Layout locale="en" title={`Page Not Found | ${SITE.titleEn}`} description="The page you're looking for doesn't exist or has been moved.">
+<Layout locale="en" title={`Page Not Found | ${SITE.titleEn}`} description="The page you're looking for doesn't exist or has been moved." noindex>
   <Header locale="en" />
   <div class="layout">
     <main>

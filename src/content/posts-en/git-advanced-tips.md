@@ -11,7 +11,7 @@ coverAlt: "An overhead view of a programmer's desk with dual monitors"
 zhSlug: "git-advanced-tips"
 ---
 
-![image](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ba-a635-f8ba5d9b496f&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1461749280684-dccba630e2f6.webp)
 
 Git is far more than just `commit` and `push`.
 

@@ -14,13 +14,14 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/codebase-memory-mcp"
 ogImage: "/images/codebase-memory-mcp-real.jpg"
 coverAlt: "MacBook 屏幕上显示着编程代码的编辑器界面"
+enSlug: "codebase-memory-mcp"
 ---
 
 ## 
 
 💻 codebase-memory-mcp：
 
-让AI记住整个代码库的神器，毫秒级索引158种语言![image](https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ce-b547-cb611e4fd400&q=50&width=1080&fmt=webp&fm=webp)
+让AI记住整个代码库的神器，毫秒级索引158种语言![image](/images/remote/1498050108023-c5249f4df085.webp)
 
 一、引言：
 
@@ -387,30 +388,12 @@ GitHub Copilot
 - [MCP 协议官网](https://modelcontextprotocol.io)
 - [Anthropic Claude](https://www.anthropic.com/claude)
 
-[上一篇20块买一年的.COM顶级域名！
+[Claude Code 实战指南：
 
-错过拍大腿！](/article/com-domain-deal)[下一篇零成本建站！
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)](/article/mineradio-tutorial)[NextChat 部署指南：
 
-用 Cloudflare Workers 免费搭建个人博客完整教程](/article/cloudflare-workers-blog)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
 
-[下一篇零成本建站！
+号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
 
-用 Cloudflare Workers 免费搭建个人博客完整教程](/article/cloudflare-workers-blog)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/codebase-memory-mcp](https://xiaozha.org/article/codebase-memory-mcp)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37)](/article/mineradio-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)
+告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)

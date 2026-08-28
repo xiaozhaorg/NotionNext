@@ -11,8 +11,14 @@ interface Props {
   publishedTime?: Date;
   tags?: string[];
   locale?: Locale;
-  /** 关联的另一种语言 URL（用于 hreflang，文章页用） */
-  altURL?: string;
+  /**
+   * 关联的另一种语言 URL（用于 hreflang，文章页用）。
+   * 传 null 表示该页面没有对应的另一种语言版本（不输出反向 hreflang）；
+   * 不传则按路径自动推导（/xxx ↔ /en/xxx）。
+   */
+  altURL?: string | null;
+  /** 禁止搜索引擎收录本页（404 等错误页用），默认 false */
+  noindex?: boolean;
 }
 
 const {
@@ -24,6 +30,7 @@ const {
   tags,
   locale,
   altURL,
+  noindex = false,
 } = Astro.props;
 
 // 自动推断 locale
@@ -42,10 +49,19 @@ const ogImage = image
   ? new URL(image, Astro.site)
   : new URL("/og-default.svg", Astro.site);
 
-// hreflang 互指
-const autoAltURL = altURL ?? getAltURL(Astro.url.pathname, isEn ? "zh" : "en");
-const zhURL = isEn ? new URL(autoAltURL, Astro.site).toString() : canonicalURL.toString();
-const enURL = isEn ? canonicalURL.toString() : new URL(autoAltURL, Astro.site).toString();
+// hreflang 互指（altURL === null 表示无对应语言版本，不输出该方向）
+const autoAltURL =
+  altURL === null ? null : altURL ?? getAltURL(Astro.url.pathname, isEn ? "zh" : "en");
+const zhURL = isEn
+  ? autoAltURL
+    ? new URL(autoAltURL, Astro.site).toString()
+    : null
+  : canonicalURL.toString();
+const enURL = isEn
+  ? canonicalURL.toString()
+  : autoAltURL
+    ? new URL(autoAltURL, Astro.site).toString()
+    : null;
 const xDefaultURL = new URL("/", Astro.site).toString();
 
 // JSON-LD 结构化数据
@@ -111,7 +127,7 @@ const crumbs: { name: string; url: string }[] = [{ name: homeLabel, url: isEn ? 
 
 let accumulated = "";
 for (const seg of segments) {
-  accumulated += `/${decodeURIComponent(seg)}`;
+  accumulated += `/${decodeURIComponent(seg)}/`;
   // 跳过 / 和 /article/ 本身作为层级
   if (seg === SITE.post.urlPrefix) {
     crumbs.push({ name: articleLabel, url: isEn ? `/en/${SITE.post.urlPrefix}/` : `/${SITE.post.urlPrefix}/` });
@@ -151,15 +167,17 @@ schemas.push({
     <meta name="keywords" content={siteKeywords} />
     <meta name="author" content={SITE.author} />
     <meta name="copyright" content={`© ${SITE.since}-${new Date().getFullYear()} ${siteTitle}`} />
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-    <meta name="baiduspider" content="index,follow" />
-    <meta name="bingbot" content="index,follow" />
-    <meta name="googlebot" content="index,follow" />
+    <meta name="robots" content={noindex
+      ? "noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+      : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"} />
+    <meta name="baiduspider" content={noindex ? "noindex,follow" : "index,follow"} />
+    <meta name="bingbot" content={noindex ? "noindex,follow" : "index,follow"} />
+    <meta name="googlebot" content={noindex ? "noindex,follow" : "index,follow"} />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- hreflang 多语言互指（Google 必须项） -->
-    <link rel="alternate" hreflang="zh-CN" href={zhURL} />
-    <link rel="alternate" hreflang="en" href={enURL} />
+    {zhURL && <link rel="alternate" hreflang="zh-CN" href={zhURL} />}
+    {enURL && <link rel="alternate" hreflang="en" href={enURL} />}
     <link rel="alternate" hreflang="x-default" href={xDefaultURL} />
 
     <!-- Open Graph -->
@@ -224,7 +242,7 @@ schemas.push({
     <!-- 51la 站点统计 -->
     {SITE.analytics.laId && (
       <>
-        <script is:inline charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+        <script is:inline charset="UTF-8" id="LA_COLLECT" src="https://sdk.51.la/js-sdk-pro.min.js"></script>
         <script is:inline define:vars={{ laId: SITE.analytics.laId, laCk: SITE.analytics.laCk }}>
           window.LA = window.LA || {};
           window.addEventListener("load", function () {
@@ -242,103 +260,142 @@ schemas.push({
       </script>
     )}
 
-    <!-- Pagefind 静态搜索（astro-pagefind 集成会自动生成 /pagefind 资源） -->
-    <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+    <!-- Pagefind 静态搜索（astro-pagefind 集成会自动生成 /pagefind 资源，点击时才加载） -->
   </head>
   <body>
     <slot />
 
-    <!-- Pagefind UI 初始化：统一由 [data-search-trigger] 触发 -->
+    <!-- Pagefind UI 初始化：懒加载，首次触发（点击/Ctrl+K/#q=）时才注入 CSS+JS -->
     <script is:inline>
       (function () {
-        function initPagefind() {
-          if (!window.PagefindUI) return;
+        const wrap = document.getElementById("pagefind-search-ui");
+        let pagefindUI = null;
 
-          const wrap = document.getElementById("pagefind-search-ui");
+        function openSearch(term) {
           if (!wrap) return;
+          wrap.classList.add("active");
+          // 支持 #q=xxx 直达：填入关键词并触发 Pagefind 搜索
+          if (term && pagefindUI) {
+            const input = wrap.querySelector(".pagefind-ui__search-input");
+            if (input) {
+              input.value = term;
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+          }
+          // 聚焦 Pagefind 内部输入框
+          setTimeout(function () {
+            const pfInput = wrap.querySelector(".pagefind-ui__search-input");
+            if (pfInput) {
+              pfInput.focus();
+              pfInput.select();
+            }
+          }, 60);
+        }
 
-          // 用 /pagefind 资源初始化；保持主题跟随站点暗/亮模式
-          new PagefindUI({
+        function closeSearch() {
+          if (!wrap) return;
+          wrap.classList.remove("active");
+        }
+
+        function initPagefind() {
+          // PagefindUI 是全局脚本注入的构造器，非模块导入
+          const PF = window["PagefindUI"];
+          if (!PF || pagefindUI) return;
+          pagefindUI = new PF({
             element: "#pagefind-search-ui",
             showSubResults: true,
             excerptLength: 40,
             showImages: false,
             baseUrl: "/",
           });
+        }
 
-          function openSearch() {
-            wrap.classList.add("active");
-            // 聚焦 Pagefind 内部输入框
-            setTimeout(function () {
-              const pfInput = document.querySelector(".pagefind-ui__search-input");
-              if (pfInput) {
-                pfInput.focus();
-                pfInput.select();
-              }
-            }, 60);
-          }
-
-          function closeSearch() {
-            wrap.classList.remove("active");
-          }
-
-          // 所有带 data-search-trigger 的元素：点击即打开搜索
-          document.querySelectorAll("[data-search-trigger]").forEach(function (el) {
-            el.addEventListener("click", function (e) {
-              e.preventDefault();
-              openSearch();
-            });
-          });
-
-          // 点击 UI 外部关闭（避开触发器自身）
-          document.addEventListener("click", function (e) {
-            if (
-              wrap.classList.contains("active") &&
-              !wrap.contains(e.target) &&
-              !e.target.closest("[data-search-trigger]")
-            ) {
-              closeSearch();
+        // 懒加载：首次调用时注入 CSS + JS，之后直接复用
+        function ensureLoaded() {
+          return new Promise(function (resolve) {
+            if (pagefindUI) {
+              resolve();
+              return;
             }
-          });
-
-          // 快捷键：Ctrl/Cmd + K 打开，ESC 关闭
-          document.addEventListener("keydown", function (e) {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-              e.preventDefault();
-              openSearch();
+            if (!document.getElementById("pagefind-ui-css")) {
+              const link = document.createElement("link");
+              link.id = "pagefind-ui-css";
+              link.rel = "stylesheet";
+              link.href = "/pagefind/pagefind-ui.css";
+              document.head.appendChild(link);
             }
-            if (e.key === "Escape") {
-              closeSearch();
+            if (window["PagefindUI"]) {
+              initPagefind();
+              resolve();
+              return;
             }
+            // /pagefind/pagefind-ui.js 由 astro-pagefind 注入到构建产物
+            const s = document.createElement("script");
+            s.src = "/pagefind/pagefind-ui.js";
+            s.onload = function () {
+              initPagefind();
+              resolve();
+            };
+            s.onerror = function () {
+              console.warn("[Pagefind] 搜索索引加载失败，构建后才会生成 /pagefind 资源");
+              alert("搜索功能在构建后启用（dev 模式无索引）");
+              resolve();
+            };
+            document.body.appendChild(s);
           });
         }
 
-        function loadPagefind() {
-          if (window.PagefindUI) {
-            initPagefind();
-            return;
-          }
-          // /pagefind/pagefind-ui.js 由 astro-pagefind 注入到构建产物，
-          // 这里用 dynamic import 加载（dev 模式下由集成自动提供 fallback）
-          const s = document.createElement("script");
-          s.src = "/pagefind/pagefind-ui.js";
-          s.onload = initPagefind;
-          s.onerror = function () {
-            console.warn("[Pagefind] 搜索索引加载失败，构建后才会生成 /pagefind 资源");
-            document.querySelectorAll("[data-search-trigger]").forEach(function (el) {
-              el.addEventListener("click", function () {
-                alert("搜索功能在构建后启用（dev 模式无索引）");
+        // #q=xxx / #search=xxx 直达搜索（配合 JSON-LD SearchAction）
+        function handleHash() {
+          const m = /#(?:q|search)=([^&]+)/.exec(location.hash);
+          if (m) {
+            const term = decodeURIComponent(m[1].replace(/\+/g, " ")).trim();
+            if (term) {
+              ensureLoaded().then(function () {
+                openSearch(term);
               });
-            });
-          };
-          document.body.appendChild(s);
+            }
+          }
         }
 
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", loadPagefind);
-        } else {
-          loadPagefind();
-        }
+        // 所有带 data-search-trigger 的元素：点击即打开搜索
+        document.querySelectorAll("[data-search-trigger]").forEach(function (el) {
+          el.addEventListener("click", function (e) {
+            e.preventDefault();
+            ensureLoaded().then(function () {
+              openSearch();
+            });
+          });
+        });
+
+        // 点击 UI 外部关闭（避开触发器自身）
+        document.addEventListener("click", function (e) {
+          if (
+            wrap &&
+            wrap.classList.contains("active") &&
+            !wrap.contains(e.target) &&
+            !e.target.closest("[data-search-trigger]")
+          ) {
+            closeSearch();
+          }
+        });
+
+        // 快捷键：Ctrl/Cmd + K 打开，ESC 关闭
+        document.addEventListener("keydown", function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+            e.preventDefault();
+            ensureLoaded().then(function () {
+              openSearch();
+            });
+          }
+          if (e.key === "Escape") {
+            closeSearch();
+          }
+        });
+
+        // 支持搜索引擎携带 #q= 直达
+        window.addEventListener("hashchange", handleHash);
+        handleHash();
       })();
     </script>
 

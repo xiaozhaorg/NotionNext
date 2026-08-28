@@ -14,6 +14,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/siliconflow-intro"
 ogImage: "/images/siliconflow-intro-real.jpg"
 coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
+enSlug: "siliconflow-intro"
 ---
 
 ## 
@@ -291,32 +292,14 @@ SiliconCloud 控制台：[立即注册](https://cloud.siliconflow.cn/i/QoiMnsJV)
 
 开发文档：[https://docs.siliconflow.cn](https://docs.siliconflow.cn)
 
-[上一篇腾讯云 EdgeOne 体验：
+[Claude Code 实战指南：
 
-国内免费 CDN 加速，Cloudflare 的最佳替代品](/article/tencent-edgeone)[下一篇自托管 20 个必备开源应用：
+终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
 
-告别云服务订阅，掌控自己的数据](/article/self-host-apps)
+Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
 
-[下一篇自托管 20 个必备开源应用：
+开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Trae IDE 深度体验：
 
-告别云服务订阅，掌控自己的数据](/article/self-host-apps)
+字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg)](/article/trae-ide-review)[腾讯马维斯Marvis体验：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/siliconflow-intro](https://xiaozha.org/article/siliconflow-intro)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[薅羊毛！
-
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b)](/article/vscode-codex-integration)[Trae IDE 深度体验：
-
-字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg?t=3a9c55d5-e9ea-811a-a308-e6fca0fd4ea9)](/article/trae-ide-review)[腾讯马维斯Marvis体验：
-
-装上就有6个AI牛马帮你干活![image](https://xiaozha.org/images/tencent-marvis-cover.jpg?t=3a9c55d5-e9ea-818f-9424-f0412536178b)](/article/tencent-marvis)
+装上就有6个AI牛马帮你干活![image](https://xiaozha.org/images/tencent-marvis-cover.jpg)](/article/tencent-marvis)

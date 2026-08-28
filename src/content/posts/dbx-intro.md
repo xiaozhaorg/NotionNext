@@ -14,6 +14,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/dbx-intro"
 ogImage: "/images/dbx-intro-real.jpg"
 coverAlt: "绿色电路板上密布的芯片与数据线特写"
+enSlug: "dbx-intro"
 ---
 
 ## 
@@ -64,28 +65,12 @@ MySQL、PostgreSQL、SQLite、Redis等40+数据库
 
 DBX开源地址：[https://github.com/t8y2/dbx](https://github.com/t8y2/dbx)
 
-[上一篇DeepSeek V4 编程能力实测：1/10 价格超越 GPT-5.6？
+[Uptime Kuma 自建监控：
 
-详细对比来了](/article/deepseek-v4-coding)[下一篇Cursor 编辑器深度评测：
+免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg)](/article/uptime-kuma-monitor)[自托管 20 个必备开源应用：
 
-AI 原生 IDE 真的能取代 VS Code 吗？](/article/cursor-vs-vscode)
+告别云服务订阅，掌控自己的数据![image](https://xiaozha.org/images/self-host-apps-cover.jpg)](/article/self-host-apps)[n8n 自托管工作流自动化：
 
-[下一篇Cursor 编辑器深度评测：
+Zapier 的开源替代，连接一切应用![image](https://xiaozha.org/images/n8n-workflow-automation-cover.jpg)](/article/n8n-workflow-automation)[Mealie 自建菜谱应用：
 
-AI 原生 IDE 真的能取代 VS Code 吗？](/article/cursor-vs-vscode)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/dbx-intro](https://xiaozha.org/article/dbx-intro)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37)](/article/mineradio-tutorial)[Uptime Kuma 自建监控：
-
-免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg?t=3a9c55d5-e9ea-813d-b32e-dc4fada13b4b)](/article/uptime-kuma-monitor)[自托管 20 个必备开源应用：
-
-告别云服务订阅，掌控自己的数据![image](https://xiaozha.org/images/self-host-apps-cover.jpg?t=3a9c55d5-e9ea-816c-99b6-e4d25f79c8bd)](/article/self-host-apps)[n8n 自托管工作流自动化：
-
-Zapier 的开源替代，连接一切应用![image](https://xiaozha.org/images/n8n-workflow-automation-cover.jpg?t=3a9c55d5-e9ea-819a-ba37-f896311d2356)](/article/n8n-workflow-automation)[Mealie 自建菜谱应用：
-
-告别下厨房广告，掌控你的私人厨房![image](https://xiaozha.org/images/mealie-recipe-app-cover.jpg?t=3a9c55d5-e9ea-815e-9418-cb48b94022bd)](/article/mealie-recipe-app)[🧠 Kimi K3 深度解析：2.8万亿参数，全球最大开源大模型来了![image](https://xiaozha.org/images/kimi-k3-open-source-cover.jpg?t=3a9c55d5-e9ea-81ab-a321-e256217a22bc)](/article/kimi-k3-open-source)
+告别下厨房广告，掌控你的私人厨房![image](https://xiaozha.org/images/mealie-recipe-app-cover.jpg)](/article/mealie-recipe-app)[🧠 Kimi K3 深度解析：2.8万亿参数，全球最大开源大模型来了![image](https://xiaozha.org/images/kimi-k3-open-source-cover.jpg)](/article/kimi-k3-open-source)

@@ -5,8 +5,9 @@ import { t, type Locale } from "@/locales/ui";
 type Props = { locale?: Locale };
 const { locale = "zh" } = Astro.props;
 
-const collectionName = locale === "en" ? "posts-en" : "posts";
-const posts = await getCollection(collectionName as any, ({ data }) => !data.draft);
+const posts = locale === "en"
+  ? await getCollection("posts-en", ({ data }) => !data.draft)
+  : await getCollection("posts", ({ data }) => !data.draft);
 
 const recentPosts = [...posts]
   .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime())

@@ -10,13 +10,14 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/com-domain-deal"
 ogImage: "/images/com-domain-deal-real.jpg"
 coverAlt: "网络域名解析与全球互联网连接的概念图"
+enSlug: "com-domain-deal"
 ---
 
 耳听为虚，眼见为实！
 
 先看图！
 
-![image](https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81d5-9b2e-e4b093dc56db&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1531403009284-440f080d1e12.webp)
 
 说白了，就是用他家的优惠码，达到首年低价的目的，当然想要注册多个域名的话可以注册多个账号来达到薅羊毛的目的！
 
@@ -49,28 +50,10 @@ Spaceship 对促销价格有严格风控，可能限制每个账户只能使用�
 
 首年优惠后，续费价格通常在 8.98-9.55 之间，具体以官网显示为准。
 
-[上一篇Cursor 编辑器深度评测：
+[白嫖福利！
 
-AI 原生 IDE 真的能取代 VS Code 吗？](/article/cursor-vs-vscode)[下一篇💻 codebase-memory-mcp：
+Gname 免费注册 3 个 eu.cc 域名，无需信用卡![image](https://xiaozha.org/images/gname-eucc-free-cover.jpg)](/article/gname-eucc-free)[GitHub Student Developer Pack 完整攻略：
 
-让AI记住整个代码库的神器，毫秒级索引158种语言](/article/codebase-memory-mcp)
+学生党免费撸 $1000+ 服务![image](https://xiaozha.org/images/github-student-pack-cover.jpg)](/article/github-student-pack)[强到可怕！
 
-[下一篇💻 codebase-memory-mcp：
-
-让AI记住整个代码库的神器，毫秒级索引158种语言](/article/codebase-memory-mcp)
-
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/com-domain-deal](https://xiaozha.org/article/com-domain-deal)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
-
-相关文章
-
-[💰 3.9 元 Tokens 不限量！
-
-讯飞星辰 Coding Plan 全面升级![image](https://xiaozha.org/images/xunfei-coding-plan-cover.jpg?t=3a9c55d5-e9ea-817c-8b47-dfa69c0a63b5)](/article/xunfei-coding-plan)[白嫖福利！
-
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡![image](https://xiaozha.org/images/gname-eucc-free-cover.jpg?t=3a9c55d5-e9ea-810c-9b43-d177c14fe495)](/article/gname-eucc-free)[GitHub Student Developer Pack 完整攻略：
-
-学生党免费撸 $1000+ 服务![image](https://xiaozha.org/images/github-student-pack-cover.jpg?t=3a9c55d5-e9ea-819e-9bc0-dcd4c453dea5)](/article/github-student-pack)[强到可怕！
-
-Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token![image](https://xiaozha.org/images/gemma-4-local-deploy-cover.jpg?t=3a9c55d5-e9ea-8134-b701-e2a15c04f02e)](/article/gemma-4-local-deploy)
+Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token![image](https://xiaozha.org/images/gemma-4-local-deploy-cover.jpg)](/article/gemma-4-local-deploy)

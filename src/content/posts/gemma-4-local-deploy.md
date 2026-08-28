@@ -13,9 +13,10 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/gemma-4-local-deploy"
 ogImage: "/images/gemma-4-local-deploy-real.jpg"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
+enSlug: "gemma-4-local-deploy"
 ---
 
-![Gemma 4 本地部署](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&q=50&width=1080&fmt=webp)
+![Gemma 4 本地部署](/images/remote/1677442136019-21780ecad995.webp)
 
 Gemma 是谷歌基于 Gemini 技术栈开源的大模型系列。2026 年发布的 **Gemma 4** 在代码生成、推理、多语言理解上比上一代提升明显，关键是 **8B 版本在 16GB 显存消费级显卡上就能跑流畅**。
 

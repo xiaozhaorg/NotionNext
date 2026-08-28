@@ -11,6 +11,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/gname-eucc-free"
 ogImage: "/images/gname-eucc-free-real.jpg"
 coverAlt: "网络域名解析与全球互联网连接的概念图"
+enSlug: "gname-eucc-free"
 ---
 
 - 白嫖福利！
@@ -25,7 +26,7 @@ Gname 免费注册 3 个 eu.cc 域名，无需信用卡 | 小吒博客
 
 0
 
-![image](https://xiaozha.org/images/gname-eucc-free-cover.jpg?t=3a9c55d5-e9ea-810c-9b43-d177c14fe495)
+![image](https://xiaozha.org/images/gname-eucc-free-cover.jpg)
 
 资源分享
 
@@ -126,13 +127,13 @@ admin@xiaozha.org
 
 最新发布
 
-[![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)薅羊毛！
+[![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg)薅羊毛！
 
-肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）2026-7-31](/article/shawn-ai-free-api)[![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)Claude Code 实战指南：
+肖恩AI 免费大模型 API 中转站，注册即送 7000 额度（附接入教程）2026-7-31](/article/shawn-ai-free-api)[![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)Claude Code 实战指南：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）2026-7-31](/article/claude-code-tutorial)[![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg?t=3acc55d5-e9ea-8103-b388-c846fa950c37)Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步2026-7-29](/article/mineradio-tutorial)[![image](https://xiaozha.org/images/com-domain-deal-cover.jpg?t=3a9c55d5-e9ea-810b-b35d-f31e4045cb27)20块买一年的.COM顶级域名！
+终端里的 AI 编程代理怎么用？（2026 国内版）2026-7-31](/article/claude-code-tutorial)[![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步2026-7-29](/article/mineradio-tutorial)[![image](https://xiaozha.org/images/com-domain-deal-cover.jpg)20块买一年的.COM顶级域名！
 
-错过拍大腿！2026-7-29](/article/com-domain-deal)[![image](https://xiaozha.org/images/bt-panel-404-cover.jpg?t=3a9c55d5-e9ea-812c-b898-df7bc7ef458e)登陆宝塔面板访问4042026-7-29](/article/bt-panel-404)[![image](https://xiaozha.org/images/xunfei-coding-plan-cover.jpg?t=3a9c55d5-e9ea-817c-8b47-dfa69c0a63b5)💰 3.9 元 Tokens 不限量！
+错过拍大腿！2026-7-29](/article/com-domain-deal)[![image](https://xiaozha.org/images/bt-panel-404-cover.jpg)登陆宝塔面板访问4042026-7-29](/article/bt-panel-404)[![image](https://xiaozha.org/images/xunfei-coding-plan-cover.jpg)💰 3.9 元 Tokens 不限量！
 
 讯飞星辰 Coding Plan 全面升级2026-7-29](/article/xunfei-coding-plan)
 

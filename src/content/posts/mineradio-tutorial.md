@@ -13,6 +13,7 @@ draft: false
 sourceUrl: "https://xiaozha.org/article/mineradio-tutorial"
 ogImage: "/images/mineradio-tutorial-real.jpg"
 coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
+enSlug: "mineradio-tutorial"
 ---
 
 核心结论经过实际测试：
@@ -238,24 +239,12 @@ Mineradio 占用资源大吗？3D 界面会比普通播放器多消耗一些显�
 
 本地版本 GitHub：`https://github.com/oirge/Mineradio`
 
-[上一篇Claude Code 实战指南：
+[Uptime Kuma 自建监控：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）](/article/claude-code-tutorial)[下一篇IDM 安装激活完整教程（2026年最新）](/article/idm-activation-tutorial-2026)
+免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg)](/article/uptime-kuma-monitor)[自托管 20 个必备开源应用：
 
-[下一篇IDM 安装激活完整教程（2026年最新）](/article/idm-activation-tutorial-2026)
+告别云服务订阅，掌控自己的数据![image](https://xiaozha.org/images/self-host-apps-cover.jpg)](/article/self-host-apps)[n8n 自托管工作流自动化：
 
-- **作者:**[小吒博客](/about)
-- **链接:**[https://xiaozha.org/article/mineradio-tutorial](https://xiaozha.org/article/mineradio-tutorial)
-- **声明:**本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
+Zapier 的开源替代，连接一切应用![image](https://xiaozha.org/images/n8n-workflow-automation-cover.jpg)](/article/n8n-workflow-automation)[Mealie 自建菜谱应用：
 
-相关文章
-
-[IDM 安装激活完整教程（2026年最新）![image](/images/idm-activation-tutorial-2026-real.jpg)](/article/idm-activation-tutorial-2026)[Uptime Kuma 自建监控：
-
-免费替代 UptimeRobot，漂亮又强大![image](https://xiaozha.org/images/uptime-kuma-monitor-cover.jpg?t=3a9c55d5-e9ea-813d-b32e-dc4fada13b4b)](/article/uptime-kuma-monitor)[自托管 20 个必备开源应用：
-
-告别云服务订阅，掌控自己的数据![image](https://xiaozha.org/images/self-host-apps-cover.jpg?t=3a9c55d5-e9ea-816c-99b6-e4d25f79c8bd)](/article/self-host-apps)[n8n 自托管工作流自动化：
-
-Zapier 的开源替代，连接一切应用![image](https://xiaozha.org/images/n8n-workflow-automation-cover.jpg?t=3a9c55d5-e9ea-819a-ba37-f896311d2356)](/article/n8n-workflow-automation)[Mealie 自建菜谱应用：
-
-告别下厨房广告，掌控你的私人厨房![image](https://xiaozha.org/images/mealie-recipe-app-cover.jpg?t=3a9c55d5-e9ea-815e-9418-cb48b94022bd)](/article/mealie-recipe-app)[🧠 Kimi K3 深度解析：2.8万亿参数，全球最大开源大模型来了![image](https://xiaozha.org/images/kimi-k3-open-source-cover.jpg?t=3a9c55d5-e9ea-81ab-a321-e256217a22bc)](/article/kimi-k3-open-source)
+告别下厨房广告，掌控你的私人厨房![image](https://xiaozha.org/images/mealie-recipe-app-cover.jpg)](/article/mealie-recipe-app)[🧠 Kimi K3 深度解析：2.8万亿参数，全球最大开源大模型来了![image](https://xiaozha.org/images/kimi-k3-open-source-cover.jpg)](/article/kimi-k3-open-source)

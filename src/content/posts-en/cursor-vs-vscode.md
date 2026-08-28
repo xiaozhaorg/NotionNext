@@ -11,7 +11,7 @@ coverAlt: "Artificial intelligence neural network concept with a blue glow"
 zhSlug: "cursor-vs-vscode"
 ---
 
-![image](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81a6-9372-c0328b3220a5&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1677442136019-21780ecad995.webp)
 
 Cursor is an AI-native IDE built on top of VS Code, and its makers don't mince words about it: they bill it as "the future of AI coding."
 

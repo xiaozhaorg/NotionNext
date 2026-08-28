@@ -11,7 +11,7 @@ coverAlt: "Close-up of a glowing AI chip and circuit board, symbolizing the comp
 zhSlug: "vscode-codex-integration"
 ---
 
-![image](https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8177-9ecb-ee9e983840b5&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1655720828018-edd2daec9349.webp)
 
 AI coding assistants have grown from "novelty toys" into genuine productivity tools. One of the most exciting combinations of 2026 is the deep integration of VS Code with OpenAI Codex.
 

@@ -11,7 +11,7 @@ coverAlt: "Color-highlighted program source code in a dark-themed code editor"
 zhSlug: "trae-ide-review"
 ---
 
-![image](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ef-9532-d72f74add626&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1620712943543-bcc4688e7485.webp)
 
 Trae is an AI-native IDE launched by ByteDance in 2025, and this article is my deep, hands-on look at it.
 

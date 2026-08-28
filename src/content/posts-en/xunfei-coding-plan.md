@@ -27,7 +27,7 @@ Today, the iFlytek Xingchen Coding Plan is getting a major upgrade.
 
 Beyond a complete overhaul of the billing model, it's the first to bring in Zhipu's newest flagship model, GLM-5.1, along with other top-tier models like Qwen3.5-397B-A17B — letting developers "raise shrimp" more efficiently and freely, and build more AI applications.
 
-![image](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81ef-9dc3-d40fff27a4da&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1677442136019-21780ecad995.webp)
 
 ## ¥3.9 Unlimited: From Token Anxiety to Worry-Free Usage
 
@@ -37,7 +37,7 @@ With this upgrade, billing has shifted from **per-token** to **per-request**.
 
 On the surface it's just a change in billing unit, but for developers it's a genuine paradigm shift — you stop obsessing over "how many resources did I burn" and start thinking about "how many requests did I complete."
 
-![image](https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8179-aa65-d45038fcaee2&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1531403009284-440f080d1e12.webp)
 
 ▲ The upgraded Coding Plan tiers
 

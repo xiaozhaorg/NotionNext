@@ -17,16 +17,16 @@ I started by searching the web, but most of the advice from bloggers was that th
 
 Accessing the panel over HTTPS returned "This site can't provide a secure connection," while accessing it over HTTP returned "404 Not Found."
 
-![image](https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-81dc-a86d-d261d7dc56e2&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1484480974693-6ca0a78fb36b.webp)
 
-![image](https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-815b-88ca-d7787bebc62a&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1499750310107-5fef28a66643.webp)
 
 After coming up empty in my web searches, I switched to an SSH terminal with an AI assistant to troubleshoot, and that's when I finally found the problem.
 
-![image](https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-8113-81d5-d7b14fa9d5ee&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1484480974693-6ca0a78fb36b.webp)
 
 It turned out that the BT Panel port was occupied. I checked again to see which service was holding the port, and the result told me it was Nginx.
 
-![image](https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop&t=3aac55d5-e9ea-811e-b542-ed1b9ac83ec8&q=50&width=1080&fmt=webp&fm=webp)
+![image](/images/remote/1499750310107-5fef28a66643.webp)
 
 Once the problem was identified, the fix was easy: I changed the BT Panel login port (I switched mine to 8888 for testing), then opened port 8888 in the BT security firewall entry on the server management console. After that, everything worked normally.
