@@ -1,5 +1,6 @@
 ---
 import { SITE } from "@/config";
+import { t, htmlLang, ogLocale, localeFromPath, getAltURL, type Locale } from "@/locales/ui";
 import "@/styles/global.css";
 
 interface Props {
@@ -9,22 +10,43 @@ interface Props {
   type?: "website" | "article";
   publishedTime?: Date;
   tags?: string[];
+  locale?: Locale;
+  /** 关联的另一种语言 URL（用于 hreflang，文章页用） */
+  altURL?: string;
 }
 
 const {
-  title = SITE.title,
-  description = SITE.description,
+  title,
+  description,
   image,
   type = "website",
   publishedTime,
   tags,
+  locale,
+  altURL,
 } = Astro.props;
+
+// 自动推断 locale
+const currentLocale: Locale = locale ?? localeFromPath(Astro.url.pathname);
+const isEn = currentLocale === "en";
+
+// 根据locale设置站点信息和SEO
+const siteTitle = isEn ? SITE.titleEn : SITE.title;
+const siteDesc = isEn ? SITE.descriptionEn : SITE.description;
+const siteKeywords = isEn ? SITE.keywordsEn.join(", ") : SITE.keywords.join(", ");
+const finalTitle = title ?? siteTitle;
+const finalDesc = description ?? siteDesc;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image
   ? new URL(image, Astro.site)
   : new URL("/og-default.svg", Astro.site);
-const keywords = SITE.keywords.join(", ");
+
+// hreflang 互指
+const autoAltURL = altURL ?? getAltURL(Astro.url.pathname, isEn ? "zh" : "en");
+const zhURL = isEn ? new URL(autoAltURL, Astro.site).toString() : canonicalURL.toString();
+const enURL = isEn ? canonicalURL.toString() : new URL(autoAltURL, Astro.site).toString();
+const xDefaultURL = new URL("/", Astro.site).toString();
 
 // JSON-LD 结构化数据
 const baseSchema = {
@@ -36,10 +58,10 @@ const schemas: Record<string, unknown>[] = [];
 schemas.push({
   ...baseSchema,
   "@type": "WebSite",
-  name: SITE.title,
+  name: siteTitle,
   url: SITE.url,
-  description: SITE.description,
-  inLanguage: SITE.lang,
+  description: siteDesc,
+  inLanguage: htmlLang(currentLocale),
   potentialAction: {
     "@type": "SearchAction",
     target: `${SITE.url}/#q={search_term_string}`,
@@ -51,8 +73,8 @@ if (type === "article") {
   schemas.push({
     ...baseSchema,
     "@type": "BlogPosting",
-    headline: title,
-    description,
+    headline: finalTitle,
+    description: finalDesc,
     image: ogImage.toString(),
     datePublished: publishedTime?.toISOString(),
     dateModified: publishedTime?.toISOString(),
@@ -63,7 +85,7 @@ if (type === "article") {
     },
     publisher: {
       "@type": "Organization",
-      name: SITE.title,
+      name: siteTitle,
       url: SITE.url,
       logo: {
         "@type": "ImageObject",
@@ -75,25 +97,28 @@ if (type === "article") {
       "@id": canonicalURL.toString(),
     },
     keywords: tags?.join(", "),
-    inLanguage: SITE.lang,
+    inLanguage: htmlLang(currentLocale),
   });
 }
 
-// BreadcrumbList 面包屑 JSON-LD（显著提升百度、搜狗对页面结构的理解）
+// BreadcrumbList 面包屑 JSON-LD
 const pathname = Astro.url.pathname.replace(/\/$/, "");
 const segments = pathname.split("/").filter(Boolean);
-const crumbs: { name: string; url: string }[] = [{ name: "首页", url: "/" }];
+const homeLabel = isEn ? "Home" : "首页";
+const articleLabel = isEn ? "Posts" : "文章";
+const tagsLabel = isEn ? "Tags" : "标签";
+const crumbs: { name: string; url: string }[] = [{ name: homeLabel, url: isEn ? "/en/" : "/" }];
 
 let accumulated = "";
 for (const seg of segments) {
   accumulated += `/${decodeURIComponent(seg)}`;
   // 跳过 / 和 /article/ 本身作为层级
   if (seg === SITE.post.urlPrefix) {
-    crumbs.push({ name: "文章", url: `/${SITE.post.urlPrefix}/` });
+    crumbs.push({ name: articleLabel, url: isEn ? `/en/${SITE.post.urlPrefix}/` : `/${SITE.post.urlPrefix}/` });
     continue;
   }
   if (seg === "tags") {
-    crumbs.push({ name: "标签", url: "/tags/" });
+    crumbs.push({ name: tagsLabel, url: isEn ? "/en/tags/" : "/tags/" });
     continue;
   }
   // 具体 slug 或 tag 名
@@ -112,7 +137,7 @@ schemas.push({
 });
 ---
 <!DOCTYPE html>
-<html lang={SITE.lang}>
+<html lang={htmlLang(currentLocale)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -120,35 +145,40 @@ schemas.push({
     <meta name="generator" content={Astro.generator} />
 
     <!-- TDK -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-    <meta name="keywords" content={keywords} />
+    <title>{finalTitle}</title>
+    <meta name="title" content={finalTitle} />
+    <meta name="description" content={finalDesc} />
+    <meta name="keywords" content={siteKeywords} />
     <meta name="author" content={SITE.author} />
-    <meta name="copyright" content={`© ${SITE.since}-${new Date().getFullYear()} ${SITE.title}`} />
+    <meta name="copyright" content={`© ${SITE.since}-${new Date().getFullYear()} ${siteTitle}`} />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="baiduspider" content="index,follow" />
     <meta name="bingbot" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
     <link rel="canonical" href={canonicalURL} />
 
+    <!-- hreflang 多语言互指（Google 必须项） -->
+    <link rel="alternate" hreflang="zh-CN" href={zhURL} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="x-default" href={xDefaultURL} />
+
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:site_name" content={SITE.title} />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDesc} />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:locale" content={ogLocale(currentLocale)} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:alt" content={finalTitle} />
     <meta property="og:see_also" content={SITE.social.github} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={finalTitle} />
+    <meta name="twitter:description" content={finalDesc} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={title} />
+    <meta name="twitter:image:alt" content={finalTitle} />
     <meta name="twitter:site" content="@xiaozhaorg" />
     <meta name="twitter:creator" content="@xiaozhaorg" />
 

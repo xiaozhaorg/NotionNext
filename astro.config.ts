@@ -10,6 +10,14 @@ import { SITE } from "./src/config";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.url,
+  i18n: {
+    defaultLocale: "zh",
+    locales: ["zh", "en"],
+    routing: {
+      prefixDefaultLocale: false,
+      redirectToDefaultLocale: false,
+    },
+  },
   integrations: [
     sitemap({
       // 按页面类型分配合适的权重与更新频率，避免搜索引擎抓错重点

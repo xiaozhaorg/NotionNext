@@ -1,11 +1,16 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@/config";
+import { t, type Locale } from "@/locales/ui";
 
-type Props = { post: CollectionEntry<"posts">; pinned?: boolean };
-const { post, pinned = false } = Astro.props;
+type Props = { post: CollectionEntry<"posts">; pinned?: boolean; locale?: Locale };
+const { post, pinned = false, locale = "zh" } = Astro.props;
 const { data, id } = post;
-const url = `/${SITE.post.urlPrefix}/${id}`;
+const urlPrefix = locale === "en" ? "/en/article" : "/article";
+const url = `${urlPrefix}/${id}`;
+const tagPrefix = locale === "en" ? "/en/tags" : "/tags";
+const dateLocale = locale === "en" ? "en-US" : "zh-CN";
+const pinnedText = locale === "en" ? "📌 Pinned" : "📌 置顶";
 
 // 阅读时长估算（中文按字符数，英文按词数）
 const wordCount = post.body?.length ?? 0;
@@ -74,14 +79,14 @@ const hasWebp = webpSrc !== data.ogImage;
         <span>{placeholderText}</span>
       </div>
     )}
-    {pinned && <span class="pinned-badge">📌 置顶</span>}
+    {pinned && <span class="pinned-badge">{pinnedText}</span>}
   </a>
 
   <div class="post-card-body">
     <div class="post-meta-row">
-      <time>{data.pubDatetime.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}</time>
+      <time>{data.pubDatetime.toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" })}</time>
       <span class="dot"></span>
-      <span>约 {readingTime} 分钟</span>
+      <span>{t(locale, "card_reading_time").replace("{min}", String(readingTime))}</span>
       {data.category && (
         <>
           <span class="dot"></span>
@@ -96,7 +101,7 @@ const hasWebp = webpSrc !== data.ogImage;
     {data.tags.length > 0 && (
       <div class="post-tags">
         {data.tags.slice(0, 3).map((tag) => (
-          <a href={`/tags/${tag}`} class="tag-item">#{tag}</a>
+          <a href={`${tagPrefix}/${tag}`} class="tag-item">#{tag}</a>
         ))}
       </div>
     )}

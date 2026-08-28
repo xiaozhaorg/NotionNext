@@ -1,32 +1,21 @@
 ---
 import { getCollection } from "astro:content";
+import { t, type Locale } from "@/locales/ui";
 
-const posts = await getCollection("posts", ({ data }) => !data.draft);
-console.log("[RightSidebar] 服务端数据加载完成，posts 总数 =", posts.length);
+type Props = { locale?: Locale };
+const { locale = "zh" } = Astro.props;
+
+const collectionName = locale === "en" ? "posts-en" : "posts";
+const posts = await getCollection(collectionName as any, ({ data }) => !data.draft);
 
 const recentPosts = [...posts]
   .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime())
   .slice(0, 6);
-console.log(
-  "[RightSidebar] 热门文章 recentPosts 取出 =",
-  recentPosts.length,
-  "篇：",
-  recentPosts.map((p) => `${p.id}(${p.data.title})`).join(" | ")
-);
-if (recentPosts.length === 0) {
-  console.warn("[RightSidebar] ⚠️ recentPosts 为空，热门文章模块将不渲染任何条目");
-}
 
 // 标签云：统计每个标签的文章数
 const tagMap = new Map<string, number>();
-posts.forEach((p) => p.data.tags.forEach((t) => tagMap.set(t, (tagMap.get(t) ?? 0) + 1)));
+posts.forEach((p) => p.data.tags.forEach((tag) => tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1)));
 const tags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 15);
-console.log(
-  "[RightSidebar] 标签云 tags 取出 =",
-  tags.length,
-  "个：",
-  tags.map(([t, c]) => `${t}=${c}`).join(" | ")
-);
 
 // 按标签数量分级，用于不同字号
 const maxCount = Math.max(...tags.map(([, c]) => c), 1);
@@ -36,19 +25,21 @@ const getTagSize = (count: number) => {
   if (ratio > 0.4) return "md";
   return "sm";
 };
+
+const prefix = locale === "en" ? "/en" : "";
 ---
 <aside class="right-sidebar">
   {/* 热门文章 */}
   <div class="widget">
     <div class="widget-header">
       <span class="widget-icon">🔥</span>
-      <h3>热门文章</h3>
+      <h3>{t(locale, "sidebar_hot")}</h3>
     </div>
     <ol class="recent-posts">
       {recentPosts.map((post, i) => (
         <li class="rank-item">
           <span class:list={["rank-num", `rank-${i + 1}`]}>{i + 1}</span>
-          <a href={`/article/${post.id}`} class="rank-title">{post.data.title}</a>
+          <a href={`${prefix}/article/${post.id}`} class="rank-title">{post.data.title}</a>
         </li>
       ))}
     </ol>
@@ -58,12 +49,12 @@ const getTagSize = (count: number) => {
   <div class="widget">
     <div class="widget-header">
       <span class="widget-icon">🏷️</span>
-      <h3>标签云</h3>
-      <a href="/tags/" class="widget-more">全部 →</a>
+      <h3>{t(locale, "sidebar_tags")}</h3>
+      <a href={`${prefix}/tags/`} class="widget-more">{t(locale, "sidebar_all_tags")}</a>
     </div>
     <div class="tags-cloud">
       {tags.map(([tag, count]) => (
-        <a href={`/tags/${tag}`} class:list={["tag-item", `tag-${getTagSize(count)}`]}>
+        <a href={`${prefix}/tags/${tag}`} class:list={["tag-item", `tag-${getTagSize(count)}`]}>
           <span class="tag-hash">#</span>{tag}
           <span class="tag-count">{count}</span>
         </a>
@@ -71,48 +62,6 @@ const getTagSize = (count: number) => {
     </div>
   </div>
 </aside>
-
-<script is:inline>
-  // 客户端渲染校验：确认热门文章 / 标签云 DOM 已正确挂载
-  (function () {
-    function log(label, ok, detail) {
-      var prefix = ok ? "✅" : "❌";
-      console.log("[RightSidebar][client] " + prefix + " " + label + (detail ? " -> " + detail : ""));
-    }
-
-    var aside = document.querySelector(".right-sidebar");
-    log("right-sidebar 容器", !!aside, aside ? "已挂载" : "未找到");
-
-    // 热门文章列表
-    var rankItems = document.querySelectorAll(".right-sidebar .recent-posts .rank-item");
-    log(
-      "热门文章条目 .rank-item",
-      rankItems.length > 0,
-      "共 " + rankItems.length + " 条"
-    );
-    if (rankItems.length === 0) {
-      console.warn("[RightSidebar][client] ⚠️ 热门文章列表为空，检查 recentPosts 数据");
-    }
-
-    // 标签云
-    var tagItems = document.querySelectorAll(".right-sidebar .tags-cloud .tag-item");
-    log(
-      "标签云条目 .tag-item",
-      tagItems.length > 0,
-      "共 " + tagItems.length + " 个"
-    );
-
-    // 汇总
-    console.log(
-      "[RightSidebar][client] 渲染校验完成：容器=" +
-        (aside ? "1" : "0") +
-        " 热门=" +
-        rankItems.length +
-        " 标签=" +
-        tagItems.length
-    );
-  })();
-</script>
 
 <style>
   .right-sidebar {

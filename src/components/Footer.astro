@@ -1,7 +1,13 @@
 ---
 import { SITE } from "@/config";
+import { t, type Locale } from "@/locales/ui";
+type Props = { locale?: Locale };
+const { locale = "zh" } = Astro.props;
 const year = new Date().getFullYear();
 const copyright = SITE.since && SITE.since < year ? `${SITE.since}–${year}` : year;
+const prefix = locale === "en" ? "/en" : "";
+const siteTitle = locale === "en" ? SITE.titleEn : SITE.title;
+const siteDesc = locale === "en" ? SITE.descriptionEn : SITE.description;
 ---
 <footer class="footer">
   <div class="footer-inner">
@@ -21,9 +27,9 @@ const copyright = SITE.since && SITE.since < year ? `${SITE.since}–${year}` : 
               <path d="M10 12h12M10 16h8M10 20h12" stroke="#fff" stroke-width="2.2" stroke-linecap="round" />
             </svg>
           </span>
-          <span class="logo-text">{SITE.title}</span>
+          <span class="logo-text">{siteTitle}</span>
         </div>
-        <p class="footer-slogan">{SITE.description}</p>
+        <p class="footer-slogan">{siteDesc}</p>
         <div class="footer-socials">
           <a href={SITE.social.github} target="_blank" rel="noopener" aria-label="GitHub" class="social-btn">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -46,28 +52,28 @@ const copyright = SITE.since && SITE.since < year ? `${SITE.since}–${year}` : 
 
       {/* 快速链接 */}
       <div class="footer-col">
-        <h4 class="footer-title">导航</h4>
+        <h4 class="footer-title">{t(locale, "footer_nav")}</h4>
         <ul class="footer-list">
-          <li><a href="/">首页</a></li>
-          <li><a href="/tags/">标签</a></li>
-          <li><a href="/tags/">归档</a></li>
-          <li><a href="/about/">关于</a></li>
+          <li><a href={`${prefix}/`}>{t(locale, "nav_home")}</a></li>
+          <li><a href={`${prefix}/tags/`}>{t(locale, "nav_tags")}</a></li>
+          <li><a href={`${prefix}/archive/`}>{t(locale, "nav_archive")}</a></li>
+          <li><a href={`${prefix}/about/`}>{t(locale, "nav_about")}</a></li>
         </ul>
       </div>
 
       {/* 资源 */}
       <div class="footer-col">
-        <h4 class="footer-title">资源</h4>
+        <h4 class="footer-title">{t(locale, "footer_resources")}</h4>
         <ul class="footer-list">
-          <li><a href="/rss.xml">RSS 订阅</a></li>
-          <li><a href="/sitemap-index.xml">站点地图</a></li>
-          <li><a href={SITE.social.github} target="_blank" rel="noopener">GitHub 源码</a></li>
+          <li><a href={`${prefix}/rss.xml`}>{t(locale, "footer_rss")}</a></li>
+          <li><a href="/sitemap-index.xml">{t(locale, "footer_sitemap")}</a></li>
+          <li><a href={SITE.social.github} target="_blank" rel="noopener">{t(locale, "footer_github")}</a></li>
         </ul>
       </div>
 
       {/* 友链 */}
       <div class="footer-col">
-        <h4 class="footer-title">友链</h4>
+        <h4 class="footer-title">{t(locale, "footer_links")}</h4>
         <ul class="footer-list">
           <li><a href="https://fx123.cc" target="_blank" rel="noopener">fx123.cc</a></li>
         </ul>

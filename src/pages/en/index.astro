@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import RightSidebar from "@/components/RightSidebar.astro";
+import Card from "@/components/Card.astro";
+import Footer from "@/components/Footer.astro";
+import { t } from "@/locales/ui";
+import { SITE } from "@/config";
+
+const posts = (await getCollection("posts-en", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
+);
+
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+const rest = posts.filter((p) => p.id !== featured?.id);
+---
+<Layout locale="en" title={`${SITE.titleEn}`} description={SITE.descriptionEn}>
+  <Header locale="en" />
+
+  <div class="layout">
+    <main>
+      {featured && (
+        <div class="featured-section">
+          <div class="section-title">
+            <span class="title-bar"></span>
+            <h2>{t("en", "home_featured")}</h2>
+          </div>
+          <Card post={featured} pinned={true} locale="en" />
+        </div>
+      )}
+
+      <div class="section-title">
+        <span class="title-bar"></span>
+        <h2>{t("en", "home_latest")}</h2>
+      </div>
+      <div class="post-list">
+        {rest.map((post) => (
+          <Card post={post} locale="en" />
+        ))}
+      </div>
+    </main>
+    <RightSidebar locale="en" />
+  </div>
+  <Footer locale="en" />
+</Layout>
+
+<style>
+  /* 区块标题 */
+  .featured-section {
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+  }
+  .title-bar {
+    width: 4px;
+    height: 1.1rem;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+  }
+  .section-title h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>

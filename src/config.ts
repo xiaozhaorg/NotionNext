@@ -5,7 +5,9 @@
 export const SITE = {
   /** 站点元数据 */
   title: "小吒博客",
+  titleEn: "Xiaozha Blog",
   description: "一个专注于 AI 工具、云计算、自托管与开源应用的个人技术博客。",
+  descriptionEn: "A personal tech blog focused on AI tools, cloud computing, self-hosting, and open-source applications.",
   author: "小吒",
   since: 2026,
   url: "https://xiaozha.org",
@@ -18,6 +20,15 @@ export const SITE = {
     "开源应用",
     "Cloudflare",
     "个人博客",
+  ],
+  keywordsEn: [
+    "tech blog",
+    "AI tools",
+    "cloud computing",
+    "self-hosting",
+    "open source",
+    "Cloudflare",
+    "developer blog",
   ],
 
   /** 文章配置（保持与旧站一致） */
