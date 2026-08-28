@@ -1,5 +1,41 @@
 User-agent: *
 Allow: /
 Disallow: /pagefind/
+Disallow: /*?v=
+Disallow: /*?cachebust=
 
+# 百度专属优化（提升抓取效率，降低误伤）
+User-agent: Baiduspider
+Allow: /
+Disallow: /pagefind/
+Disallow: /*?v=
+Disallow: /*?cachebust=
+Crawl-delay: 1
+
+User-agent: Bytespider
+Allow: /
+Disallow: /pagefind/
+Disallow: /*?v=
+Disallow: /*?cachebust=
+Crawl-delay: 1
+
+User-agent: Yisouspider
+Allow: /
+Disallow: /pagefind/
+Disallow: /*?v=
+Disallow: /*?cachebust=
+Crawl-delay: 1
+
+User-agent: Sogou web spider
+Allow: /
+Disallow: /pagefind/
+Disallow: /*?v=
+Disallow: /*?cachebust=
+
+# Host 指令（百度/Bing 专用，明确主域名）
+Host: xiaozha.org
+
+# 多格式 sitemap，兼容不同蜘蛛抓取
 Sitemap: https://xiaozha.org/sitemap-index.xml
+Sitemap: https://xiaozha.org/sitemap-0.xml
+Sitemap: https://xiaozha.org/sitemap.xml

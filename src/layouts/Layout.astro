@@ -65,6 +65,10 @@ if (type === "article") {
       "@type": "Organization",
       name: SITE.title,
       url: SITE.url,
+      logo: {
+        "@type": "ImageObject",
+        url: new URL("/og-default.svg", Astro.site).toString(),
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -74,6 +78,38 @@ if (type === "article") {
     inLanguage: SITE.lang,
   });
 }
+
+// BreadcrumbList 面包屑 JSON-LD（显著提升百度、搜狗对页面结构的理解）
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+const segments = pathname.split("/").filter(Boolean);
+const crumbs: { name: string; url: string }[] = [{ name: "首页", url: "/" }];
+
+let accumulated = "";
+for (const seg of segments) {
+  accumulated += `/${decodeURIComponent(seg)}`;
+  // 跳过 / 和 /article/ 本身作为层级
+  if (seg === SITE.post.urlPrefix) {
+    crumbs.push({ name: "文章", url: `/${SITE.post.urlPrefix}/` });
+    continue;
+  }
+  if (seg === "tags") {
+    crumbs.push({ name: "标签", url: "/tags/" });
+    continue;
+  }
+  // 具体 slug 或 tag 名
+  const label = decodeURIComponent(seg).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  crumbs.push({ name: label, url: accumulated });
+}
+schemas.push({
+  ...baseSchema,
+  "@type": "BreadcrumbList",
+  itemListElement: crumbs.map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.url, Astro.site).toString(),
+  })),
+});
 ---
 <!DOCTYPE html>
 <html lang={SITE.lang}>
@@ -89,6 +125,11 @@ if (type === "article") {
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content={SITE.author} />
+    <meta name="copyright" content={`© ${SITE.since}-${new Date().getFullYear()} ${SITE.title}`} />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <meta name="baiduspider" content="index,follow" />
+    <meta name="bingbot" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
@@ -99,16 +140,36 @@ if (type === "article") {
     <meta property="og:site_name" content={SITE.title} />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:see_also" content={SITE.social.github} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={title} />
     <meta name="twitter:site" content="@xiaozhaorg" />
+    <meta name="twitter:creator" content="@xiaozhaorg" />
+
+    <!-- 百度 / 搜狗 / 360 专属优化 -->
+    <meta name="renderer" content="webkit" />
+    <meta name="force-rendering" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0c10" />
+    <meta name="application-name" content={SITE.title} />
+    <meta name="apple-mobile-web-app-title" content={SITE.title} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no,email=no,address=no" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
 
     <!-- RSS / Sitemap -->
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="alternate" type="application/atom+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
     <!-- JSON-LD 结构化数据 -->
