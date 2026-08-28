@@ -41,13 +41,36 @@ const gradientStyle = `background: linear-gradient(135deg, ${c1} 0%, ${c2} 100%)
 const placeholderText = data.title.charAt(0);
 // 封面图 alt：优先用描述性 coverAlt，回退到标题
 const coverAlt = data.coverAlt || data.title;
+
+// 生成 WebP 路径：/images/xxx.jpg → /images/xxx.webp
+const webpSrc = data.ogImage
+  ? data.ogImage.replace(/\.(jpe?g|png)$/i, ".webp")
+  : "";
+const hasWebp = webpSrc !== data.ogImage;
 ---
 <article class="post-card">
   <a href={url} class="post-thumb" aria-label={data.title}>
     {data.ogImage ? (
-      <img src={data.ogImage} alt={coverAlt} class="post-thumb-img" loading="lazy" />
+      <picture>
+        {hasWebp && <source srcset={webpSrc} type="image/webp" />}
+        <img
+          src={data.ogImage}
+          alt={coverAlt}
+          class="post-thumb-img"
+          width="220"
+          height="138"
+          loading="lazy"
+          decoding="async"
+          onerror="this.style.display='none';this.parentElement.nextElementSibling.style.display='flex'"
+        />
+      </picture>
     ) : (
       <div class="post-thumb-placeholder" style={gradientStyle}>
+        <span>{placeholderText}</span>
+      </div>
+    )}
+    {data.ogImage && (
+      <div class="post-thumb-placeholder post-thumb-fallback" style={`${gradientStyle};display:none`}>
         <span>{placeholderText}</span>
       </div>
     )}

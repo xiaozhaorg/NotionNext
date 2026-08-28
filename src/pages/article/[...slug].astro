@@ -18,6 +18,11 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 // 封面图 alt：优先用描述性 coverAlt，回退到标题
 const coverAlt = post.data.coverAlt || post.data.title;
+// 生成 WebP 路径
+const webpSrc = post.data.ogImage
+  ? post.data.ogImage.replace(/\.(jpe?g|png)$/i, ".webp")
+  : "";
+const hasWebp = webpSrc !== post.data.ogImage;
 ---
 <Layout
   title={post.data.title.includes(SITE.title) ? post.data.title : `${post.data.title} | ${SITE.title}`}
@@ -57,7 +62,19 @@ const coverAlt = post.data.coverAlt || post.data.title;
             )}
           </div>
           {post.data.ogImage && (
-            <img src={post.data.ogImage} alt={coverAlt} class="post-cover" loading="lazy" />
+            <picture>
+              {hasWebp && <source srcset={webpSrc} type="image/webp" />}
+              <img
+                src={post.data.ogImage}
+                alt={coverAlt}
+                class="post-cover"
+                width="800"
+                height="450"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </picture>
           )}
         </header>
         <div class="prose">
