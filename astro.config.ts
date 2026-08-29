@@ -24,7 +24,7 @@ export default defineConfig({
       // 按页面类型分配合适的权重与更新频率，避免搜索引擎抓错重点
       serialize(item): SitemapItem {
         const p = new URL(item.url).pathname;
-        const cf: ChangeFreqEnum =
+        const cf = (
           p === "/" || p === ""
             ? "daily"
             : /^\/(about|archive|tags)\/?$/.test(p)
@@ -33,7 +33,8 @@ export default defineConfig({
                 ? "weekly"
                 : p.startsWith("/tags/")
                   ? "monthly"
-                  : "weekly";
+                  : "weekly"
+        ) as ChangeFreqEnum;
         const pr =
           p === "/" || p === ""
             ? 1.0
