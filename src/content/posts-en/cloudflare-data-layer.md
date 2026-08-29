@@ -7,7 +7,7 @@ tags: ["Cloudflare", "Tutorial", "Workers", "Database", "Free Tools"]
 featured: false
 draft: false
 zhSlug: "cloudflare-data-layer"
-ogImage: "/images/cloudflare-data-layer-cover.jpg"
+ogImage: "/images/cloudflare-data-layer-real.jpg"
 ---
 
 Completing the Cloudflare series: I previously wrote about [building a free blog on Workers](/en/article/cloudflare-workers-blog) and [R2 object storage](/en/article/cloudflare-r2-storage). This post covers the data layer — D1, KV, and Queues, the three fundamentals for storing data in Worker apps: relational data, key-value data, and async tasks.
