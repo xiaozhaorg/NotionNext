@@ -41,11 +41,14 @@ enSlug: "free-domain-2026"
 - **特点**：支持 Cloudflare DNS 托管，解析稳定
 - **有效期**：需要定期续期，一般是一年
 
+**注册地址**：https://www.gname.com/tld-eu-cc.html
+
 **注册流程**：
-1. 访问 eu.cc 官网，注册账号
-2. 搜索想要的域名，确认可用
-3. 填写注册信息，完成验证
-4. 登录后在 DNS 管理中配置 Cloudflare 的 NS 记录
+1. 访问 GNAME 官网，注册账号
+2. 在 Free Registration 页面领取免费 eu.cc 券
+3. 搜索想要的域名，确认可用
+4. 填写注册信息，完成验证
+5. 登录后在 DNS 管理中配置 Cloudflare 的 NS 记录
 
 ### 2. DigitalPlat FreeDomain
 
@@ -56,6 +59,9 @@ enSlug: "free-domain-2026"
 - **邮箱转发**：域名邮箱自动转发
 - **流量统计**：自带简单的访问统计
 
+**注册地址**：https://domain.digitalplat.org/
+**GitHub 仓库**：https://github.com/DigitalPlatDev/FreeDomain
+
 优势是一站式解决多个需求，不用分别找不同的服务。
 
 ### 3. Stackryze Domains
@@ -65,6 +71,9 @@ enSlug: "free-domain-2026"
 - **免费数量**：最多 4 个域名
 - **适用场景**：个人项目、测试环境
 - **特点**：注册流程简单，审核快
+
+**注册地址**：https://domain.stackryze.com
+**GitHub 仓库**：https://github.com/stackryze/FreeDomains
 
 ### 4. 其他选择
 

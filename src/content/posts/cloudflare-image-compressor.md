@@ -32,8 +32,8 @@ enSlug: "cloudflare-image-compressor"
 
 主要依赖两个库：
 
-- **browser-image-compression**：图片压缩核心库
-- **FileSaver.js**：下载压缩后的文件
+- **browser-image-compression**：图片压缩核心库，GitHub：https://github.com/ Donaldcwl/browser-image-compression
+- **FileSaver.js**：下载压缩后的文件，GitHub：https://github.com/nickersk/FileSaver.js
 
 优点是所有处理都在浏览器完成，不需要后端服务器。
 

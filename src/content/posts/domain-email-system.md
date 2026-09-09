@@ -71,10 +71,12 @@ enSlug: "domain-email-system"
 
 ### 优点
 
-- 支持收发邮件
+- 收发邮件
 - 界面友好
 - 免费额度够个人使用
 - 支持多个域名
+
+**注册地址**：https://oqumail.com/
 
 ### 配置步骤
 

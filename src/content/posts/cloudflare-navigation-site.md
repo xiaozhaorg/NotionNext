@@ -36,6 +36,11 @@ enSlug: "cloudflare-navigation-site"
 - **分类管理**：支持多级分类，方便整理
 - **搜索功能**：内置站内搜索，快速找到目标网站
 
+**资源地址**：
+- WebStack GitHub 仓库：https://github.com/WebStackPage/WebStackPage.github.io
+- WebStack Hugo 版本：https://github.com/shenweiyan/WebStack-Hugo
+- 官方演示站：https://webstack.cc
+
 ## 部署步骤
 
 ### 第一步：Fork 项目
