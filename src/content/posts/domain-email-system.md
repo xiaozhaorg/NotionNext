@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/domain-email-system-real.jpg"
+ogImage: "/images/domain-email-system-real.webp"
 coverAlt: "邮箱设置界面展示自定义域名邮箱"
 enSlug: "domain-email-system"
 ---

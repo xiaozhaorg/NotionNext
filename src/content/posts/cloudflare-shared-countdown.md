@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/cloudflare-shared-countdown-real.jpg"
+ogImage: "/images/cloudflare-shared-countdown-real.webp"
 coverAlt: "倒计时器界面显示剩余时间"
 enSlug: "cloudflare-shared-countdown"
 ---

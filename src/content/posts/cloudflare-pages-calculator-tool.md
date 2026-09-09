@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/cloudflare-pages-calculator-tool-real.jpg"
+ogImage: "/images/cloudflare-pages-calculator-tool-real.webp"
 coverAlt: "代码编辑器界面显示计算器项目代码"
 enSlug: "cloudflare-pages-calculator-tool"
 ---

@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/cloudflare-image-compressor-real.jpg"
+ogImage: "/images/cloudflare-image-compressor-real.webp"
 coverAlt: "图片压缩前后对比效果展示"
 enSlug: "cloudflare-image-compressor"
 ---

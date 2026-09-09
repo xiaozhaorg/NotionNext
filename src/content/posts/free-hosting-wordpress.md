@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/free-hosting-wordpress-real.jpg"
+ogImage: "/images/free-hosting-wordpress-real.webp"
 coverAlt: "WordPress 后台仪表盘界面"
 enSlug: "free-hosting-wordpress"
 ---

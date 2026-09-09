@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/cloudflare-address-generator-real.jpg"
+ogImage: "/images/cloudflare-address-generator-real.webp"
 coverAlt: "表单测试数据自动生成界面"
 enSlug: "cloudflare-address-generator"
 ---

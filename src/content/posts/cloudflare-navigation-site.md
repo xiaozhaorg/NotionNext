@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/cloudflare-navigation-site-real.jpg"
+ogImage: "/images/cloudflare-navigation-site-real.webp"
 coverAlt: "浏览器导航页面截图展示多分类网站链接"
 enSlug: "cloudflare-navigation-site"
 ---

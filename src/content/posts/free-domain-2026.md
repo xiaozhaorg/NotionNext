@@ -10,7 +10,7 @@ tags:
 featured: false
 draft: false
 sourceUrl: ""
-ogImage: "/images/free-domain-2026-real.jpg"
+ogImage: "/images/free-domain-2026-real.webp"
 coverAlt: "域名解析 DNS 设置界面截图"
 enSlug: "free-domain-2026"
 ---
