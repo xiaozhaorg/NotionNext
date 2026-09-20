@@ -9,7 +9,6 @@ const postSchema = z.object({
   modDatetime: z.coerce.date().optional(),
   author: z.string().default("小吒"),
   tags: z.array(z.string()).default([]),
-  featured: z.boolean().default(false),
   draft: z.boolean().default(false),
   ogImage: z.string().optional(),
   coverAlt: z.string().optional(),

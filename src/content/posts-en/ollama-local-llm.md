@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete Ollama tutorial. Install, download models, use the API, integrate with Open WebUI. Run local LLMs on your own machine in 5 minutes."
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial", "Free Tools"]
-featured: false
 draft: false
 ogImage: "/images/ollama-local-llm-real.jpg"
 coverAlt: "Glowing AI chip on circuit board close-up, symbolizing LLM computing power"

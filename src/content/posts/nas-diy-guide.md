@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 教程
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/nas-diy-guide"
 ogImage: "/images/nas-diy-guide-real.jpg"

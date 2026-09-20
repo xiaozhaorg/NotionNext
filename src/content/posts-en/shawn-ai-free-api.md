@@ -8,7 +8,6 @@ tags:
   - API
   - Tutorial
   - Free Tools
-featured: false
 draft: false
 ogImage: "/images/shawn-ai-free-api-real.jpg"
 coverAlt: "A conceptual neural network image of artificial intelligence bathed in a blue glow"

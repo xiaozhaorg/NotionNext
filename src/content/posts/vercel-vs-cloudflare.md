@@ -7,7 +7,6 @@ tags:
   - 教程
   - 免费工具
   - Cloudflare
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/vercel-vs-cloudflare"
 ogImage: "/images/vercel-vs-cloudflare-real.jpg"

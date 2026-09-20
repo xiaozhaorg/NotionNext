@@ -8,7 +8,6 @@ tags:
   - 教程
   - 免费工具
   - 大模型
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/nextchat-deploy-guide"
 ogImage: "/images/nextchat-deploy-guide-real.jpg"

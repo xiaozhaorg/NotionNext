@@ -6,10 +6,8 @@ author: 小吒
 tags:
   - AI
   - AI 编程
-  - Cline
   - 教程
-  - 开源工具
-featured: false
+  - 开源
 draft: false
 ogImage: "/images/cline-tutorial-real.jpg"
 ---

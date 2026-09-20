@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete guide to applying for the GitHub Student Developer Pack, covering dozens of free perks like DigitalOcean, Namecheap, and JetBrains, with a step-by-step application walkthrough and practical tips."
 author: "Xiaozha"
 tags: ["GitHub", "Tutorial", "Free Tools", "Student"]
-featured: false
 draft: false
 ogImage: "/images/github-student-pack-real.jpg"
 coverAlt: "Close-up of chips and data cables densely packed on a green circuit board"

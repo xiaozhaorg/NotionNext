@@ -7,7 +7,6 @@ tags:
   - 免费工具
   - 资源分享
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-student-pack"
 ogImage: "/images/github-student-pack-real.jpg"

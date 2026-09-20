@@ -4,10 +4,10 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: Docker Compose 入门教程，从安装到实战，涵盖常用命令、YAML 配置、多容器编排、自建开发环境。
 author: 小吒
 tags:
+  - Docker
   - 教程
   - 开发工具
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/docker-compose-tutorial"
 ogImage: "/images/docker-compose-tutorial-real.jpg"

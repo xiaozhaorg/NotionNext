@@ -7,7 +7,6 @@ tags:
   - Cloudflare
   - 教程
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-r2-storage"
 ogImage: "/images/cloudflare-r2-storage-real.jpg"

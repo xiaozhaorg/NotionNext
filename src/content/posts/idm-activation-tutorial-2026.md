@@ -5,9 +5,6 @@ description: Internet Download Manager (IDM) 是一款功能强大的下载加�
 author: 小吒
 tags:
   - 软件教程
-  - IDM
-  - 下载工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/idm-activation-tutorial-2026"
 ogImage: "/images/idm-activation-tutorial-2026-real.jpg"

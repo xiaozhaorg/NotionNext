@@ -7,7 +7,6 @@ tags:
   - Cloudflare
   - 免费工具
   - 项目实战
-featured: false
 draft: false
 sourceUrl: ""
 ogImage: "/images/cloudflare-address-generator-real.webp"

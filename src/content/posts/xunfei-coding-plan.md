@@ -5,7 +5,6 @@ description: 讯飞星辰Coding Plan全新升级，3.9元不限量Tokens，新�
 author: 小吒
 tags:
   - 资源分享
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/xunfei-coding-plan"
 ogImage: "/images/xunfei-coding-plan-real.jpg"

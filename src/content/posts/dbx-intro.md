@@ -4,12 +4,8 @@ pubDatetime: "2026-06-02T00:00:00.000Z"
 description: Navicat太贵、DBeaver太重？这款不到20MB的开源数据库客户端DBX，免费、轻量、跨平台，支持40+数据库。
 author: 小吒
 tags:
-  - DBX
   - 数据库
   - 开源
-  - 工具
-  - 客户端
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/dbx-intro"
 ogImage: "/images/dbx-intro-real.jpg"

@@ -10,30 +10,18 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
 );
 
-const featured = posts.find((p) => p.data.featured) ?? posts[0];
-const rest = posts.filter((p) => p.id !== featured?.id);
 ---
 <Layout>
   <Header />
 
   <div class="layout">
     <main>
-      {featured && (
-        <div class="featured-section">
-          <div class="section-title">
-            <span class="title-bar"></span>
-            <h2>⭐ 置顶推荐</h2>
-          </div>
-          <Card post={featured} pinned={true} />
-        </div>
-      )}
-
       <div class="section-title">
         <span class="title-bar"></span>
         <h2>📝 最新文章</h2>
       </div>
       <div class="post-list">
-        {rest.map((post) => (
+        {posts.map((post) => (
           <Card post={post} />
         ))}
       </div>
@@ -45,9 +33,6 @@ const rest = posts.filter((p) => p.id !== featured?.id);
 
 <style>
   /* 区块标题 */
-  .featured-section {
-    margin-bottom: 1.5rem;
-  }
   .section-title {
     display: flex;
     align-items: center;

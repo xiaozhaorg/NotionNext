@@ -67,7 +67,6 @@ async function main() {
     "author: 小吒",
     "tags:",
     ...(tags.length ? tags.map((t) => `  - ${t}`) : ["  []"]),
-    "featured: false",
     "draft: false",
     "---",
     "",

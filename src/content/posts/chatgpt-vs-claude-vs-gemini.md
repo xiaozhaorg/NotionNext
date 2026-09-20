@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - AI
   - 大模型
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/chatgpt-vs-claude-vs-gemini"
 ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.jpg"

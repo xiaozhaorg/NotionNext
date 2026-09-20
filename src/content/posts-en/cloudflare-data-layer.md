@@ -4,7 +4,6 @@ pubDatetime: "2026-08-28T00:00:00.000Z"
 description: "We covered building a free blog on Cloudflare Workers; this post fills in the data layer. Learn when to use D1 (SQLite-compatible relational DB), KV (global key-value store), and Queues (message queue), with config, code examples, and a selection cheat sheet for your Worker apps."
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Workers", "Database", "Free Tools"]
-featured: false
 draft: false
 zhSlug: "cloudflare-data-layer"
 ogImage: "/images/cloudflare-data-layer-real.jpg"

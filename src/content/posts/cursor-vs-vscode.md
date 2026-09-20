@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - AI
   - 开发工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cursor-vs-vscode"
 ogImage: "/images/cursor-vs-vscode-real.jpg"

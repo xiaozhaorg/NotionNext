@@ -8,7 +8,6 @@ tags:
   - 开发工具
   - 免费工具
   - 开源
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/free-ai-coding-tools-2026"
 ogImage: "/images/free-ai-coding-tools-2026-real.jpg"

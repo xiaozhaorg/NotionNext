@@ -5,12 +5,10 @@ description: 这是博客的第一篇文章，介绍了本站和博主。（更�
 author: 小吒
 tags:
   - 日常记录
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/hi-welcome"
 ogImage: "/images/hi-welcome-real.jpg"
 coverAlt: "团队成员在桌前协作交流的温馨工作场景"
-enSlug: "hello-world"
 ---
 
 Hi!

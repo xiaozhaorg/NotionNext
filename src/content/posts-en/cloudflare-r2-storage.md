@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete guide to Cloudflare R2 object storage. Learn S3-compatible API, CDN integration, custom domain setup, and zero egress fees. The best free AWS S3 alternative."
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools", "Storage"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-r2-storage-real.jpg"
 coverAlt: "Blue storage array lights in a cloud server room"

@@ -4,7 +4,6 @@ pubDatetime: "2026-07-20T00:00:00.000Z"
 description: "A roundup of the best free AI coding assistants worth using in 2026, comparing the features, experience, and limits of Codeium, Trae, CodeGeeX, and more to help you pick the right AI coding partner."
 author: "Xiaozha"
 tags: ["AI", "Development Tools", "Free Tools", "Open Source"]
-featured: false
 draft: false
 ogImage: "/images/free-ai-coding-tools-2026-real.jpg"
 coverAlt: "Concept art of an AI neural network in a blue glow"

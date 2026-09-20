@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Moonshot AI releases the open-source Kimi K3 with 2.8 trillion parameters, the largest in the world. It supports a 1 million token context window and native multimodal understanding, marking a new stage for China's homegrown large models."
 author: "Xiaozha"
 tags: ["AI", "Kimi", "Open Source", "Moonshot AI"]
-featured: false
 draft: false
 ogImage: "/images/kimi-k3-open-source-real.jpg"
 coverAlt: "Conceptual illustration of an artificial neural network bathed in a blue glow"

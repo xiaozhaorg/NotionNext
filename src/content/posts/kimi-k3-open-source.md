@@ -7,9 +7,6 @@ tags:
   - AI
   - 大模型
   - 开源
-  - Kimi
-  - 月之暗面
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/kimi-k3-open-source"
 ogImage: "/images/kimi-k3-open-source-real.jpg"

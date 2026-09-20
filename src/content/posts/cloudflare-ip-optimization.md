@@ -5,9 +5,7 @@ description: 网站管理员专属！通过优选IP + DNS解析实现全站加�
 author: 小吒
 tags:
   - Cloudflare
-  - CDN优化
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-ip-optimization"
 ogImage: "/images/cloudflare-ip-optimization-real.jpg"

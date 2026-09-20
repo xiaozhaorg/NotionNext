@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 教程
   - 开发工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-actions-advanced"
 ogImage: "/images/github-actions-advanced-real.jpg"

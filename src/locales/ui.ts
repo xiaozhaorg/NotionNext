@@ -21,7 +21,6 @@ const zh = {
   nav_about: "关于",
 
   // Home
-  home_featured: "⭐ 置顶推荐",
   home_latest: "📝 最新文章",
 
   // Card
@@ -95,7 +94,6 @@ const en = {
   nav_about: "About",
 
   // Home
-  home_featured: "⭐ Featured",
   home_latest: "📝 Latest Posts",
 
   // Card

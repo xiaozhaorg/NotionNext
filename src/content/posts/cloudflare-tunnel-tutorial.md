@@ -7,8 +7,6 @@ tags:
   - Cloudflare
   - 教程
   - 免费工具
-  - 内网穿透
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-tunnel-tutorial"
 ogImage: "/images/cloudflare-tunnel-tutorial-real.jpg"

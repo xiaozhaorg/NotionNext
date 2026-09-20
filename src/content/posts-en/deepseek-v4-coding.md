@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "We benchmarked DeepSeek V4's coding ability against GPT-5.6 and Claude Sonnet 4. At just one-tenth the price, its performance holds its own. This article covers API usage and best practices."
 author: "Xiaozha"
 tags: ["AI", "DeepSeek", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/deepseek-v4-coding-real.jpg"
 coverAlt: "Close-up of a glowing AI chip and circuit board, symbolizing large-model compute power"

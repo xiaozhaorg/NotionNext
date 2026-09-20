@@ -7,7 +7,6 @@ tags:
   - AI
   - 开发工具
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/trae-ide-review"
 ogImage: "/images/trae-ide-review-real.jpg"

@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Set up a WordPress blog on TinkerHost for free. No server purchase needed, from registration to launch — full tutorial for beginners."
 author: "Xiaozha"
 tags: ["WordPress", "Free Resources", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/free-hosting-wordpress-real.webp"
 coverAlt: "WordPress admin dashboard interface"

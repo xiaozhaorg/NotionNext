@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Step-by-step guide to building a DIY NAS: hardware shopping list, TrueNAS/Unraid system installation, remote access, and media library setup — a complete private cloud storage solution."
 author: "Xiaozha"
 tags: ["NAS", "Self-Hosting", "Tutorial", "Hardware"]
-featured: false
 draft: false
 ogImage: "/images/nas-diy-guide-real.jpg"
 coverAlt: "Warm scene of team members collaborating around a desk"

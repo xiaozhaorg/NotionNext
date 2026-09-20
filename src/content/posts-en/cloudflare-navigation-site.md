@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Deploy a WebStack open-source navigation site on Cloudflare Pages for free. No server needed, custom domain support, perfect for organizing your bookmarks."
 author: "Xiaozha"
 tags: ["Cloudflare", "Open Source", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-navigation-site-real.webp"
 coverAlt: "Browser navigation page showing categorized website links"

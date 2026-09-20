@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "GitHub Copilot now has a free tier. This hands-on review tests its features and limits and compares it with free alternatives like Codeium and Tabnine to help you decide whether the free version is good enough."
 author: "Xiaozha"
 tags: ["AI", "Development Tools", "Free Tools"]
-featured: false
 draft: false
 ogImage: "/images/github-copilot-free-real.jpg"
 coverAlt: "Overhead view of a programmer writing code at a dual-monitor desk"

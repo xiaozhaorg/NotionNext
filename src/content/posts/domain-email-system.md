@@ -4,10 +4,9 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: 用域名搭建专属邮箱系统，支持自定义后缀、邮件转发、多别名管理，让个人品牌更专业。
 author: 小吒
 tags:
-  - 免费资源
+  - 免费工具
   - 域名
   - 教程
-featured: false
 draft: false
 sourceUrl: ""
 ogImage: "/images/domain-email-system-real.webp"

@@ -5,10 +5,8 @@ description: 使用 Cloud Mail 免费搭建域名邮箱，支持多域名、TG �
 author: 小吒
 tags:
   - Cloudflare
-  - 域名邮箱
   - 免费工具
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-cloud-mail"
 ogImage: "/images/cloudflare-cloud-mail-real.jpg"

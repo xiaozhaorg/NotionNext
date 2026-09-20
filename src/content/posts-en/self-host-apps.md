@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "The 20 best open-source apps worth self-hosting to replace paid cloud services. From notes, cloud storage, media to collaboration tools. Take control of your data."
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Free Tools"]
-featured: false
 draft: false
 ogImage: "/images/self-host-apps-real.jpg"
 coverAlt: "Laptop with data charts on office desk"

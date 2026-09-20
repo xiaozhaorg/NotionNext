@@ -6,9 +6,6 @@ author: 小吒
 tags:
   - 软件教程
   - 开源
-  - 音乐播放器
-  - Mineradio
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/mineradio-tutorial"
 ogImage: "/images/mineradio-tutorial-real.jpg"

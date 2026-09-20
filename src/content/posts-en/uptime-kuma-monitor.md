@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete Uptime Kuma tutorial. Self-hosted uptime monitoring with HTTP, TCP, Ping, DNS checks. Beautiful UI + alert notifications. Free replacement for UptimeRobot."
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Monitoring"]
-featured: false
 draft: false
 ogImage: "/images/uptime-kuma-monitor-real.jpg"
 coverAlt: "Clean office desk with laptop and work notes"

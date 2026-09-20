@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Deploy a free image compression tool on Cloudflare Pages. Supports JPG, PNG, WebP conversion. Pure frontend, no server, privacy-safe."
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-image-compressor-real.webp"
 coverAlt: "Before and after image compression comparison"

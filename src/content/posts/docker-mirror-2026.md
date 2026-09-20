@@ -7,8 +7,6 @@ tags:
   - Docker
   - 开发工具
   - 教程
-  - 运维
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/docker-mirror-2026"
 ogImage: "/images/docker-mirror-2026-real.jpg"

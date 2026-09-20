@@ -4,10 +4,8 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: 使用免费虚拟主机搭建 WordPress 博客，从注册到上线全流程，无需购买服务器，适合个人博客和项目展示。
 author: 小吒
 tags:
-  - WordPress
-  - 免费资源
+  - 免费工具
   - 教程
-featured: false
 draft: false
 sourceUrl: ""
 ogImage: "/images/free-hosting-wordpress-real.webp"

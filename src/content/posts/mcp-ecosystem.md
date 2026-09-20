@@ -7,9 +7,8 @@ tags:
   - AI
   - MCP
   - AI 编程
-  - 开源工具
+  - 开源
   - 效率工具
-featured: false
 draft: false
 enSlug: "mcp-ecosystem"
 ogImage: "/images/mcp-ecosystem-real.jpg"

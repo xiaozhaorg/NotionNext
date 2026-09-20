@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Cloudflare Drop is now live: drag a folder onto the page and deploy a static website in seconds, no account needed. Supports custom domains, automatic HTTPS, and global CDN acceleration."
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools", "Static Site", "Web Hosting"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-drop-guide-real.jpg"
 coverAlt: "Blue storage array lights in cloud server room"

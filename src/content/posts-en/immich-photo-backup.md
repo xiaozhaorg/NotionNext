@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Immich is the best open-source self-hosted photo backup app with AI face recognition, auto-tagging, and map view. A complete Google Photos alternative."
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Free Tools"]
-featured: false
 draft: false
 ogImage: "/images/immich-photo-backup-real.jpg"
 coverAlt: "Green circuit board with chips and data lines close-up"

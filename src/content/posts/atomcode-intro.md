@@ -8,7 +8,6 @@ tags:
   - 开发工具
   - 开源
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/atomcode-intro"
 ogImage: "/images/atomcode-intro-real.jpg"

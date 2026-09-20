@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Comprehensive list of free domain resources still available in 2026, including eu.cc, DigitalPlat, and Stackryze. Registration guides and Cloudflare hosting tutorial included."
 author: "Xiaozha"
 tags: ["Free Resources", "Domains", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/free-domain-2026-real.webp"
 coverAlt: "DNS settings interface showing domain configuration"

@@ -8,7 +8,6 @@ tags:
   - Marvis
   - AI
   - Tutorial
-featured: false
 draft: false
 ogImage: "/images/tencent-marvis-real.jpg"
 coverAlt: "A laptop and work notes on a tidy office desk"

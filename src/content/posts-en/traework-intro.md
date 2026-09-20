@@ -4,7 +4,6 @@ pubDatetime: "2026-08-08T00:00:00.000Z"
 description: "TraeWork is ByteDance's AI office platform in the TRAE ecosystem, handling documents, data processing, web page creation, and more through cloud-based tasks. This article covers its core concepts, how to earn credits, its membership tiers, and the new-user signup bonus."
 author: "Xiaozha"
 tags: ["Trae", "TraeWork", "AI", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/traework-intro-real.jpg"
 coverAlt: "A blue tech-styled AI neural network concept image symbolizing TraeWork's cloud-based AI task processing"

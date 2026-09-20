@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Deploy an online address generator on Cloudflare Pages. Generates fake names, phones, emails, addresses for testing. Developer essential tool."
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-address-generator-real.webp"
 coverAlt: "Form test data auto-generation interface"

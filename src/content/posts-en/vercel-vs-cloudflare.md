@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Deep comparison of Vercel and Cloudflare Pages: deployment experience, performance, pricing, free tiers. Which is the best static site hosting platform in 2026?"
 author: "Xiaozha"
 tags: ["Tutorial", "Free Tools", "Cloudflare", "Vercel"]
-featured: false
 draft: false
 ogImage: "/images/vercel-vs-cloudflare-real.jpg"
 coverAlt: "Cloud computing deployment concept with clouds and server room"

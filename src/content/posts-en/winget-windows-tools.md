@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "A tutorial on installing software from the command line with winget, the Windows package manager — faster and more stable than Scoop. Covers common commands, script automation, and batch installs."
 author: "Xiaozha"
 tags: ["Windows", "Tutorial", "Development Tools"]
-featured: false
 draft: false
 ogImage: "/images/winget-windows-tools-real.jpg"
 coverAlt: "Close-up of densely packed chips and data cables on a green circuit board"

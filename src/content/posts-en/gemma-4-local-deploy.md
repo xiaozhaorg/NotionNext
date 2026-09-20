@@ -4,7 +4,6 @@ pubDatetime: "2026-07-22T00:00:00.000Z"
 description: "Gemma 4 is Google's newest open-source LLM family, released in 2026 with 2B, 8B, and 27B variants. This hands-on guide walks you through deploying Gemma 4 locally with Ollama, vLLM, and Transformers, then compares real-world inference quality, VRAM usage, and speed."
 author: "Xiaozha"
 tags: ["AI", "Gemma", "Tutorial", "Local LLM"]
-featured: false
 draft: false
 ogImage: "/images/gemma-4-local-deploy-real.jpg"
 coverAlt: "AI neural network concept art in a blue glow"

@@ -6,10 +6,8 @@ author: 小吒
 tags:
   - Cloudflare
   - 教程
-  - Workers
   - 数据库
   - 免费工具
-featured: false
 draft: false
 enSlug: "cloudflare-data-layer"
 ogImage: "/images/cloudflare-data-layer-real.jpg"

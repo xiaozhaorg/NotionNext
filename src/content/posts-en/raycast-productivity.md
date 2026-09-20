@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Raycast is the most powerful productivity tool on Mac. This guide covers installation, recommended extensions, shortcut configuration, and custom scripts so you can leave Spotlight behind for good."
 author: "Xiaozha"
 tags: ["Raycast", "Productivity", "macOS", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/raycast-productivity-real.jpg"
 coverAlt: "Headphones and a music player interface sitting beside a MacBook"

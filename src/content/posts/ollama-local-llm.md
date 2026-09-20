@@ -8,7 +8,6 @@ tags:
   - 大模型
   - 教程
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/ollama-local-llm"
 ogImage: "/images/ollama-local-llm-real.jpg"

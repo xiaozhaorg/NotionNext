@@ -7,7 +7,6 @@ tags:
   - 免费工具
   - 开源
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/uptime-kuma-monitor"
 ogImage: "/images/uptime-kuma-monitor-real.jpg"

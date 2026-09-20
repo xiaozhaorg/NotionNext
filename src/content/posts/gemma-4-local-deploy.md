@@ -4,11 +4,10 @@ pubDatetime: "2026-07-22T00:00:00.000Z"
 description: "Gemma 4 是谷歌 2026 年发布的最新开源大模型系列，包含 2B / 8B / 27B 三种规格。本文手把手教你在本地用 Ollama、vLLM 和 Transformers 三种方式部署 Gemma 4，并对比实际推理效果、显存占用和速度表现。"
 author: "小吒"
 tags:
-  - "AI"
-  - "大模型"
-  - "教程"
-  - "免费工具"
-featured: false
+  - AI
+  - 大模型
+  - 教程
+  - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/gemma-4-local-deploy"
 ogImage: "/images/gemma-4-local-deploy-real.jpg"

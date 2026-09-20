@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete Jellyfin setup guide. Docker deployment, metadata scraping, hardware transcoding, client apps. The best free open-source media server."
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Media Server"]
-featured: false
 draft: false
 ogImage: "/images/jellyfin-media-server-real.jpg"
 coverAlt: "Clean office desk with laptop and work notes"

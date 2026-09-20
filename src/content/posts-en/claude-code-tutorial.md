@@ -4,7 +4,6 @@ pubDatetime: "2026-07-30T06:18:32.994Z"
 description: "Claude Code is Anthropic's terminal-native AI coding agent. From installation and configuration to real-world commands, this guide shows Chinese developers how to use it without barriers via CC Switch, Alibaba Cloud Bailian, QuickRouter, and other solutions — including 5 real-world scenarios."
 author: "Xiaozha"
 tags: ["AI", "Claude", "Tutorial", "AI Coding", "Development Tools", "ccswitch"]
-featured: false
 draft: false
 ogImage: "/images/claude-code-tutorial-real.jpg"
 coverAlt: "Close-up of a developer's hands typing code on a laptop keyboard"

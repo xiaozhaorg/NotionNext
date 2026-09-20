@@ -4,7 +4,6 @@ pubDatetime: "2026-07-12T00:00:00.000Z"
 description: "An AI coding agent that runs right in your terminal, supports any LLM, and is built on a 100% AI-generated codebase. Open source, free, and well worth a try."
 author: "Xiaozha"
 tags: ["AtomCode", "AI", "IDE", "Development Tools"]
-featured: false
 draft: false
 ogImage: "/images/atomcode-intro-real.jpg"
 coverAlt: "Color-highlighted program source code in a dark-themed code editor"

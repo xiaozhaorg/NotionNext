@@ -4,7 +4,6 @@ pubDatetime: "2026-08-28T00:00:00.000Z"
 description: "MCP (Model Context Protocol) has become the de facto standard for extending AI coding tools. This post surveys client support, a curated list of MCP servers worth installing, configuration tips, and security red lines — level your AI coding assistant up from chatty to actually useful."
 author: "Xiaozha"
 tags: ["AI", "MCP", "AI Coding", "Open Source", "Productivity"]
-featured: false
 draft: false
 zhSlug: "mcp-ecosystem"
 ogImage: "/images/mcp-ecosystem-real.jpg"

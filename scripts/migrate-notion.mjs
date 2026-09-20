@@ -191,7 +191,6 @@ async function migrate() {
         `description: ${JSON.stringify(article.description || article.title)}`,
         `author: ${JSON.stringify(article.author)}`,
         `tags: ${article.tags.length ? "\n" + article.tags.map((t) => `  - ${JSON.stringify(t)}`).join("\n") : "[]"}`,
-        `featured: false`,
         `draft: false`,
         `sourceUrl: ${JSON.stringify(url)}`,
         article.ogImage ? `ogImage: ${JSON.stringify(article.ogImage)}` : null,

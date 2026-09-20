@@ -5,7 +5,6 @@ description: 使用优惠码COMPROS，首年仅需20元即可注册.COM顶级域
 author: 小吒
 tags:
   - 资源分享
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/com-domain-deal"
 ogImage: "/images/com-domain-deal-real.jpg"

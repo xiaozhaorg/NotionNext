@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 开发工具
   - 大模型
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/rust-vs-go"
 ogImage: "/images/rust-vs-go-real.jpg"

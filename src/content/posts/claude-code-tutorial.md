@@ -6,11 +6,8 @@ author: 小吒
 tags:
   - AI
   - 教程
-  - Claude Code
   - AI 编程
-  - ccswitch
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/claude-code-tutorial"
 ogImage: "/images/claude-code-tutorial-real.jpg"

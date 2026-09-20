@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Cursor is an AI-native IDE built on VS Code. This hands-on review puts Cursor's AI features through their paces, compares them with VS Code + Copilot, and tells you whether switching is worth it."
 author: "Xiaozha"
 tags: ["AI", "Development Tools", "VS Code"]
-featured: false
 draft: false
 ogImage: "/images/cursor-vs-vscode-real.jpg"
 coverAlt: "Artificial intelligence neural network concept with a blue glow"

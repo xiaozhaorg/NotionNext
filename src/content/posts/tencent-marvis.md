@@ -5,9 +5,7 @@ description: 腾讯推出的Marvis马维斯是一款操作系统层级AI助手�
 author: 小吒
 tags:
   - AI
-  - 腾讯
   - 大模型
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-marvis"
 ogImage: "/images/tencent-marvis-real.jpg"

@@ -4,7 +4,6 @@ pubDatetime: "2026-07-29T00:00:00.000Z"
 description: "Mineradio is a fully open-source, free music player that supports logging in with NetEase Cloud Music and QQ Music to sync playlists, with 3D stereo lyrics and dynamic visual switching for a listening experience far beyond ordinary players."
 author: "Xiaozha"
 tags: ["Mineradio", "Music", "Tutorial", "Open Source"]
-featured: false
 draft: false
 ogImage: "/images/mineradio-tutorial-real.jpg"
 coverAlt: "Headphones and a music player interface resting beside a MacBook"

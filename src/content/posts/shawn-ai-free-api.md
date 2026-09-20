@@ -8,9 +8,7 @@ tags:
   - 免费工具
   - 大模型
   - API
-  - 肖恩AI
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/shawn-ai-free-api"
 ogImage: "/images/shawn-ai-free-api-real.jpg"

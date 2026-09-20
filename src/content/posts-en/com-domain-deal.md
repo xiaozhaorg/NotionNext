@@ -4,7 +4,6 @@ pubDatetime: "2026-04-11T00:00:00.000Z"
 description: "Use promo code COMPROS to register a .COM top-level domain for just ¥20 in the first year."
 author: "Xiaozha"
 tags: ["Domain", "Tutorial", "Deals"]
-featured: false
 draft: false
 ogImage: "/images/com-domain-deal-real.jpg"
 coverAlt: "Conceptual illustration of domain name resolution and global internet connectivity"

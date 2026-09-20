@@ -8,7 +8,6 @@ tags:
   - ChatGPT
   - Claude
   - Gemini
-featured: false
 draft: false
 ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.jpg"
 coverAlt: "A close-up of a glowing AI chip on a circuit board, symbolizing the computing power behind large language models"

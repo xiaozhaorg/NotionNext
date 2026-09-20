@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Step-by-step guide to using Cloudflare Tunnel for free. Expose local AI services, NAS, and dev environments to the internet without a public IP."
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools", "Tunneling"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-tunnel-tutorial-real.jpg"
 coverAlt: "Data center server rack with blinking network LEDs"

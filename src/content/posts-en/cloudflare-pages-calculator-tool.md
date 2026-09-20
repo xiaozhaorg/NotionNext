@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Step-by-step guide to building a multi-function online calculator (mortgage, tax, BMI) on Cloudflare Pages. Pure frontend, zero server cost."
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-pages-calculator-tool-real.webp"
 coverAlt: "Code editor showing calculator project code"

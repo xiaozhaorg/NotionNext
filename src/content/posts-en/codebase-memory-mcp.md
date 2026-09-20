@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "codebase-memory-mcp is a high-performance code intelligence MCP server that indexes your entire codebase in milliseconds and supports 158 programming languages, so your AI coding assistant truly understands your project."
 author: "Xiaozha"
 tags: ["MCP", "AI", "Development Tools", "Open Source", "Productivity Tools"]
-featured: false
 draft: false
 ogImage: "/images/codebase-memory-mcp-real.jpg"
 coverAlt: "MacBook screen showing a programming editor with code"

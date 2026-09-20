@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 教程
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/ubuntu-server-setup"
 ogImage: "/images/ubuntu-server-setup-real.jpg"

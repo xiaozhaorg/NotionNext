@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 开发工具
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-extensions-2026"
 ogImage: "/images/vscode-extensions-2026-real.jpg"

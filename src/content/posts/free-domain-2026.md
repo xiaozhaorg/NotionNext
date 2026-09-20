@@ -4,10 +4,9 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: 汇总 2026 年仍可使用的免费域名资源，包括 .eu.cc、DigitalPlat、Stackryze 等，附注册流程和 Cloudflare 托管教程。
 author: 小吒
 tags:
-  - 免费资源
+  - 免费工具
   - 域名
   - 建站
-featured: false
 draft: false
 sourceUrl: ""
 ogImage: "/images/free-domain-2026-real.webp"

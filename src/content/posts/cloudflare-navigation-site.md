@@ -5,9 +5,8 @@ description: 使用 Cloudflare Pages 零成本部署 WebStack 开源导航站，
 author: 小吒
 tags:
   - Cloudflare
-  - 开源项目
+  - 开源
   - 教程
-featured: false
 draft: false
 sourceUrl: ""
 ogImage: "/images/cloudflare-navigation-site-real.webp"

@@ -6,10 +6,7 @@ author: 小吒
 tags:
   - AI
   - API
-  - SiliconFlow
   - 大模型
-  - 硅基流动
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/siliconflow-intro"
 ogImage: "/images/siliconflow-intro-real.jpg"

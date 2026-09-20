@@ -9,7 +9,6 @@ tags:
   - Open Source
   - Tool
   - Client
-featured: false
 draft: false
 ogImage: "/images/dbx-intro-real.jpg"
 coverAlt: "Close-up of chips and data cables densely packed on a green circuit board"

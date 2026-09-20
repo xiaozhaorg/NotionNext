@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Zed is a code editor written in Rust that promises GPU-accelerated rendering and top-tier speed. This hands-on review puts Zed through its paces, compares it with VS Code and Sublime Text, and tells you whether it's worth a try."
 author: "Xiaozha"
 tags: ["Zed", "VS Code", "Development Tools"]
-featured: false
 draft: false
 ogImage: "/images/zed-vs-vscode-real.jpg"
 coverAlt: "Color-highlighted program source code in a dark-themed code editor"

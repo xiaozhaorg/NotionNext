@@ -4,7 +4,6 @@ pubDatetime: "2026-07-29T00:00:00.000Z"
 description: "Internet Download Manager (IDM) is a powerful download accelerator. This guide walks through activating IDM with an open-source script."
 author: "Xiaozha"
 tags: ["Software Tutorial", "IDM", "Download Tool"]
-featured: false
 draft: false
 ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
 coverAlt: "Racks of neatly arranged server cabinets and network cables in a data center"

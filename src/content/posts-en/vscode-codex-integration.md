@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "A complete walkthrough of deeply integrating OpenAI Codex into VS Code, from installing the extension to hands-on AI pair programming, covering code completion, refactoring suggestions, and generating code from natural language."
 author: "Xiaozha"
 tags: ["VS Code", "Codex", "AI", "OpenAI", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/vscode-codex-integration-real.jpg"
 coverAlt: "Close-up of a glowing AI chip and circuit board, symbolizing the computing power behind large language models"

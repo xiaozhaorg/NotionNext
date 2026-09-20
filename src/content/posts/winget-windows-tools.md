@@ -7,7 +7,6 @@ tags:
   - 免费工具
   - 开发工具
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/winget-windows-tools"
 ogImage: "/images/winget-windows-tools-real.jpg"

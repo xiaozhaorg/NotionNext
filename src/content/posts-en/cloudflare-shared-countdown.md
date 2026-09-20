@@ -4,7 +4,6 @@ pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Deploy a shared countdown timer on Cloudflare Pages. Multiple people can view the same countdown simultaneously. Perfect for events, deadlines, launches."
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-shared-countdown-real.webp"
 coverAlt: "Countdown timer interface showing remaining time"

@@ -7,7 +7,6 @@ tags:
   - 免费工具
   - 开源
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/mealie-recipe-app"
 ogImage: "/images/mealie-recipe-app-real.jpg"

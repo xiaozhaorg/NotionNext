@@ -5,11 +5,7 @@ description: 详细介绍 VS Code 深度集成 OpenAI Codex 的完整流程，�
 author: 小吒
 tags:
   - AI
-  - VS Code
-  - 编程助手
-  - OpenAI
   - 效率工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-codex-integration"
 ogImage: "/images/vscode-codex-integration-real.jpg"

@@ -8,8 +8,6 @@ tags:
   - 教程
   - 免费工具
   - 建站
-  - 静态网站
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-drop-guide"
 ogImage: "/images/cloudflare-drop-guide-real.jpg"

@@ -7,7 +7,6 @@ tags:
   - AI
   - 大模型
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/claude-sonnet-4"
 ogImage: "/images/claude-sonnet-4-real.jpg"

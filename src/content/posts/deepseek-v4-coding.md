@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - AI
   - 大模型
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/deepseek-v4-coding"
 ogImage: "/images/deepseek-v4-coding-real.jpg"

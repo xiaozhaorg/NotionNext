@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 开发工具
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/astro-vs-nextjs"
 ogImage: "/images/astro-vs-nextjs-real.jpg"

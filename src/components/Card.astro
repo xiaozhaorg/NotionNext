@@ -3,15 +3,13 @@ import type { CollectionEntry } from "astro:content";
 import { SITE } from "@/config";
 import { t, type Locale } from "@/locales/ui";
 
-type Props = { post: CollectionEntry<"posts"> | CollectionEntry<"posts-en">; pinned?: boolean; locale?: Locale };
-const { post, pinned = false, locale = "zh" } = Astro.props;
+type Props = { post: CollectionEntry<"posts"> | CollectionEntry<"posts-en">; locale?: Locale };
+const { post, locale = "zh" } = Astro.props;
 const { data, id } = post;
 const urlPrefix = locale === "en" ? "/en/article" : "/article";
 const url = `${urlPrefix}/${id}`;
 const tagPrefix = locale === "en" ? "/en/tags" : "/tags";
 const dateLocale = locale === "en" ? "en-US" : "zh-CN";
-const pinnedText = locale === "en" ? "📌 Pinned" : "📌 置顶";
-
 // 阅读时长估算（中文按字符数 ~350字/分，英文按词数 ~220词/分）
 const rawText = (post.body ?? "")
   .replace(/```[\s\S]*?```/g, " ")
@@ -91,7 +89,6 @@ const fallbackId = `thumb-fallback-${id}`;
         <span>{placeholderText}</span>
       </div>
     )}
-    {pinned && <span class="pinned-badge">{pinnedText}</span>}
   </a>
 
   <div class="post-card-body">
@@ -189,20 +186,6 @@ const fallbackId = `thumb-fallback-${id}`;
   .post-card:hover .post-thumb-placeholder {
     transform: scale(1.06);
   }
-  .pinned-badge {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    background: rgba(0, 0, 0, 0.65);
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 0.15rem 0.55rem;
-    border-radius: var(--radius-full);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
   /* 右侧内容 */
   .post-card-body {
     flex: 1;

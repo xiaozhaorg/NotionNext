@@ -4,7 +4,6 @@ pubDatetime: "2026-07-20T00:00:00.000Z"
 description: "Step-by-step guide to building a personal blog on Cloudflare Workers for free. No server needed, global CDN, custom domain support. Launch your website at zero cost."
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools", "Blogging"]
-featured: false
 draft: false
 ogImage: "/images/cloudflare-workers-blog-real.jpg"
 coverAlt: "Blue storage array lights in cloud server room"

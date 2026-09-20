@@ -4,7 +4,6 @@ pubDatetime: "2026-06-03T00:00:00.000Z"
 description: "Deploy your own private AI chat assistant with NextChat. Supports OpenAI, Claude, DeepSeek, Gemini and 16+ LLMs. Local storage for privacy. Zero-cost deployment."
 author: "Xiaozha"
 tags: ["AI", "Tutorial", "Free Tools", "LLM"]
-featured: false
 draft: false
 ogImage: "/images/nextchat-deploy-guide-real.jpg"
 coverAlt: "Glowing AI chat interface on screen"

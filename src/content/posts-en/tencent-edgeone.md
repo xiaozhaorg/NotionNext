@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Tencent Cloud EdgeOne offers free CDN acceleration within mainland China. This article walks through signup, configuration, and real-world results to help you fix slow access for domestic visitors."
 author: "Xiaozha"
 tags: ["Tencent", "EdgeOne", "CDN", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/tencent-edgeone-real.jpg"
 coverAlt: "Abstract illustration of a CDN content delivery network above the clouds"

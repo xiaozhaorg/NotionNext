@@ -4,7 +4,6 @@ pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Advanced GitHub Actions tips covering dependency caching, matrix builds, scheduled workflows, secret management, and composite workflows — with practical YAML configurations."
 author: "Xiaozha"
 tags: ["GitHub", "CI/CD", "Tutorial"]
-featured: false
 draft: false
 ogImage: "/images/github-actions-advanced-real.jpg"
 coverAlt: "A warm team collaboration scene at a work desk"

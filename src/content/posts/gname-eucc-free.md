@@ -6,7 +6,6 @@ author: 小吒
 tags:
   - 资源分享
   - 免费工具
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gname-eucc-free"
 ogImage: "/images/gname-eucc-free-real.jpg"

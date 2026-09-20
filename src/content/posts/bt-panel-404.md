@@ -5,7 +5,6 @@ description: 宝塔面板访问报404错误的解决方案，端口被Nginx占�
 author: 小吒
 tags:
   - 日常记录
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/bt-panel-404"
 ogImage: "/images/bt-panel-404-real.jpg"

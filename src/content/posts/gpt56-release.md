@@ -7,7 +7,6 @@ tags:
   - AI
   - 大模型
   - 教程
-featured: false
 draft: false
 sourceUrl: "https://xiaozha.org/article/gpt56-release"
 ogImage: "/images/gpt56-release-real.jpg"
