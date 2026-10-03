@@ -102,12 +102,3 @@ GPT-5.6 推出了 Operator 功能，可以自动执行浏览器操作；Claude 4
 
 [Claude Code 实战指南：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Trae IDE 深度体验：
-
-字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg)](/article/trae-ide-review)[腾讯马维斯Marvis体验：
-
-装上就有6个AI牛马帮你干活![image](https://xiaozha.org/images/tencent-marvis-cover.jpg)](/article/tencent-marvis)

@@ -14,163 +14,177 @@ coverAlt: "云层与服务器机房的云计算抽象图"
 enSlug: "docker-mirror-2026"
 ---
 
-![image](/images/remote/1518432031352-d6fc5c10da5a.webp)
-
 如果你在国内使用 Docker，肯定遇到过这种崩溃瞬间：`docker pull nginx` 卡在 `Pulling fs layer` 半天不动，最后报一个 `i/o timeout` 或 `TLS handshake timeout`。
 
-Docker Hub 在国内的访问时好时坏，严重影响开发效率。
+Docker Hub 在国内的访问时好时坏，严重影响开发效率。今天就系统整理一下 2026 年 7 月仍然可用的国内镜像加速方案，亲测有效。
 
-今天就系统整理一下 2026 年 7 月仍然可用的国内镜像加速方案，亲测有效。
-
-一、为什么需要镜像加速？
+## 一、为什么需要镜像加速？
 
 Docker Hub 官方服务器在海外，国内访问存在几个痛点：
 
-- 网络延迟高：
+- **网络延迟高**：直连平均 200-500ms，丢包严重
+- **拉取速度慢**：百兆宽带只能跑 100-300 KB/s
+- **频繁超时**：大镜像（如 PyTorch、CUDA）几乎拉不下来
+- **企业网络限制**：部分公司网络直接屏蔽 Docker Hub
 
-直连平均 200-500ms，丢包严重
-- 拉取速度慢：
+配置国内镜像源后，下载速度可以从 300 KB/s 飙升到 **12 MB/s 以上**，体验天差地别。
 
-百兆宽带只能跑 100-300 KB/s
-- 频繁超时：
+## 二、2026 年 7 月可用镜像源实测
 
-大镜像（如 PyTorch、CUDA）几乎拉不下来
-- 企业网络限制：
+经过实测，以下镜像源在 2026 年 7 月仍可正常使用（推荐按顺序配置，做容错）：
 
-部分公司网络直接屏蔽 Docker Hub配置国内镜像源后，下载速度可以从 300 KB/s 飙升到 12 MB/s 以上，体验天差地别。
+| 镜像源 | 地址 | 状态 | 速度 |
+|--------|------|------|------|
+| 1Panel | `docker.1panel.live` | ✅ 稳定 | ⭐⭐⭐⭐⭐ |
+| DaoCloud | `docker.m.daocloud.io` | ✅ 稳定 | ⭐⭐⭐⭐ |
+| 南京大学 | `docker.nju.edu.cn` | ✅ 稳定 | ⭐⭐⭐⭐ |
+| 中科院 | `docker.mirrors.ustc.edu.cn` | ⚠️ 时好时坏 | ⭐⭐⭐ |
+| 阿里云 | `xxxx.mirror.aliyuncs.com` | ✅ 需个人 ID | ⭐⭐⭐⭐⭐ |
 
-二、2026 年 7 月可用镜像源实测经过实测，以下镜像源在 2026 年 7 月仍可正常使用（推荐按顺序配置，做容错）：
+> 💡 **提示**：镜像源会不定期失效，建议同时配置多个，Docker 会自动切换。
 
-镜像源
+## 三、Docker Engine 配置（最常用）
 
-地址
+### 1. 编辑 daemon.json
 
-状态
+Linux 系统配置文件位于 `/etc/docker/daemon.json`（Windows Docker Desktop 在设置界面配置）：
 
-速度
+```json
+{
+  "registry-mirrors": [
+    "https://docker.1panel.live",
+    "https://docker.m.daocloud.io",
+    "https://docker.nju.edu.cn",
+    "https://docker.mirrors.ustc.edu.cn"
+  ]
+}
+```
 
-1Panel
+### 2. 重启 Docker 服务
 
-`docker.1panel.live`
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
 
-✅ 稳定
+输出类似如下表示配置成功：
 
-⭐⭐⭐⭐⭐
+```
+● docker.service - Docker Application Container Engine
+   Active: active (running) since ...
+```
 
-DaoCloud
+### 3. 测试加速效果
 
-`docker.m.daocloud.io`
+```bash
+docker pull nginx
+```
 
-✅ 稳定
+配置前可能需要 5-10 分钟，配置后通常 10-30 秒搞定。
 
-⭐⭐⭐⭐
+## 四、Docker Desktop（Windows/Mac）配置
 
-南京大学
+Docker Desktop 不需要手动编辑配置文件：
 
-`docker.nju.edu.cn`
+1. 打开 Docker Desktop
+2. 点击右上角齿轮图标进入 **Settings**
+3. 左侧选择 **Docker Engine**
+4. 在 JSON 编辑框中粘贴上面的 `registry-mirrors` 配置
+5. 点击 **Apply & Restart**
 
-✅ 稳定
+Mac 用户还可以通过 `~/.docker/daemon.json` 直接编辑。
 
-⭐⭐⭐⭐
+## 五、阿里云专属加速器（推荐个人用户）
 
-中科院
+阿里云为每个账号提供专属加速地址，速度最快且最稳定：
 
-`docker.mirrors.ustc.edu.cn`
+1. 登录 [阿里云容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)
+2. 在「镜像工具 → 镜像加速器」页面获取你的专属地址，形如：
 
-⚠️ 时好时坏
-
-⭐⭐⭐
-
-阿里云
-
-`xxxx.mirror.aliyuncs.com`
-
-✅ 需个人ID
-
-⭐⭐⭐⭐⭐
-
-> 💡 **提示**：
-
-镜像源会不定期失效，建议同时配置多个，Docker 会自动切换。
-
-三、Docker Engine 配置（最常用）
-
-#### 1. 编辑 daemon.jsonLinux 系统配置文件位于 `/etc/docker/daemon.json`（Windows Docker Desktop 在设置界面配置）：
-
-#### 
-
-2. 重启 Docker 服务输出类似如下表示配置成功：
-
-#### 
-
-3. 测试加速效果配置前可能需要 5-10 分钟，配置后通常 10-30 秒搞定。
-
-四、Docker Desktop（Windows/Mac）配置Docker Desktop 不需要手动编辑配置文件：
-
-- 打开 Docker Desktop
-- 点击右上角齿轮图标进入 Settings
-- 左侧选择 Docker Engine
-- 在 JSON 编辑框中粘贴上面的 `registry-mirrors` 配置
-- 点击 Apply & RestartMac 用户还可以通过 `~/.docker/daemon.json` 直接编辑。
-
-五、阿里云专属加速器（推荐个人用户）阿里云为每个账号提供专属加速地址，速度最快且最稳定：
-
-- 登录 [阿里云容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)
-- 在「镜像工具 → 镜像加速器」页面获取你的专属地址，形如：
-
+```
 https://xxxxxx.mirror.aliyuncs.com
+```
 
- 
+3. 按页面提示执行配置脚本（阿里云会自动生成对应系统的命令）
 
-- 按页面提示执行配置脚本（阿里云会自动生成对应系统的命令）阿里云加速器的优势是独享带宽，不会因为公共镜像源被刷爆而变慢。
+阿里云加速器的优势是**独享带宽**，不会因为公共镜像源被刷爆而变慢。
 
-六、Containerd 配置（K8s 用户必看）如果你用的是 K8s 或 containerd，配置方式略有不同。
+## 六、Containerd 配置（K8s 用户必看）
 
-编辑 `/etc/containerd/config.toml`：
+如果你用的是 K8s 或 containerd，配置方式略有不同。编辑 `/etc/containerd/config.toml`：
+
+```toml
+[plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+  endpoint = [
+    "https://docker.1panel.live",
+    "https://docker.m.daocloud.io",
+    "https://docker.nju.edu.cn"
+  ]
+```
 
 重启 containerd：
 
-七、直接通过镜像源拉取（无需改配置）如果不想修改系统配置，可以在镜像名前直接加镜像源前缀：
+```bash
+sudo systemctl restart containerd
+```
+
+## 七、直接通过镜像源拉取（无需改配置）
+
+如果不想修改系统配置，可以在镜像名前直接加镜像源前缀：
+
+```bash
+docker pull docker.1panel.live/library/nginx:latest
+docker tag docker.1panel.live/library/nginx:latest nginx:latest
+```
 
 这种方式适合临时使用或者没有 root 权限的场景。
 
-八、进阶：
+## 八、进阶：搭建私有镜像代理
 
-搭建私有镜像代理对于企业或团队使用，推荐用 Cloudflare Workers 反代 Docker Hub，搭建自己的私有镜像源。
+对于企业或团队使用，推荐用 Cloudflare Workers 反代 Docker Hub，搭建自己的私有镜像源。
 
-核心思路：
+**核心思路：**
 
 - 创建一个 Worker，反代 `registry-1.docker.io`
 - 绑定自己的域名（如 `docker.yourdomain.com`）
-- 在 `daemon.json` 中添加该地址示例 Worker 代码片段：
+- 在 `daemon.json` 中添加该地址
 
-> ⚠️ 注意：
+示例 Worker 代码片段：
 
-Cloudflare Workers 免费版每日 10 万次请求，团队共用可能不够，建议升级到付费版。
+```javascript
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    url.hostname = 'registry-1.docker.io';
+    return fetch(url.toString(), request);
+  }
+};
+```
 
-九、常见问题排查
+> ⚠️ **注意**：Cloudflare Workers 免费版每日 10 万次请求，团队共用可能不够，建议升级到付费版。
 
-#### Q1：
+## 九、常见问题排查
 
-配置后仍然超时？
+### Q1：配置后仍然超时？
 
 按以下顺序排查：
 
-#### 
+1. 检查 `daemon.json` 格式是否正确（JSON 不允许注释和尾逗号）
+2. 确认 Docker 服务已重启：`sudo systemctl status docker`
+3. 测试单个镜像源是否可用：`curl https://docker.1panel.live/v2/`
+4. 检查防火墙/代理设置是否拦截了 Docker 流量
 
-Q2：
+### Q2：报错 `x509: certificate signed by unknown authority`？
 
-报错 `x509: certificate signed by unknown authority`？
+说明镜像源证书有问题或系统时间不对。先检查时间：
 
-说明镜像源证书有问题或系统时间不对。
+```bash
+timedatectl
+# 或
+date
+```
 
-先检查时间：
-
-#### 
-
-Q3：
-
-镜像源全部失效怎么办？
+### Q3：镜像源全部失效怎么办？
 
 镜像源会周期性被封，可以关注以下渠道获取最新可用地址：
 
@@ -178,36 +192,14 @@ Q3：
 - 1Panel 社区论坛
 - GitHub 搜索 `docker-mirror` 相关项目
 
-### 十、总结与建议2026 年在国内用 Docker，配置镜像加速器已经是必备操作。
+## 十、总结与建议
 
-给大家几点建议：
+2026 年在国内用 Docker，配置镜像加速器已经是必备操作。给大家几点建议：
 
-- 首选阿里云专属加速器：
+- **首选阿里云专属加速器**：稳定、快速、独享带宽
+- **配置多个镜像源做容错**：避免单点失效导致拉取失败
+- **K8s 用户务必配 containerd**：否则节点拉镜像会全军覆没
+- **企业团队搭建私有代理**：用 Cloudflare Workers 或自建 Harbor
+- **关注镜像源动态**：失效了及时切换，别死磕一个
 
-稳定、快速、独享带宽
-- 配置多个镜像源做容错：
-
-避免单点失效导致拉取失败
-- K8s 用户务必配 containerd：
-
-否则节点拉镜像会全军覆没
-- 企业团队搭建私有代理：
-
-用 Cloudflare Workers 或自建 Harbor
-- 关注镜像源动态：
-
-失效了及时切换，别死磕一个配置好镜像加速后，你会发现 Docker 用起来丝滑多了——`docker pull` 从此告别「等下一杯咖啡」的尴尬。
-
-后续「小吒の博客」会继续分享 Docker、K8s、云原生相关的实战经验，欢迎收藏关注。
-
-[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
-
-让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg)](/article/vscode-extensions-2026)
+配置好镜像加速后，你会发现 Docker 用起来丝滑多了——`docker pull` 从此告别「等下一杯咖啡」的尴尬。

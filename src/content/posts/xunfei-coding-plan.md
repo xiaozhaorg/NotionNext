@@ -26,8 +26,6 @@ enSlug: "xunfei-coding-plan"
 
 不仅彻底重构了计费模式，更率先引入智谱最新一代旗舰模型 GLM-5.1，同时新增 Qwen3.5-397B-A17B 等多款顶尖模型，让开发者能够更高效、更自由「养虾」，创造更多AI应用。
 
-![image](/images/remote/1677442136019-21780ecad995.webp)
-
 3.9元不限量
 
 从 Token 焦虑到「无忧畅享」
@@ -37,8 +35,6 @@ enSlug: "xunfei-coding-plan"
 此次升级，计费逻辑由「Token计费」转变为「按请求次数计费」。
 
 看似只是计费单位的调整，但对开发者来说，本质是一次使用范式的切换——从关注「消耗了多少资源」，变成关注「完成了多少次调用」。
-
-![image](/images/remote/1531403009284-440f080d1e12.webp)
 
 ▲ 升级版的Coding Plan套餐类型
 
@@ -104,8 +100,3 @@ PC端进入星辰MaaS平台官网（[https://maas.xfyun.cn/packageSubscription?i
 
 [GitHub Student Developer Pack 完整攻略：
 
-学生党免费撸 $1000+ 服务![image](https://xiaozha.org/images/github-student-pack-cover.jpg)](/article/github-student-pack)[强到可怕！
-
-Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token![image](https://xiaozha.org/images/gemma-4-local-deploy-cover.jpg)](/article/gemma-4-local-deploy)[20块买一年的.COM顶级域名！
-
-错过拍大腿！![image](https://xiaozha.org/images/com-domain-deal-cover.jpg)](/article/com-domain-deal)

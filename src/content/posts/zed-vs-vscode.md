@@ -13,97 +13,55 @@ coverAlt: "深色主题代码编辑器中色彩高亮的程序源码"
 enSlug: "zed-vs-vscode"
 ---
 
-引言Zed 是2024年发布的新一代代码编辑器，由 Atom 编辑器原班人马打造。
+## 引言
 
-它使用 Rust 编写，主打极致性能和原生多人协作功能。
-
-经过近两年的迭代，Zed 在2026年已经成为开发者社区中备受关注的新星。
+Zed 是 2024 年发布的新一代代码编辑器，由 Atom 编辑器原班人马打造。它使用 Rust 编写，主打极致性能和原生多人协作功能。经过近两年的迭代，Zed 在 2026 年已经成为开发者社区中备受关注的新星。
 
 本文将深度体验 Zed 的各项功能，看看它是否真的能取代 VS Code。
 
-核心特性
+## 核心特性
 
-#### 极致性能Zed 使用 GPU 加速渲染，配合 Rust 的高性能特性，在启动速度、文件打开速度和大文件编辑上都有明显优势。
+### 极致性能
 
-实测打开 10MB 的日志文件，Zed 几乎是秒开，而 VS Code 需要 2-3 秒。
+Zed 使用 GPU 加速渲染，配合 Rust 的高性能特性，在启动速度、文件打开速度和大文件编辑上都有明显优势。实测打开 10MB 的日志文件，Zed 几乎是秒开，而 VS Code 需要 2-3 秒。
 
-#### 
+### 原生多人协作
 
-原生多人协作Zed 内置了实时协作功能，无需安装任何插件即可邀请团队成员共同编辑代码。
+Zed 内置了实时协作功能，无需安装任何插件即可邀请团队成员共同编辑代码。支持语音通话和屏幕共享，类似 Google Docs 的编程体验。这对于远程团队协作是一个杀手级功能。
 
-支持语音通话和屏幕共享，类似 Google Docs 的编程体验。
+### AI 集成
 
-这对于远程团队协作是一个杀手级功能。
+Zed 原生集成了 AI 辅助编程功能，支持 OpenAI、Anthropic 和本地模型（如 Ollama）。相比 VS Code 需要安装 Copilot 或 Cursor，Zed 的 AI 功能是内置的，配置更简单。
 
-#### 
+### 现代化设计
 
-AI 集成Zed 原生集成了 AI 辅助编程功能，支持 OpenAI、Anthropic 和本地模型（如 Ollama）。
+Zed 的 UI 设计简洁现代，采用原生界面元素而非 Electron。主题系统基于 CSS，自定义灵活。整体视觉风格介于 VS Code 和 Sublime Text 之间，既美观又实用。
 
-相比 VS Code 需要安装 Copilot 或 Cursor，Zed 的 AI 功能是内置的，配置更简单。
+## 与 VS Code 对比
 
-#### 
+### 优势
 
-现代化设计Zed 的 UI 设计简洁现代，采用原生界面元素而非 Electron。
+- **启动速度**：Zed < 1s vs VS Code 2-3s
+- **内存占用**：Zed 约 200MB vs VS Code 500MB+
+- **大文件处理**：Zed 明显更流畅
+- **原生协作**：无需额外配置
+- **界面响应**：更丝滑的滚动和动画
 
-主题系统基于 CSS，自定义灵活。
+### 劣势
 
-整体视觉风格介于 VS Code 和 Sublime Text 之间，既美观又实用。
+- **插件生态**：远不如 VS Code 丰富（但增长迅速）
+- **调试功能**：对某些语言的支持还在完善
+- **远程开发**：SSH 远程编辑功能较弱
+- **平台限制**：仅支持 macOS（Windows 和 Linux 版本开发中）
 
-与 VS Code 对比
+## 实际使用体验
 
-#### 优势
-- 启动速度：
+在日常开发中，Zed 的编辑体验非常流畅。代码补全、跳转定义、重构等功能都与 VS Code 相当。特别值得一提的是 Zed 的多光标编辑和 vim 模式支持，对于习惯键盘操作的开发者非常友好。
 
-Zed < 1s vs VS Code 2-3s
-- 内存占用：
+但对于需要特定插件（如 Docker、Kubernetes 扩展）的开发者，Zed 目前还不能完全替代 VS Code。建议将 Zed 作为主力编辑器，VS Code 作为特定场景的补充。
 
-Zed 约 200MB vs VS Code 500MB+
-- 大文件处理：
+## 总结
 
-Zed 明显更流畅
-- 原生协作：
+Zed 是一款值得期待的编辑器，它在性能和协作功能上已经超越了 VS Code，但插件生态还需要时间成熟。
 
-无需额外配置
-- 界面响应：
-
-更丝滑的滚动和动画
-
-#### 劣势
-- 插件生态：
-
-远不如 VS Code 丰富（但增长迅速）
-- 调试功能：
-
-对某些语言的支持还在完善
-- 远程开发：
-
-SSH 远程编辑功能较弱
-- 仅支持 macOS（Windows 和 Linux 版本开发中）
-
-### 实际使用体验在日常开发中，Zed 的编辑体验非常流畅。
-
-代码补全、跳转定义、重构等功能都与 VS Code 相当。
-
-特别值得一提的是 Zed 的多光标编辑和vim模式支持，对于习惯键盘操作的开发者非常友好。
-
-但对于需要特定插件（如 Docker、Kubernetes 扩展）的开发者，Zed 目前还不能完全替代 VS Code。
-
-建议将 Zed 作为主力编辑器，VS Code 作为特定场景的补充。
-
-总结Zed 是一款值得期待的编辑器，它在性能和协作功能上已经超越了 VS Code，但插件生态还需要时间成熟。
-
-如果你是 macOS 用户，且主要使用主流编程语言（Rust、Go、TypeScript、Python），Zed 已经可以作为主力编辑器使用。
-
-对于依赖大量插件的开发者，建议继续观望，等生态更完善后再迁移。
-
-[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)[2026 年 VS Code 必备插件推荐：
-
-让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg)](/article/vscode-extensions-2026)[Vercel vs Cloudflare Pages：
-
-静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg)](/article/vercel-vs-cloudflare)
+如果你是 macOS 用户，且主要使用主流编程语言（Rust、Go、TypeScript、Python），Zed 已经可以作为主力编辑器使用。对于依赖大量插件的开发者，建议继续观望，等生态更完善后再迁移。

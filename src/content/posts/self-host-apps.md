@@ -14,8 +14,6 @@ coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 enSlug: "self-host-apps"
 ---
 
-![image](/images/remote/1504639725590-34d0984388bd.webp)
-
 云服务越来越贵，数据隐私越来越让人担忧。
 
 这 20 个开源应用帮你自托管，替代各类付费服务。
@@ -60,10 +58,3 @@ enSlug: "self-host-apps"
 
 [Claude Code 实战指南：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)](/article/mineradio-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)

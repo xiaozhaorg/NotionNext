@@ -18,16 +18,8 @@ enSlug: "bt-panel-404"
 
 使用HTTPS访问提示"此网站无法提供安全连接"，使用HTTP访问提示"404 Not Found"
 
-![image](/images/remote/1484480974693-6ca0a78fb36b.webp)
-
-![image](/images/remote/1499750310107-5fef28a66643.webp)
-
 解决方案在通过查询网站无果后，采用带AI助手的SSH终端进行查询解决，最终发现了问题
 
-![image](/images/remote/1484480974693-6ca0a78fb36b.webp)
-
 原来是宝塔面板端口被占用，然后再次检查是被哪个服务占用，结果告诉我是Nginx占用
-
-![image](/images/remote/1499750310107-5fef28a66643.webp)
 
 找到问题就好解决了，将宝塔面板的登陆端口改一下，我这边改成8888测试，然后再将服务器管理后台的宝塔安全防火墙入口8888开放，然后就正常了

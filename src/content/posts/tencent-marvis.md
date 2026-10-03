@@ -91,12 +91,3 @@ Search Agent从公开资源中搜索信息并附带引用来源。
 
 [Claude Code 实战指南：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Trae IDE 深度体验：
-
-字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg)](/article/trae-ide-review)[硅基流动（SiliconFlow）是什么？
-
-一文读懂这个 AI 基础设施新星![image](https://xiaozha.org/images/siliconflow-intro-cover.jpg)](/article/siliconflow-intro)

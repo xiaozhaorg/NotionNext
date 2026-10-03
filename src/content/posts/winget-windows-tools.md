@@ -14,8 +14,6 @@ coverAlt: "绿色电路板上密布的芯片与数据线特写"
 enSlug: "winget-windows-tools"
 ---
 
-![image](/images/remote/1518770660439-4636190af475.webp)
-
 macOS 有 Homebrew，Linux 有 apt，Windows 现在有 winget。
 
 一、安装 wingetWindows 11 自带，Windows 10 需手动安装：
@@ -95,12 +93,3 @@ C:\Program Files
 
 [Claude Code 实战指南：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[2026 年 VS Code 必备插件推荐：
-
-让开发效率翻倍的 20 个神器![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg)](/article/vscode-extensions-2026)[Vercel vs Cloudflare Pages：
-
-静态网站部署终极对比，2026 谁更胜一筹？![image](https://xiaozha.org/images/vercel-vs-cloudflare-cover.jpg)](/article/vercel-vs-cloudflare)

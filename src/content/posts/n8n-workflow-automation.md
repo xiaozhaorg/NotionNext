@@ -14,99 +14,84 @@ coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 enSlug: "n8n-workflow-automation"
 ---
 
-![image](/images/remote/1504639725590-34d0984388bd.webp)
-
 n8n 是开源的工作流自动化工具，比 Zapier 便宜 100 倍，功能却不输。
 
-一、什么是 n8n
+## 一、什么是 n8n
+
 - 开源、免费（自托管）
 - 400+ 应用集成
 - 可视化拖拽编辑
 - 支持自定义代码
 - 支持 AI 节点
 
-### 二、Docker 部署
+## 二、Docker 部署
 
-### 三、典型工作流
+最简单的方式是用 Docker Compose：
 
-#### 1. RSS 自动推送抓取 RSS → AI 摘要 → 推送到 Telegram
+```yaml
+version: "3.8"
 
-#### 
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=your-n8n-domain.com
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - GENERIC_TIMEZONE=Asia/Shanghai
+    volumes:
+      - ~/.n8n:/home/node/.n8n
+```
 
-2. 表单自动回复网站表单 → 数据库存储 → 自动邮件回复 → 通知到 Slack
+```bash
+docker compose up -d
+```
 
-#### 
+打开 `http://localhost:5678` 即可开始使用。
 
-3. 定时数据备份定时触发 → 备份数据库 → 上传云存储 → 通知管理员
+## 三、典型工作流
 
-#### 
+### 1. RSS 自动推送
 
-4. AI 客服客户消息 → AI 处理 → 自动回复 → 复杂问题转人工
+抓取 RSS → AI 摘要 → 推送到 Telegram
 
-四、内置节点
-- 触发器：
+### 2. 表单自动回复
 
-定时、Webhook、邮件、IM
-- 数据处理：
+网站表单 → 数据库存储 → 自动邮件回复 → 通知到 Slack
 
-Filter、Set、Code、Merge
-- AI：
+### 3. 定时数据备份
 
-OpenAI、Claude、Hugging Face
-- 数据库：
+定时触发 → 备份数据库 → 上传云存储 → 通知管理员
 
-MySQL、PostgreSQL、MongoDB
-- 通讯：
+### 4. AI 客服
 
-Email、Slack、Telegram、微信
-- 存储：
+客户消息 → AI 处理 → 自动回复 → 复杂问题转人工
 
-S3、Google Drive、Dropbox
+## 四、内置节点
 
-### 五、实战：
+- **触发器**：定时、Webhook、邮件、IM
+- **数据处理**：Filter、Set、Code、Merge
+- **AI**：OpenAI、Claude、Hugging Face
+- **数据库**：MySQL、PostgreSQL、MongoDB
+- **通讯**：Email、Slack、Telegram、微信
+- **存储**：S3、Google Drive、Dropbox
 
-RSS → Telegram 推送
-- 添加 RSS Trigger 节点
-- 添加 Function 节点处理数据
-- 添加 HTTP Request 调用 AI API 生成摘要
-- 添加 Telegram 节点发送消息
+## 五、实战：RSS → Telegram 推送
 
-### 六、定价对比工具
+1. 添加 **RSS Trigger** 节点，输入 RSS 源 URL
+2. 添加 **Function** 节点，处理数据格式
+3. 添加 **HTTP Request**，调用 AI API 生成摘要
+4. 添加 **Telegram** 节点，配置 Bot Token 和 Chat ID
 
-价格
+## 六、定价对比
 
-任务数
-
-n8n 自托管
-
-免费
-
-无限
-
-n8n 云
-
-€20/月
-
-10000
-
-Zapier
-
-$19.99/月
-
-750
-
-Make
-
-$9/月
-
-10000
-
-[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)](/article/mineradio-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)
+| 工具 | 价格 | 任务数 |
+|------|------|--------|
+| **n8n 自托管** | **免费** | **无限** |
+| n8n 云 | €20/月 | 10000 |
+| Zapier | $19.99/月 | 750 |
+| Make | $9/月 | 10000 |

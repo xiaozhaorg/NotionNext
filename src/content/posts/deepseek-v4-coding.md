@@ -13,68 +13,79 @@ coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
 enSlug: "deepseek-v4-coding"
 ---
 
-![image](/images/remote/1707343843982-f8275f3994c5.webp)
-
 DeepSeek V4 编程能力大幅提升，价格只有 GPT-5.6 的 1/10。
 
-一、价格对比模型
+## 一、价格对比
 
-输入价格
+| 模型 | 输入价格 | 输出价格 |
+|------|----------|----------|
+| GPT-5.6 Mid | $3/1M | $12/1M |
+| Claude Sonnet 4 | $3/1M | $15/1M |
+| **DeepSeek V4** | **$0.14/1M** | **$0.28/1M** |
 
-输出价格
+## 二、编程能力实测
 
-GPT-5.6 Mid
+### 任务：用 Python 写一个 LRU Cache
 
-$3/1M
+**DeepSeek V4 一次成功：**
 
-$12/1M
+```python
+from collections import OrderedDict
 
-Claude Sonnet 4
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.capacity = capacity
 
-$3/1M
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        self.cache.move_to_end(key)
+        return self.cache[key]
 
-$15/1M
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+```
 
-DeepSeek V4
+## 三、API 使用
 
-$0.14/1M
+```python
+from openai import OpenAI
 
-$0.28/1M
+client = OpenAI(
+    api_key="sk-your-deepseek-key",
+    base_url="https://api.deepseek.com/v1"
+)
 
-二、编程能力实测
+response = client.chat.completions.create(
+    model="deepseek-chat",
+    messages=[{"role": "user", "content": "用 Python 写一个 LRU Cache"}],
+    temperature=0.7
+)
+print(response.choices[0].message.content)
+```
 
-#### 任务：
+## 四、为什么 DeepSeek 这么便宜
 
-用 Python 写一个 LRU CacheDeepSeek V4 一次成功：
-
-三、API 使用
-
-### 四、为什么 DeepSeek 这么便宜
 - 自研 MoE 架构
 - 高效推理优化
 - 团队专注 AGI 不急于变现
 
-### 五、推荐使用场景
+## 五、推荐使用场景
+
 - 日常编程辅助
 - 代码补全
 - 代码审查
 - 学习编程
 - 批量代码生成
 
-### 六、注意事项
+## 六、注意事项
+
 - 高峰期可能限流
 - 长上下文表现略弱于 GPT
 - 中文能力极强
 - 推荐搭配 Cursor / Cline 使用
-
-[Claude Code 实战指南：
-
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[⚡ VS Code + OpenAI Codex 深度集成：
-
-开启 AI 结对编程新时代![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg)](/article/vscode-codex-integration)[Trae IDE 深度体验：
-
-字节出品的 AI 原生编辑器，到底值不值得用？![image](https://xiaozha.org/images/trae-ide-review-cover.jpg)](/article/trae-ide-review)[腾讯马维斯Marvis体验：
-
-装上就有6个AI牛马帮你干活![image](https://xiaozha.org/images/tencent-marvis-cover.jpg)](/article/tencent-marvis)

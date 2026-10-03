@@ -14,8 +14,6 @@ coverAlt: "云计算与服务器机房的蓝色科技灯光"
 enSlug: "bitwarden-self-host"
 ---
 
-![image](/images/remote/1460925895917-afdab827c52f.webp)
-
 1Password 一年要 $36？
 
 Vaultwarden 自托管完全免费，且数据自己掌控。
@@ -48,10 +46,3 @@ Vaultwarden 自托管完全免费，且数据自己掌控。
 
 [Claude Code 实战指南：
 
-终端里的 AI 编程代理怎么用？（2026 国内版）![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg)](/article/claude-code-tutorial)[Mineradio 音乐播放器教程（2026）：3D 立体歌词开源播放器，支持网易云 QQ 音乐同步![image](https://xiaozha.org/images/mineradio-tutorial-cover.jpg)](/article/mineradio-tutorial)[NextChat 部署指南：
-
-Vercel 一键部署专属 AI 助手，支持 DeepSeek 等 16+ 大模型![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg)](/article/nextchat-deploy-guide)[Zed 编辑器体验：
-
-号称最快的代码编辑器，到底有多强？![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg)](/article/zed-vs-vscode)[Windows 包管理器 winget 完全指南：
-
-告别手动下载安装软件![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg)](/article/winget-windows-tools)

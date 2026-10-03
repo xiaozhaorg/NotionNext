@@ -16,8 +16,6 @@ enSlug: "com-domain-deal"
 
 先看图！
 
-![image](/images/remote/1531403009284-440f080d1e12.webp)
-
 说白了，就是用他家的优惠码，达到首年低价的目的，当然想要注册多个域名的话可以注册多个账号来达到薅羊毛的目的！
 
 优惠码：`COM67`，可以优惠到40RMB
@@ -51,8 +49,3 @@ Spaceship 对促销价格有严格风控，可能限制每个账户只能使用�
 
 [白嫖福利！
 
-Gname 免费注册 3 个 eu.cc 域名，无需信用卡![image](https://xiaozha.org/images/gname-eucc-free-cover.jpg)](/article/gname-eucc-free)[GitHub Student Developer Pack 完整攻略：
-
-学生党免费撸 $1000+ 服务![image](https://xiaozha.org/images/github-student-pack-cover.jpg)](/article/github-student-pack)[强到可怕！
-
-Gemma 4 越狱版开源大模型，本地部署教程｜免费无限制 · 无需Token![image](https://xiaozha.org/images/gemma-4-local-deploy-cover.jpg)](/article/gemma-4-local-deploy)
