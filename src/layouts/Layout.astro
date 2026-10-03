@@ -241,8 +241,8 @@ schemas.push({
       })();
     </script>
 
-    <!-- 51la 站点统计 -->
-    {SITE.analytics.laId && (
+    <!-- 51la 站点统计（仅生产环境） -->
+    {import.meta.env.PROD && SITE.analytics.laId && (
       <>
         <script is:inline charset="UTF-8" id="LA_COLLECT" src="https://sdk.51.la/js-sdk-pro.min.js"></script>
         <script is:inline define:vars={{ laId: SITE.analytics.laId, laCk: SITE.analytics.laCk }}>
@@ -254,8 +254,8 @@ schemas.push({
       </>
     )}
 
-    <!-- Cloudflare Web Analytics -->
-    {SITE.analytics.cloudflareToken && (
+    <!-- Cloudflare Web Analytics（仅生产环境） -->
+    {import.meta.env.PROD && SITE.analytics.cloudflareToken && (
       <script defer is:inline
         src={`https://static.cloudflareinsights.com/beacon.min.js`}
         data-cf-beacon={`{"token": "${SITE.analytics.cloudflareToken}"}`}>
