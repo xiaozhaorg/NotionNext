@@ -19,6 +19,8 @@ interface Props {
   altURL?: string | null;
   /** 禁止搜索引擎收录本页（404 等错误页用），默认 false */
   noindex?: boolean;
+  /** 封面图的描述性 alt 文本（文章详情页可传 coverAlt） */
+  imageAlt?: string;
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   locale,
   altURL,
   noindex = false,
+  imageAlt,
 } = Astro.props;
 
 // 自动推断 locale
@@ -47,7 +50,13 @@ const finalDesc = description ?? siteDesc;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image
   ? new URL(image, Astro.site)
-  : new URL("/og-default.svg", Astro.site);
+  : new URL("/og-default.jpg", Astro.site);
+// 默认 og 图的描述性 alt（社交分享时显示）
+const defaultOgAlt = isEn
+  ? `${SITE.titleEn} — ${SITE.descriptionEn}`
+  : `${SITE.title} — ${SITE.description}`;
+// og:image:alt 优先用传入的 imageAlt，否则用站点描述
+const ogImageAlt = imageAlt ?? defaultOgAlt;
 
 // hreflang 互指（altURL === null 表示无对应语言版本，不输出该方向）
 const autoAltURL =
@@ -62,38 +71,32 @@ const enURL = isEn
   : autoAltURL
     ? new URL(autoAltURL, Astro.site).toString()
     : null;
-const xDefaultURL = new URL("/", Astro.site).toString();
+// x-default 指向当前页的默认语言（zh）版本；无对应中文版时退回本页 canonical
+const xDefaultURL = zhURL ?? canonicalURL.toString();
 
-// JSON-LD 结构化数据
-const baseSchema = {
-  "@context": "https://schema.org",
-};
+// JSON-LD 结构化数据（统一收进 @graph，@context 只在顶层声明一次）
 const schemas: Record<string, unknown>[] = [];
 
-// WebSite schema（所有页共享）
+// 站点默认 logo URL（用于 JSON-LD publisher.logo）
+const siteLogo = new URL("/og-default.jpg", Astro.site).toString();
+
+// WebSite schema（所有页共享；站点搜索是 #q= 哈希触发，Google 不支持哈希 SearchAction，故不声明）
 schemas.push({
-  ...baseSchema,
   "@type": "WebSite",
   name: siteTitle,
   url: SITE.url,
   description: siteDesc,
   inLanguage: htmlLang(currentLocale),
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${SITE.url}/#q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
 });
 
 if (type === "article") {
   schemas.push({
-    ...baseSchema,
     "@type": "BlogPosting",
     headline: finalTitle,
     description: finalDesc,
     image: ogImage.toString(),
     datePublished: publishedTime?.toISOString(),
-    dateModified: publishedTime?.toISOString(),
+    dateModified: publishedTime?.toISOString(), // TODO: 接入 modDatetime 后优先用更新时间
     author: {
       "@type": "Person",
       name: SITE.author,
@@ -105,7 +108,7 @@ if (type === "article") {
       url: SITE.url,
       logo: {
         "@type": "ImageObject",
-        url: new URL("/og-default.svg", Astro.site).toString(),
+        url: siteLogo,
       },
     },
     mainEntityOfPage: {
@@ -142,7 +145,6 @@ for (const seg of segments) {
   crumbs.push({ name: label, url: accumulated });
 }
 schemas.push({
-  ...baseSchema,
   "@type": "BreadcrumbList",
   itemListElement: crumbs.map((c, i) => ({
     "@type": "ListItem",
@@ -188,7 +190,7 @@ schemas.push({
     <meta property="og:site_name" content={siteTitle} />
     <meta property="og:locale" content={ogLocale(currentLocale)} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content={finalTitle} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:see_also" content={SITE.social.github} />
 
     <!-- Twitter Card -->
@@ -196,7 +198,7 @@ schemas.push({
     <meta name="twitter:title" content={finalTitle} />
     <meta name="twitter:description" content={finalDesc} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={finalTitle} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     <meta name="twitter:site" content="@xiaozhaorg" />
     <meta name="twitter:creator" content="@xiaozhaorg" />
 
@@ -223,7 +225,7 @@ schemas.push({
     <!-- JSON-LD 结构化数据 -->
     <script
       type="application/ld+json"
-      set:html={schemas.map((s) => JSON.stringify(s)).join("")}
+      set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemas })}
       is:inline
     />
 

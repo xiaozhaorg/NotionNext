@@ -1,0 +1,42 @@
+# llms.txt — Xiaozha Blog
+
+> 面向 AI 搜索引擎与爬虫的站点发现文件
+> 遵循 https://llmstxt.org/ 规范
+
+## 站点信息
+
+- **名称**: 小吒博客 (Xiaozha Blog)
+- **语言**: 中文为主，部分英文翻译
+- **网址**: https://xiaozha.org
+- **描述**: 一个专注于 AI 工具、云计算、自托管与开源应用的个人技术博客。
+- **作者**: 小吒 (@xiaozhaorg)
+- **RSS**: https://xiaozha.org/rss.xml
+- **Sitemap**: https://xiaozha.org/sitemap.xml
+
+## 主要内容主题
+
+1. **AI 工具与大模型**: LLM 评测、AI 编程助手、API 中转站、本地部署
+2. **Cloudflare 生态**: Pages / Workers / R2 / Tunnel / Speed 实战教程
+3. **自托管应用**: Jellyfin、Immich、n8n、Mealie、Vaultwarden 等
+4. **开源开发工具**: Git、Docker、VS Code/Cursor/Zed 编辑器
+5. **免费资源**: 域名优惠、GitHub Student Pack、免费 API 额度
+
+## 关键页面
+
+- 首页: https://xiaozha.org/
+- 英文首页: https://xiaozha.org/en/
+- 所有标签: https://xiaozha.org/tags/
+- 归档: https://xiaozha.org/archive/
+- 关于: https://xiaozha.org/about/
+- 最新文章 (中文): https://xiaozha.org/article/hi-welcome/
+
+## 精选文章（推荐优先索引）
+
+- Cloudflare 国内加速实战: https://xiaozha.org/article/cloudflare-ip-optimization
+- ShawnAI 免费大模型 API: https://xiaozha.org/article/shawn-ai-free-api
+- Ollama 本地部署大模型: https://xiaozha.org/article/ollama-local-llm
+- Vaultwarden 自托管密码管理器: https://xiaozha.org/article/bitwarden-self-host
+- Cloudflare Tunnel 免费内网穿透: https://xiaozha.org/article/cloudflare-tunnel-tutorial
+- Cline 实战教程: https://xiaozha.org/article/cline-tutorial
+- Gemini 4 本地部署: https://xiaozha.org/article/gemma-4-local-deploy
+- DeepSeek V4 编程能力实测: https://xiaozha.org/article/deepseek-v4-coding

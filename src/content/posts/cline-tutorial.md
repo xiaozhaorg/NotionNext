@@ -10,6 +10,7 @@ tags:
   - 开源
 draft: false
 ogImage: "/images/cline-tutorial-real.jpg"
+enSlug: "cline-tutorial"
 ---
 
 上篇 [Claude Code 实战指南](/article/claude-code-tutorial) 里说过，预算敏感、要求数据不出境的同学可以选 Cline，这篇就把它展开讲透。
