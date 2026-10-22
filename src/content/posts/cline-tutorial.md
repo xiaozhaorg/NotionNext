@@ -10,6 +10,7 @@ tags:
   - 开源
 draft: false
 ogImage: "/images/cline-tutorial-real.jpg"
+coverAlt: "两人围在笔记本电脑前讨论代码，一手指向屏幕"
 enSlug: "cline-tutorial"
 ---
 

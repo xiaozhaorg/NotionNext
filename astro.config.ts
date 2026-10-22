@@ -8,6 +8,65 @@ import type { SitemapItem } from "@astrojs/sitemap";
 import pagefind from "astro-pagefind";
 import { SITE } from "./src/config";
 
+const SRC = path.join(path.dirname(fileURLToPath(import.meta.url)), "src", "content");
+
+/** 取 frontmatter 段（--- 之间的内容）；统一归一化 CRLF，避免正则按 \n 写时漏匹配 */
+function frontmatterOf(file: string): string {
+  return fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n").split("---")[1] ?? "";
+}
+
+/** 兼容 YAML block（tags:\n  - x）与 flow（tags: [a, b]）两种写法 */
+function tagsIn(fm: string): string[] {
+  const block = /^tags:\n((?:[ \t]*-[ \t]*.+\n?)+)/m.exec(fm);
+  if (block) {
+    return block[1]
+      .split("\n")
+      .filter(Boolean)
+      .map((l) => l.replace(/^\s*-\s*/, "").trim())
+      .filter(Boolean);
+  }
+  const flow = /^tags:\s*\[([^\]]*)\]/m.exec(fm);
+  if (flow) {
+    return flow[1]
+      .split(",")
+      .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+      .filter(Boolean);
+  }
+  return [];
+}
+
+function dateIn(fm: string, key: string): Date | null {
+  const m = new RegExp(`^${key}:\\s*["']?([^"'\\n]+)`, "m").exec(fm);
+  if (!m) return null;
+  const d = new Date(m[1].trim());
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/**
+ * 从内容源统计两类数据（sitemap 的 filter/serialize 只能拿到 URL，拿不到集合）：
+ *  - tagCounts: 标签页路径 → 文章数，用于排除只有 1 篇的薄标签页
+ *  - lastmods:  文章路径 → 最后更新时间，用于输出 sitemap lastmod
+ */
+const tagCounts = new Map();
+const lastmods = new Map();
+for (const [dir, prefix] of [
+  ["posts", ""],
+  ["posts-en", "/en"],
+]) {
+  const base = path.join(SRC, dir);
+  if (!fs.existsSync(base)) continue;
+  for (const f of fs.readdirSync(base)) {
+    if (!f.endsWith(".md")) continue;
+    const fm = frontmatterOf(path.join(base, f));
+    const mod = dateIn(fm, "modDatetime") ?? dateIn(fm, "pubDatetime");
+    if (mod) lastmods.set(`${prefix}/article/${f.replace(/\.md$/, "")}`, mod);
+    for (const t of tagsIn(fm)) {
+      const key = `${prefix}/tags/${encodeURIComponent(t)}`;
+      tagCounts.set(key, (tagCounts.get(key) ?? 0) + 1);
+    }
+  }
+}
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.url,
@@ -21,6 +80,17 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // 排除两类页面：
+      //  1) 错误页——根级 404.astro 会被 Astro 自动排除，但 /en/404/ 是嵌套路由不会
+      //  2) 只有 1 篇文章的薄标签页——页面自身已设 noindex，sitemap 必须同步排除，
+      //     否则会制造「sitemap 收录 noindex URL」这类 Search Console 报错
+      filter: (page) => {
+        const p = new URL(page).pathname;
+        if (/\/404\/?$/.test(p)) return false;
+        const m = /^(\/en)?\/tags\/(.+)\/$/.exec(p);
+        if (m && (tagCounts.get(`${m[1] ?? ""}/tags/${m[2]}`) ?? 0) < 2) return false;
+        return true;
+      },
       // 按页面类型分配合适的权重与更新频率，避免搜索引擎抓错重点
       serialize(item): SitemapItem {
         const p = new URL(item.url).pathname;
@@ -45,7 +115,9 @@ export default defineConfig({
                 : p.startsWith("/tags/")
                   ? 0.35
                   : 0.7;
-        return { ...item, changefreq: cf, priority: pr };
+        // lastmod 取 modDatetime，缺省回退 pubDatetime；非文章页没有日期则省略
+        const lm = lastmods.get(p.replace(/\/$/, ""));
+        return { ...item, changefreq: cf, priority: pr, ...(lm ? { lastmod: lm.toISOString() } : {}) };
       },
     }),
     pagefind(),

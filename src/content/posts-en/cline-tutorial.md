@@ -7,6 +7,7 @@ tags: ["AI", "AI Coding", "Cline", "Tutorial", "Open Source"]
 draft: false
 zhSlug: "cline-tutorial"
 ogImage: "/images/cline-tutorial-real.jpg"
+coverAlt: "Two developers at a laptop, one pointing at the screen"
 ---
 
 In the [Claude Code hands-on guide](/en/article/claude-code-tutorial), I mentioned that budget-sensitive developers who require on-prem data can choose Cline. This post covers it in depth.

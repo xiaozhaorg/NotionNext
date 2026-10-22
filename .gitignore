@@ -28,3 +28,6 @@ Thumbs.db
 
 # cloudflare
 .wrangler/
+
+# agent workspace (platform-internal memory, not project content)
+.workbuddy/

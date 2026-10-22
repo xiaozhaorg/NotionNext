@@ -7,6 +7,7 @@ tags: ["AI", "MCP", "AI Coding", "Open Source", "Productivity"]
 draft: false
 zhSlug: "mcp-ecosystem"
 ogImage: "/images/mcp-ecosystem-real.jpg"
+coverAlt: "A humanoid robot sitting on a bench using a tablet"
 ---
 
 In the previous post about [Cline in practice](/en/article/cline-tutorial), I mentioned MCP integration. This post takes a full tour of the MCP ecosystem — it's now the single most important way to extend AI coding tools.

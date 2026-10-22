@@ -12,6 +12,7 @@ tags:
 draft: false
 enSlug: "mcp-ecosystem"
 ogImage: "/images/mcp-ecosystem-real.jpg"
+coverAlt: "坐在长椅上操作平板电脑的人形机器人"
 ---
 
 上篇 [Cline 实战](/article/cline-tutorial) 里提到 MCP 接入，这篇就把 MCP 生态完整盘一遍——现在它已经是 AI 编程工具最重要的"外挂"标准了。

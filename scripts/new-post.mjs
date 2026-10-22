@@ -52,6 +52,18 @@ async function main() {
     ? tagsRaw.split(/[,，]/).map((t) => t.trim()).filter(Boolean)
     : [];
 
+  // 最后更新时间：留空表示无（SEO 的 dateModified 会回退到发布时间）
+  const modRaw = (await ask("最后更新时间（YYYY-MM-DD，留空表示无）: ")).trim();
+  let modDatetime = null;
+  if (modRaw) {
+    const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(modRaw) ? `${modRaw}T00:00:00` : modRaw);
+    if (Number.isNaN(d.getTime())) {
+      console.error("❌ 更新时间格式无法解析，已忽略");
+    } else {
+      modDatetime = d.toISOString();
+    }
+  }
+
   // 检查 slug 冲突
   const existing = await readdir(POSTS_DIR);
   if (existing.some((f) => f === `${slug}.md`)) {
@@ -68,6 +80,7 @@ async function main() {
     "tags:",
     ...(tags.length ? tags.map((t) => `  - ${t}`) : ["  []"]),
     "draft: false",
+    ...(modDatetime ? [`modDatetime: "${modDatetime}"`] : []),
     "---",
     "",
     "在这里开始写作…",

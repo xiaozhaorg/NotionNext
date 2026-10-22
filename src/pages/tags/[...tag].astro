@@ -35,8 +35,14 @@ const title = tag ? `标签：${tag} | 小吒博客` : "所有标签 | 小吒博
 const desc = tag
   ? `标签「${tag}」下的所有文章，共 ${filtered.length} 篇`
   : `浏览所有文章标签，共 ${allTags.length} 个标签，${posts.length} 篇文章`;
+// 中英文标签名互不相同（如「教程」vs Tutorial），单标签页不存在对应语言版本，
+// 传 null 阻止 Layout 按路径前缀推导出 /en/tags/<中文标签>/ 这类死链
+const altURL = tag ? null : "/en/tags/";
+// 只有 1 篇文章的标签页内容过薄，设 noindex 避免稀释站点质量信号；
+// sitemap 的 filter 会同步排除这些 URL，两边保持一致
+const thin = tag ? filtered.length < 2 : false;
 ---
-<Layout title={title} description={desc}>
+<Layout title={title} description={desc} altURL={altURL} noindex={thin}>
   <Header />
   <div class="layout">
     <main>

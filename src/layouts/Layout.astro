@@ -1,6 +1,6 @@
 ---
 import { SITE } from "@/config";
-import { t, htmlLang, ogLocale, localeFromPath, getAltURL, type Locale } from "@/locales/ui";
+import { htmlLang, ogLocale, localeFromPath, getAltURL, type Locale } from "@/locales/ui";
 import "@/styles/global.css";
 
 interface Props {
@@ -9,6 +9,8 @@ interface Props {
   image?: string;
   type?: "website" | "article";
   publishedTime?: Date;
+  /** 最后更新时间；缺省时回退到publishedTime（JSON-LD dateModified 与 article:modified_time） */
+  modifiedTime?: Date;
   tags?: string[];
   locale?: Locale;
   /**
@@ -29,6 +31,7 @@ const {
   image,
   type = "website",
   publishedTime,
+  modifiedTime,
   tags,
   locale,
   altURL,
@@ -96,7 +99,8 @@ if (type === "article") {
     description: finalDesc,
     image: ogImage.toString(),
     datePublished: publishedTime?.toISOString(),
-    dateModified: publishedTime?.toISOString(), // TODO: 接入 modDatetime 后优先用更新时间
+    // 无修改时间时回退到发布时间，保证 dateModified 不为空
+    dateModified: (modifiedTime ?? publishedTime)?.toISOString(),
     author: {
       "@type": "Person",
       name: SITE.author,
@@ -191,6 +195,12 @@ schemas.push({
     <meta property="og:locale" content={ogLocale(currentLocale)} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:alt" content={ogImageAlt} />
+    {type === "article" && publishedTime && (
+      <meta property="article:published_time" content={publishedTime.toISOString()} />
+    )}
+    {type === "article" && (modifiedTime ?? publishedTime) && (
+      <meta property="article:modified_time" content={(modifiedTime ?? publishedTime)?.toISOString()} />
+    )}
     <meta property="og:see_also" content={SITE.social.github} />
 
     <!-- Twitter Card -->

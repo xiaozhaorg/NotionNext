@@ -11,6 +11,7 @@ tags:
 draft: false
 enSlug: "cloudflare-data-layer"
 ogImage: "/images/cloudflare-data-layer-real.jpg"
+coverAlt: "数据中心服务器机架中密集的线缆与闪烁的指示灯"
 ---
 
 Cloudflare 系列补全：之前写了 [Workers 免费建站](/article/cloudflare-workers-blog) 和 [R2 对象存储](/article/cloudflare-r2-storage)，这篇讲数据层——D1、KV、Queues 是 Worker 应用存数据的三个基本盘，覆盖了"关系型数据、键值数据、异步任务"三大需求。
