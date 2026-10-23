@@ -3,11 +3,7 @@ title: "Free Large Model API Relay: Shawn AI Gives 7000 Free Credits on Signup (
 pubDatetime: "2026-07-31T04:53:41.260Z"
 description: "Shawn AI is a free large model API relay platform that aggregates hundreds of mainstream models including GPT-5.5, Claude Opus 4.7, Gemini 3.1, and DeepSeek-V4. New users get 5000 credits on signup, plus 2000 more when registering through an invite code, and 1000-3000 credits for daily check-ins. This article covers the full signup process and how to connect CherryStudio, Claude Code, and SillyTavern."
 author: "Xiaozha"
-tags:
-  - AI
-  - API
-  - Tutorial
-  - Free Tools
+tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
 ogImage: "/images/shawn-ai-free-api-real.jpg"
 coverAlt: "A conceptual neural network image of artificial intelligence bathed in a blue glow"

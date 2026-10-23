@@ -3,7 +3,7 @@ title: "Ubuntu Server Initial Setup: 10 Things to Do on a Fresh Server"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "10 essential steps for Ubuntu Server initial setup: SSH security, firewall, auto-updates, timezone, Docker, monitoring. A complete hardening checklist."
 author: "Xiaozha"
-tags: ["Tutorial", "Linux", "DevOps", "Server"]
+tags: ["Tutorial", "DevOps", "Self-Hosting"]
 draft: false
 ogImage: "/images/ubuntu-server-setup-real.jpg"
 coverAlt: "Server room with neatly arranged racks and network equipment"

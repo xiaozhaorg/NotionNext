@@ -3,7 +3,7 @@ title: "🐳 2026 Docker Registry Mirror Guide: Speed Up Pulls 10x"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "2026 latest Docker registry mirror configuration guide. Covers Docker Engine, Containerd, and K8s. Solve pull timeout issues and boost download speed 10x."
 author: "Xiaozha"
-tags: ["Docker", "DevTools", "Tutorial", "DevOps"]
+tags: ["DevOps", "Tutorial", "Development Tools"]
 draft: false
 ogImage: "/images/docker-mirror-2026-real.jpg"
 coverAlt: "Cloud computing abstract image with clouds and server room"

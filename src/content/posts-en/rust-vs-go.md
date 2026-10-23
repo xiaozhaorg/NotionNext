@@ -3,7 +3,7 @@ title: "Rust vs Go in 2026: Which One Is the Backend King? An In-Depth Compariso
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Rust and Go are both modern system-level languages. This article compares them across performance, ecosystem, learning curve, and concurrency models to help you pick the right backend language."
 author: "Xiaozha"
-tags: ["Rust", "Go", "Programming"]
+tags: ["Development Tools", "Tutorial"]
 draft: false
 ogImage: "/images/rust-vs-go-real.jpg"
 coverAlt: "Rows of neatly arranged server racks in a data center computer room"

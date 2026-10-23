@@ -3,7 +3,7 @@ title: "Build a Custom Email System on Your Domain: Complete Guide"
 pubDatetime: "2026-09-09T00:00:00.000Z"
 description: "Set up a custom email system using your domain name. Supports custom addresses, email forwarding, and alias management. Free options included."
 author: "Xiaozha"
-tags: ["Free Resources", "Domains", "Tutorial"]
+tags: ["Domains", "Tutorial"]
 draft: false
 ogImage: "/images/domain-email-system-real.webp"
 coverAlt: "Email settings interface showing custom domain configuration"

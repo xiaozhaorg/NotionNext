@@ -3,7 +3,7 @@ title: "Cloudflare Speed Optimization for Mainland China: Optimized IP Setup Gui
 pubDatetime: "2026-07-05T00:00:00.000Z"
 description: "Made for website administrators! Speed up your whole site with optimized IPs + DNS resolution, so every visitor from mainland China enjoys low-latency access."
 author: "Xiaozha"
-tags: ["Cloudflare", "Tutorial", "Networking"]
+tags: ["Cloudflare", "Tutorial"]
 draft: false
 ogImage: "/images/cloudflare-ip-optimization-real.jpg"
 coverAlt: "Blinking network indicator lights on a data center server rack"

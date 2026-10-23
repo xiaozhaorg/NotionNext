@@ -3,12 +3,7 @@ title: "Under 20MB with Support for 40+ Databases! This Open-Source DBX Client I
 pubDatetime: "2026-06-02T00:00:00.000Z"
 description: "Is Navicat too expensive and DBeaver too bloated? DBX is a free, lightweight, cross-platform open-source database client that comes in under 20MB and supports 40+ databases."
 author: "Xiaozha"
-tags:
-  - DBX
-  - Database
-  - Open Source
-  - Tool
-  - Client
+tags: ["Database", "Open Source"]
 draft: false
 ogImage: "/images/dbx-intro-real.jpg"
 coverAlt: "Close-up of chips and data cables densely packed on a green circuit board"

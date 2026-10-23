@@ -3,7 +3,7 @@ title: "Git Advanced Tips: 10 Advanced Commands That Will Impress Your Colleague
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "10 advanced Git tips covering interactive rebase, cherry-pick, worktree, bisect, and more — take your version control skills to the next level."
 author: "Xiaozha"
-tags: ["Git", "Tutorial", "Development Tools"]
+tags: ["Development Tools", "Tutorial"]
 draft: false
 ogImage: "/images/git-advanced-tips-real.jpg"
 coverAlt: "An overhead view of a programmer's desk with dual monitors"

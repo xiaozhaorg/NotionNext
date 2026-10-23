@@ -3,7 +3,7 @@ title: "20 Must-Have VS Code Extensions in 2026: Tools That Double Your Producti
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "A curated list of the 20 most essential VS Code extensions to install in 2026, covering AI coding assistants, code formatting, Git enhancements, productivity tools, themes, and remote development."
 author: "Xiaozha"
-tags: ["VS Code", "Development Tools", "Tutorial", "Free Tools"]
+tags: ["Development Tools", "Tutorial", "Free Tools"]
 draft: false
 ogImage: "/images/vscode-extensions-2026-real.jpg"
 coverAlt: "A MacBook with headphones and a music player interface beside it"

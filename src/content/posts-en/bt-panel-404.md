@@ -3,7 +3,7 @@ title: "BT Panel Login Returns 404"
 pubDatetime: "2026-04-17T00:00:00.000Z"
 description: "How to fix a 404 error when logging into BT Panel, including troubleshooting and resolving a port conflict caused by Nginx."
 author: "Xiaozha"
-tags: ["BT Panel", "Tutorial", "Nginx"]
+tags: ["Tutorial", "Self-Hosting"]
 draft: false
 ogImage: "/images/bt-panel-404-real.jpg"
 coverAlt: "Racks of neatly arranged server cabinets and network equipment in a data center"

@@ -3,7 +3,7 @@ title: "Cloudflare Cloud Mail: Set Up a Free Domain Email Without a Server"
 pubDatetime: "2026-06-28T00:00:00.000Z"
 description: "Build a professional domain email for free with Cloud Mail. Supports multiple domains, unlimited addresses, and Telegram push notifications — no server required, zero cost."
 author: "Xiaozha"
-tags: ["Cloudflare", "Email", "Tutorial", "Free Tools"]
+tags: ["Cloudflare", "Tutorial", "Free Tools"]
 draft: false
 ogImage: "/images/cloudflare-cloud-mail-real.jpg"
 coverAlt: "Blue storage array lights in a cloud server room"

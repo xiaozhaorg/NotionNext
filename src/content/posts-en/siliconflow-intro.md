@@ -3,7 +3,7 @@ title: "What Is SiliconFlow? Understanding This Rising Star of AI Infrastructure
 pubDatetime: "2026-05-15T00:00:00.000Z"
 description: "An in-depth look at SiliconFlow, the AI-era infrastructure that lets developers tap into large language models as easily as turning on water or electricity."
 author: "Xiaozha"
-tags: ["AI", "SiliconFlow", "Tutorial", "LLM"]
+tags: ["AI", "LLM", "Tutorial"]
 draft: false
 ogImage: "/images/siliconflow-intro-real.jpg"
 coverAlt: "A laptop with data charts on a desk in a work setting"

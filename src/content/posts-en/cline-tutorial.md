@@ -3,7 +3,7 @@ title: "Cline in Practice: The Open-Source Free Claude Code Alternative That Kee
 pubDatetime: "2026-08-28T00:00:00.000Z"
 description: "Cline is the most mature open-source AI coding agent — feature-aligned with Claude Code and free. This guide covers installation, model configuration, and on-prem deployment so your code never leaves China: pair it with Ollama local models or domestic API endpoints, plus Plan/Act dual modes, MCP integration, and real-world scenarios."
 author: "Xiaozha"
-tags: ["AI", "AI Coding", "Cline", "Tutorial", "Open Source"]
+tags: ["AI", "AI Coding", "Tutorial", "Open Source"]
 draft: false
 zhSlug: "cline-tutorial"
 ogImage: "/images/cline-tutorial-real.jpg"

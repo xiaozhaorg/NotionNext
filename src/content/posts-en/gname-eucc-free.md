@@ -3,7 +3,7 @@ title: "Freebie Alert! Register 3 eu.cc Domains for Free on Gname — No Credit 
 pubDatetime: "2026-07-05T00:00:00.000Z"
 description: "Gname is running a free eu.cc domain promotion — regular users can register up to 3 domains at no cost, no credit card required, so you can own a domain for $0!"
 author: "Xiaozha"
-tags: ["Domain", "Tutorial", "Free Tools"]
+tags: ["Domains", "Tutorial", "Free Tools"]
 draft: false
 ogImage: "/images/gname-eucc-free-real.jpg"
 coverAlt: "Conceptual illustration of domain name resolution and global internet connectivity"

@@ -3,7 +3,7 @@ title: "Cloudflare Tunnel: Expose Your Home NAS and Raspberry Pi to the Internet
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Use Cloudflare Tunnel to expose your local services to the public internet for free — no public IP or port forwarding needed. Get a secure tunnel running in about five minutes."
 author: "Xiaozha"
-tags: ["Cloudflare", "Tunnel", "Self-Hosting", "Tutorial"]
+tags: ["Cloudflare", "Self-Hosting", "Tutorial"]
 draft: false
 ogImage: "/images/cloudflare-tunnel-real.jpg"
 coverAlt: "Data center server rack with blinking network LEDs"

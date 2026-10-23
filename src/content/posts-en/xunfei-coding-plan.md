@@ -3,7 +3,7 @@ title: "¥3.9 for Unlimited Tokens! The iFlytek Xingchen Coding Plan Just Got a 
 pubDatetime: "2026-04-11T00:00:00.000Z"
 description: "The iFlytek Xingchen Coding Plan is fully upgraded — unlimited requests for just ¥3.9, plus new flagship models including GLM-5.1."
 author: "Xiaozha"
-tags: ["iFlytek", "AI", "Coding", "Tutorial"]
+tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
 ogImage: "/images/xunfei-coding-plan-real.jpg"
 coverAlt: "Concept image of an artificial intelligence neural network glowing in blue light"

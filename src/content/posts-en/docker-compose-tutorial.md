@@ -3,7 +3,7 @@ title: "Docker Compose Tutorial: From Beginner to Practice in 5 Minutes"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete Docker Compose tutorial covering installation, YAML configuration, common commands, multi-container orchestration, and building a WordPress dev environment."
 author: "Xiaozha"
-tags: ["Tutorial", "Docker", "DevTools", "DevOps"]
+tags: ["Tutorial", "DevOps", "Development Tools"]
 draft: false
 ogImage: "/images/docker-compose-tutorial-real.jpg"
 coverAlt: "Close-up of developer hands on laptop keyboard writing code"

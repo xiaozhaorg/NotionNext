@@ -3,11 +3,7 @@ title: "Tencent Marvis Hands-On: Install It and Six AI Workhorses Get to Work fo
 pubDatetime: "2026-06-01T00:00:00.000Z"
 description: Marvis by Tencent is an OS-level AI assistant. After installation, six AI "workhorses" work for you around the clock, letting you truly control your computer with natural language.
 author: "Xiaozha"
-tags:
-  - Tencent
-  - Marvis
-  - AI
-  - Tutorial
+tags: ["AI", "Tutorial"]
 draft: false
 ogImage: "/images/tencent-marvis-real.jpg"
 coverAlt: "A laptop and work notes on a tidy office desk"

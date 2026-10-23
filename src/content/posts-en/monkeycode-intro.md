@@ -3,7 +3,7 @@ title: "I Built a Whole Project with MonkeyCode — and the Experience Was Unrea
 pubDatetime: "2026-07-06T00:00:00.000Z"
 description: "Code right in your browser and let AI build the entire project — MonkeyCode has completely redefined how I develop."
 author: "Xiaozha"
-tags: ["MonkeyCode", "AI", "IDE", "Development Tools"]
+tags: ["AI", "AI Coding", "Development Tools"]
 draft: false
 ogImage: "/images/monkeycode-intro-real.jpg"
 coverAlt: "Abstract AI concept art in blue-purple gradient lighting"

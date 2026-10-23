@@ -3,7 +3,7 @@ title: "Claude Sonnet 4 Deep Dive: Top-Tier Coding Performance and Claude Code E
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Anthropic's Claude Sonnet 4 delivers a major leap in coding ability. This article breaks down its new features, how to use the Claude Code tool, and how it compares with GPT, so you can choose the best AI coding assistant for your needs."
 author: "Xiaozha"
-tags: ["AI", "Claude", "Anthropic"]
+tags: ["AI", "LLM"]
 draft: false
 ogImage: "/images/claude-sonnet-4-real.jpg"
 coverAlt: "Close-up of a glowing AI chip on a circuit board, symbolizing the computing power of large models"

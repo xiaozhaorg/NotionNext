@@ -3,7 +3,7 @@ title: "Astro vs Next.js: Ultimate Static Blog Framework Comparison (2026)"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "In-depth comparison of Astro and Next.js: developer experience, performance, ecosystem, and SEO. Which framework is the best choice for your static blog or content site in 2026?"
 author: "Xiaozha"
-tags: ["Astro", "Next.js", "Tutorial"]
+tags: ["Tutorial", "Blogging", "Development Tools"]
 draft: false
 ogImage: "/images/astro-vs-nextjs-real.jpg"
 coverAlt: "A MacBook screen displaying a code editor interface"

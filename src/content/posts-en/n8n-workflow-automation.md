@@ -3,7 +3,7 @@ title: "n8n Self-Hosted Workflow Automation: Open Source Zapier Alternative"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Complete n8n tutorial. The open-source workflow automation tool with 400+ integrations. Visual drag-and-drop workflow building. Docker deployment and practical examples."
 author: "Xiaozha"
-tags: ["Self-Hosting", "Open Source", "Tutorial", "Automation"]
+tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
 ogImage: "/images/n8n-workflow-automation-real.jpg"
 coverAlt: "Laptop with data charts on office desk"

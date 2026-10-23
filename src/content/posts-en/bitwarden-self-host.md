@@ -3,7 +3,7 @@ title: "Vaultwarden Self-Hosted Password Manager: Ditch the 1Password Annual Fee
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Vaultwarden is the lightweight, self-hosted version of Bitwarden. This guide covers Docker deployment, secure exposure through Cloudflare Tunnel, and client setup — say goodbye to annual fees."
 author: "Xiaozha"
-tags: ["Self-Hosting", "Bitwarden", "Tutorial", "Privacy"]
+tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
 ogImage: "/images/bitwarden-self-host-real.jpg"
 coverAlt: "Blue tech lighting over cloud computing and server room racks"

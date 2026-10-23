@@ -3,11 +3,7 @@ title: "ChatGPT vs Claude vs Gemini 2026: Which AI Comes Out on Top?"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "A 2026 head-to-head comparison of ChatGPT, Claude, and Gemini across coding, reasoning, creative writing, multimodal capabilities, and API pricing, to help you find the best AI for your needs."
 author: "Xiaozha"
-tags:
-  - AI
-  - ChatGPT
-  - Claude
-  - Gemini
+tags: ["AI", "LLM"]
 draft: false
 ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.jpg"
 coverAlt: "A close-up of a glowing AI chip on a circuit board, symbolizing the computing power behind large language models"

@@ -3,7 +3,7 @@ title: "Trae IDE Deep Dive: Is ByteDance's AI-Native Editor Worth Using?"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Trae is ByteDance's AI-native IDE. This in-depth hands-on review puts its Builder and Chat modes through their paces, compares it with Cursor and VS Code, and helps you decide whether it's worth switching."
 author: "Xiaozha"
-tags: ["Trae", "IDE", "AI", "Review"]
+tags: ["AI", "AI Coding", "Development Tools"]
 draft: false
 ogImage: "/images/trae-ide-review-real.jpg"
 coverAlt: "Color-highlighted program source code in a dark-themed code editor"

@@ -3,7 +3,7 @@ title: "Self-Host Mealie: Ditch Recipe App Ads and Take Control of Your Kitchen"
 pubDatetime: "2026-07-21T00:00:00.000Z"
 description: "Mealie is an open-source, self-hosted recipe manager that scrapes recipes from the web, plans meals, and builds shopping lists — the perfect alternative to Xiachufang (下厨房) and Douguo (豆果美食)."
 author: "Xiaozha"
-tags: ["Self-Hosting", "Mealie", "Tutorial"]
+tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
 ogImage: "/images/mealie-recipe-app-real.jpg"
 coverAlt: "Blue tech lighting of cloud computing and a server room"
