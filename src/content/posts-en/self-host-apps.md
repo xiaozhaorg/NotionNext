@@ -24,7 +24,7 @@ Three reasons keep coming up again and again:
 - **Cost.** A $5/month VPS or a one-time $200 mini-PC replaces a stack of $5–$15/month subscriptions. The break-even point is usually a few months.
 - **Control and longevity.** Open source software doesn't get bought, renamed, or shut down overnight. When a project you depend on disappears, you keep the code.
 
-The tool that makes all of this pleasant is Docker Compose. If you're new to it, our [Docker Compose tutorial](/en/articles/docker-compose-tutorial) is the prerequisite reading — every app below assumes you have Docker installed.
+The tool that makes all of this pleasant is Docker Compose. If you're new to it, our [Docker Compose tutorial](/en/article/docker-compose-tutorial/)) is the prerequisite reading — every app below assumes you have Docker installed.
 
 ---
 
@@ -143,7 +143,7 @@ Pick Nextcloud for an all-in-one workspace; pick Seafile for pure, fast file syn
 
 ### Jellyfin — Replaces Plex / Emby / Netflix
 
-**Jellyfin** is the leading free and open-source media server. Organize your movies and TV shows, stream to every device in your home, and transcode on the fly to match the screen. Unlike Plex, there are no premium features locked behind a paywall — everything is free. Full guide here: [Jellyfin media server setup](/en/articles/jellyfin-media-server).
+**Jellyfin** is the leading free and open-source media server. Organize your movies and TV shows, stream to every device in your home, and transcode on the fly to match the screen. Unlike Plex, there are no premium features locked behind a paywall — everything is free. Full guide here: [Jellyfin media server setup](/en/article/jellyfin-media-server/)).
 
 ```bash
 docker run -d --name jellyfin \
@@ -184,7 +184,7 @@ docker run -d --name photoprism \
 
 ### Immich — Replaces Google Photos (Backup + AI)
 
-**Immich** is the closest thing to a real Google Photos replacement: automatic mobile backup, AI face recognition, CLIP semantic search, shared albums, and a world map. We have a complete deployment guide here: [Immich self-hosted photo backup](/en/articles/immich-photo-backup).
+**Immich** is the closest thing to a real Google Photos replacement: automatic mobile backup, AI face recognition, CLIP semantic search, shared albums, and a world map. We have a complete deployment guide here: [Immich self-hosted photo backup](/en/article/immich-photo-backup/)).
 
 The tl;dr is a Docker Compose stack with `ghcr.io/immich-app/immich-server` plus PostgreSQL and Redis. Install the mobile app, enable auto-upload, and your photos stop going to Google.
 
@@ -255,7 +255,7 @@ Vaultwarden is the go-to for individuals and small families; Passbolt shines whe
 
 ### n8n — Replaces Zapier / Make
 
-**n8n** is a fair-code, self-hostable workflow automation tool with **400+ integrations** and a visual, drag-and-drop editor. The killer advantage over Zapier: no per-workflow task limits and no "50 workflows" ceiling — you're only limited by your own server. We have a complete tutorial here: [n8n workflow automation guide](/en/articles/n8n-workflow-automation).
+**n8n** is a fair-code, self-hostable workflow automation tool with **400+ integrations** and a visual, drag-and-drop editor. The killer advantage over Zapier: no per-workflow task limits and no "50 workflows" ceiling — you're only limited by your own server. We have a complete tutorial here: [n8n workflow automation guide](/en/article/n8n-workflow-automation/)).
 
 ```bash
 docker run -d --name n8n \
@@ -292,7 +292,7 @@ docker run -d --name huginn \
 
 ### Uptime Kuma — Replaces UptimeRobot / StatusPage
 
-**Uptime Kuma** is a self-hosted uptime monitor with a beautiful dashboard and public status pages. It checks HTTP(S), TCP, ping, DNS, and even Kubernetes or Docker containers, and notifies you via Telegram, Discord, Slack, email, and 90+ other channels. Free and unlimited monitors — UptimeRobot's free tier only gives you 50. Full setup here: [Uptime Kuma monitoring guide](/en/articles/uptime-kuma-monitor).
+**Uptime Kuma** is a self-hosted uptime monitor with a beautiful dashboard and public status pages. It checks HTTP(S), TCP, ping, DNS, and even Kubernetes or Docker containers, and notifies you via Telegram, Discord, Slack, email, and 90+ other channels. Free and unlimited monitors — UptimeRobot's free tier only gives you 50. Full setup here: [Uptime Kuma monitoring guide](/en/article/uptime-kuma-monitor/)).
 
 ```bash
 docker run -d --name uptime-kuma \
@@ -439,4 +439,4 @@ If the list feels overwhelming, here's a suggested order for a beginner:
 
 A single 2-core, 8 GB mini-PC or a $5/month VPS running Docker Compose can host every app in this list. The only real cost is time — and the payoff is a stack of canceled subscriptions, your data on your hardware, and software that can't be taken away from you.
 
-For the deployment mechanics, our [Docker Compose tutorial](/en/articles/docker-compose-tutorial) covers everything from installation to production best practices. If you're new to remote servers, start with the [Ubuntu server setup guide](/en/articles/ubuntu-server-setup). Happy self-hosting! 🐳
+For the deployment mechanics, our [Docker Compose tutorial](/en/article/docker-compose-tutorial/)) covers everything from installation to production best practices. If you're new to remote servers, start with the [Ubuntu server setup guide](/en/article/ubuntu-server-setup/)). Happy self-hosting! 🐳

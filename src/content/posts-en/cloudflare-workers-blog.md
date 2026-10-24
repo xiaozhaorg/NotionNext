@@ -407,4 +407,4 @@ In this tutorial you learned how to:
 9. **Stay within free limits** — 100k requests/day is plenty.
 10. **Decide between Workers and Pages** — and pick Pages for most real blogs.
 
-The fastest way to test your understanding is to deploy this exact project and push one article into KV. Then, if you want a more polished blog, explore our guides on [Cloudflare Tunnel for exposing local services](/en/articles/cloudflare-tunnel-tutorial), [Cloudflare R2 object storage](/en/articles/cloudflare-r2-storage), and [Docker Compose for self-hosted apps](/en/articles/docker-compose-tutorial). Happy publishing! 🚀
+The fastest way to test your understanding is to deploy this exact project and push one article into KV. Then, if you want a more polished blog, explore our guides on [Cloudflare Tunnel for exposing local services](/en/article/cloudflare-tunnel-tutorial/)), [Cloudflare R2 object storage](/en/article/cloudflare-r2-storage/)), and [Docker Compose for self-hosted apps](/en/article/docker-compose-tutorial/)). Happy publishing! 🚀

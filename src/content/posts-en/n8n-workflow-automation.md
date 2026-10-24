@@ -174,7 +174,7 @@ Start it:
 docker compose up -d
 ```
 
-Wait a few seconds, then open `http://localhost:5678`, create your admin account, and you're in the editor. For a domain, put n8n behind a reverse proxy or a [Cloudflare Tunnel](/en/articles/cloudflare-tunnel-tutorial) so you reach it over HTTPS at `https://n8n.example.com`.
+Wait a few seconds, then open `http://localhost:5678`, create your admin account, and you're in the editor. For a domain, put n8n behind a reverse proxy or a [Cloudflare Tunnel](/en/article/cloudflare-tunnel-tutorial/)) so you reach it over HTTPS at `https://n8n.example.com`.
 
 ### Backup Strategy (Don't Skip This)
 
@@ -475,4 +475,4 @@ By now you can:
 
 The fastest way to learn is to pick one boring task you do by hand every week — copying data between apps, checking a feed, forwarding notifications — and automate it in n8n tonight. Start with the RSS → Telegram example; it's the smallest workflow that teaches you triggers, expressions, and credentials in one go.
 
-n8n is one of the stars of the [self-hosted app ecosystem](/en/articles/self-host-apps). If you're deploying it on a fresh server, our [Ubuntu setup guide](/en/articles/ubuntu-server-setup) and [Docker Compose tutorial](/en/articles/docker-compose-tutorial) will get you to the finish line, and a [Cloudflare Tunnel](/en/articles/cloudflare-tunnel-tutorial) gives you a safe public URL. Happy automating! ⚙️
+n8n is one of the stars of the [self-hosted app ecosystem](/en/article/self-host-apps/)). If you're deploying it on a fresh server, our [Ubuntu setup guide](/en/article/ubuntu-server-setup/)) and [Docker Compose tutorial](/en/article/docker-compose-tutorial/)) will get you to the finish line, and a [Cloudflare Tunnel](/en/article/cloudflare-tunnel-tutorial/)) gives you a safe public URL. Happy automating! ⚙️

@@ -334,4 +334,4 @@ NextChat is the fastest way to own a private, multi-model AI chat assistant at z
 10. **Back up chat data** — manual export and WebDAV/Upstash sync.
 11. **Fix common issues** — CORS, passwords, model lists, missing keys.
 
-The quickest way to try it: fork the repo, deploy on Vercel with `OPENAI_API_KEY` and `CODE`, and start a conversation with DeepSeek within ten minutes. If you found this useful, you might also enjoy our guides on [running LLMs locally with Ollama](/en/articles/ollama-local-llm) and [exposing local AI services with Cloudflare Tunnel](/en/articles/cloudflare-tunnel-tutorial). Happy chatting! 🤖
+The quickest way to try it: fork the repo, deploy on Vercel with `OPENAI_API_KEY` and `CODE`, and start a conversation with DeepSeek within ten minutes. If you found this useful, you might also enjoy our guides on [running LLMs locally with Ollama](/en/article/ollama-local-llm/)) and [exposing local AI services with Cloudflare Tunnel](/en/article/cloudflare-tunnel-tutorial/)). Happy chatting! 🤖

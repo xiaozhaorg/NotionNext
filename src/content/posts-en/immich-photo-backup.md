@@ -57,8 +57,8 @@ Immich is a multi-container application. You need:
 
 - A Linux server (Ubuntu 22.04+, Debian 12+, or any distro with Docker support). macOS works for testing; Windows works via WSL2.
 - At least 2 GB RAM (4+ GB if you run machine-learning features).
-- Docker Engine 24+ and the Docker Compose plugin v2. See our [Docker Compose tutorial](/en/articles/docker-compose-tutorial) if you need to install them.
-- A domain or subdomain (recommended) so you can put Immich behind HTTPS. A free [Cloudflare Tunnel](/en/articles/cloudflare-tunnel-tutorial) works perfectly.
+- Docker Engine 24+ and the Docker Compose plugin v2. See our [Docker Compose tutorial](/en/article/docker-compose-tutorial/)) if you need to install them.
+- A domain or subdomain (recommended) so you can put Immich behind HTTPS. A free [Cloudflare Tunnel](/en/article/cloudflare-tunnel-tutorial/)) works perfectly.
 
 Verify your setup:
 
@@ -321,7 +321,7 @@ Schedule it with cron:
 
 ### 2. Off-site Mirror to S3 or R2
 
-For off-site, push a copy of `UPLOAD_LOCATION` to an S3-compatible bucket. **Cloudflare R2** is ideal — see our [Cloudflare R2 guide](/en/articles/cloudflare-r2-storage) for setup.
+For off-site, push a copy of `UPLOAD_LOCATION` to an S3-compatible bucket. **Cloudflare R2** is ideal — see our [Cloudflare R2 guide](/en/article/cloudflare-r2-storage/)) for setup.
 
 Configure rclone with an R2 remote, then schedule a nightly sync:
 
@@ -449,4 +449,4 @@ Immich is the closest open-source analog to Google Photos, with the privacy and 
 8. **Accelerate face recognition** with NVIDIA CUDA, Intel OpenVINO, or Apple CoreML.
 9. **Compare Immich to alternatives** — Google Photos, Nextcloud Photos, PhotoPrism.
 
-The next step is to do the migration with your own library — there's nothing quite like the moment your last 10 years of photos load in your own timeline, on your own server, fully searchable, with zero data leaving your home. If you found this guide useful, you might also enjoy our tutorials on [Ubuntu Server initial setup](/en/articles/ubuntu-server-setup) and [Cloudflare R2 object storage](/en/articles/cloudflare-r2-storage). Happy photographing! 📸
+The next step is to do the migration with your own library — there's nothing quite like the moment your last 10 years of photos load in your own timeline, on your own server, fully searchable, with zero data leaving your home. If you found this guide useful, you might also enjoy our tutorials on [Ubuntu Server initial setup](/en/article/ubuntu-server-setup/)) and [Cloudflare R2 object storage](/en/article/cloudflare-r2-storage/)). Happy photographing! 📸

@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import { SITE } from "@/config";
 import { t, localeFromPath, getAltURL, type Locale } from "@/locales/ui";
 
@@ -25,10 +26,42 @@ const isActive = (href: string) => {
   return cleanPath.startsWith(cleanHref);
 };
 
-// 语言切换链接
+// 语言切换链接。
+// getAltURL 只做路径前缀交换，但中英文的标签名不同（「教程」vs Tutorial）、
+// 也不是每篇文章都有双语版，直接交换会指向不存在的页面。这里用真实内容校验，
+// 不存在则回退到目标语言的首页或标签索引。
+const [zhPosts, enPosts] = await Promise.all([
+  getCollection("posts", ({ data }) => !data.draft),
+  getCollection("posts-en", ({ data }) => !data.draft),
+]);
+const slugSets = {
+  zh: new Set(zhPosts.map((p) => p.id)),
+  en: new Set(enPosts.map((p) => p.id)),
+};
+const tagSets = {
+  zh: new Set(zhPosts.flatMap((p) => p.data.tags)),
+  en: new Set(enPosts.flatMap((p) => p.data.tags)),
+};
+
+function resolveAltURL(pathname: string, target: Locale): string {
+  // 404 页没有对应语言版本，回退到目标语言首页
+  if (/\/404\/?$/.test(pathname)) return target === "en" ? "/en/" : "/";
+  const article = /^\/(?:en\/)?article\/([^/]+)\/?$/.exec(pathname);
+  if (article) {
+    const slug = decodeURIComponent(article[1]);
+    if (!slugSets[target].has(slug)) return target === "en" ? "/en/" : "/";
+  }
+  const tag = /^\/(?:en\/)?tags\/([^/]+)\/?$/.exec(pathname);
+  if (tag) {
+    const name = decodeURIComponent(tag[1]);
+    if (!tagSets[target].has(name)) return target === "en" ? "/en/tags/" : "/tags/";
+  }
+  return getAltURL(pathname, target);
+}
+
 const currentPath = Astro.url.pathname;
 const altLocale: Locale = isEn ? "zh" : "en";
-const altURL = getAltURL(currentPath, altLocale);
+const altURL = resolveAltURL(currentPath, altLocale);
 ---
 
 <header class="header">

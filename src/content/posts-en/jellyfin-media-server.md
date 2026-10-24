@@ -354,7 +354,7 @@ Run `caddy` and you have HTTPS at `https://jellyfin.example.com` automatically.
 
 ### Option B: Cloudflare Tunnel (no public IP required)
 
-If your server is behind a NAT, use Cloudflare Tunnel — it's free, automatic HTTPS, and protects the origin IP. See our [Cloudflare Tunnel tutorial](/en/articles/cloudflare-tunnel-tutorial) for full setup.
+If your server is behind a NAT, use Cloudflare Tunnel — it's free, automatic HTTPS, and protects the origin IP. See our [Cloudflare Tunnel tutorial](/en/article/cloudflare-tunnel-tutorial/)) for full setup.
 
 The short version:
 
@@ -448,4 +448,4 @@ Jellyfin is the best free, open-source media server in 2026. In this guide you l
 9. **Expose safely** — Caddy reverse proxy or Cloudflare Tunnel, no public IP needed.
 10. **Apply tips** for naming, NFOs, and subtitles.
 
-The next step is to copy some media onto your server, scan the library, and start watching. If you found this guide useful, you might also enjoy our tutorials on [Immich self-hosted photo backup](/en/articles/immich-photo-backup) and [Ubuntu Server initial setup](/en/articles/ubuntu-server-setup). Happy streaming! 🎬
+The next step is to copy some media onto your server, scan the library, and start watching. If you found this guide useful, you might also enjoy our tutorials on [Immich self-hosted photo backup](/en/article/immich-photo-backup/)) and [Ubuntu Server initial setup](/en/article/ubuntu-server-setup/)). Happy streaming! 🎬

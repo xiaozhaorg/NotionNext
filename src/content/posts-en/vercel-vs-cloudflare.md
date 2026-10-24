@@ -280,4 +280,4 @@ Vercel and Cloudflare Pages are both superb platforms, and for most projects the
 
 My rule of thumb: **static and content-heavy → Cloudflare Pages. Next.js and React → Vercel.** Everything else is gravy.
 
-If you're self-hosting instead, our guide on [self-hosted open source apps](/en/articles/self-host-apps) and the [Docker Compose tutorial](/en/articles/docker-compose-tutorial) are good places to start. And if you're already on Cloudflare, don't miss our [R2 storage guide](/en/articles/cloudflare-r2-storage) to get zero-egress object storage running today.
+If you're self-hosting instead, our guide on [self-hosted open source apps](/en/article/self-host-apps/)) and the [Docker Compose tutorial](/en/article/docker-compose-tutorial/)) are good places to start. And if you're already on Cloudflare, don't miss our [R2 storage guide](/en/article/cloudflare-r2-storage/)) to get zero-egress object storage running today.

@@ -250,7 +250,7 @@ Caddy issues and renews the certificate automatically.
 
 ### Option B: Cloudflare Tunnel (no public IP needed)
 
-If your server is behind NAT, Cloudflare Tunnel gives you HTTPS without opening any port. See our full [Cloudflare Tunnel tutorial](/en/articles/cloudflare-tunnel-tutorial) for the complete walkthrough. The short version:
+If your server is behind NAT, Cloudflare Tunnel gives you HTTPS without opening any port. See our full [Cloudflare Tunnel tutorial](/en/article/cloudflare-tunnel-tutorial/)) for the complete walkthrough. The short version:
 
 ```bash
 cloudflared tunnel login
@@ -363,7 +363,7 @@ How does Uptime Kuma stack up against the field?
 - **Heartbeat** (self-hosted agent model, e.g. Elastic Agent / custom heartbeat daemons) — powerful for fleet monitoring, but much more complex to run than Uptime Kuma's turnkey UI.
 - **Uptime Kuma** — the best balance for individuals and small teams who already run a server: everything in one place, unlimited, free, and self-contained.
 
-If you don't already have a server, the [Ubuntu Server setup guide](/en/articles/ubuntu-server-setup) is the perfect place to start — then deploy Uptime Kuma as your first service.
+If you don't already have a server, the [Ubuntu Server setup guide](/en/article/ubuntu-server-setup/)) is the perfect place to start — then deploy Uptime Kuma as your first service.
 
 ---
 
@@ -383,4 +383,4 @@ Uptime Kuma is the best free, self-hosted monitoring tool in 2026. In this guide
 10. **Apply advanced features** — Prometheus API, maintenance mode, groups and tags.
 11. **Compare it** with UptimeRobot, StatusCake, and Heartbeat — and know when self-hosting wins.
 
-Your next step is simple: `docker compose up -d`, add your blog, your API, and your home server, and set up Telegram or Ntfy notifications. Then go get some sleep — Uptime Kuma will watch the lights for you. If you found this useful, you might also like our [Docker Compose tutorial](/en/articles/docker-compose-tutorial) and [Cloudflare Tunnel guide](/en/articles/cloudflare-tunnel-tutorial). Happy monitoring! 📡
+Your next step is simple: `docker compose up -d`, add your blog, your API, and your home server, and set up Telegram or Ntfy notifications. Then go get some sleep — Uptime Kuma will watch the lights for you. If you found this useful, you might also like our [Docker Compose tutorial](/en/article/docker-compose-tutorial/)) and [Cloudflare Tunnel guide](/en/article/cloudflare-tunnel-tutorial/)). Happy monitoring! 📡

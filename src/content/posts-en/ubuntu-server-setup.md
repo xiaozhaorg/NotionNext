@@ -315,7 +315,7 @@ docker compose version
 docker run hello-world
 ```
 
-If all three commands succeed, you're ready to deploy anything you find on Docker Hub. For a deeper dive, see our [Docker Compose tutorial](/en/articles/docker-compose-tutorial).
+If all three commands succeed, you're ready to deploy anything you find on Docker Hub. For a deeper dive, see our [Docker Compose tutorial](/en/article/docker-compose-tutorial/)).
 
 ---
 
@@ -668,4 +668,4 @@ A hardened server is the foundation of every reliable deployment. In this guide 
 
 Plus a **one-line setup script** that runs all ten steps unattended, with sensible defaults and environment-variable overrides for the username, port, timezone, and swap size.
 
-The next step is to put your server to work. If you want inspiration, check out our tutorials on [Immich self-hosted photo backup](/en/articles/immich-photo-backup), [Jellyfin media server](/en/articles/jellyfin-media-server), [Ollama local LLMs](/en/articles/ollama-local-llm), and [Cloudflare R2 object storage](/en/articles/cloudflare-r2-storage). Happy hosting! 🐧
+The next step is to put your server to work. If you want inspiration, check out our tutorials on [Immich self-hosted photo backup](/en/article/immich-photo-backup/)), [Jellyfin media server](/en/article/jellyfin-media-server/)), [Ollama local LLMs](/en/article/ollama-local-llm/)), and [Cloudflare R2 object storage](/en/article/cloudflare-r2-storage/)). Happy hosting! 🐧

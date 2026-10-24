@@ -731,4 +731,4 @@ Docker Compose turns "it works on my machine" into "it works on every machine". 
 
 The next step is to dockerize one of your own projects. Pick something you run manually today — a database, an API, a static site — and write a `docker-compose.yml` for it. Once you have a working file, commit it to the repo. Your future self, your teammates, and your CI pipeline will all thank you.
 
-If you found this Docker Compose tutorial useful, you might also like our guides on [Docker registry mirror configuration](/en/articles/docker-mirror-2026) and [self-hosting open-source applications](/en/articles/self-host-apps). Happy composing! 🐳
+If you found this Docker Compose tutorial useful, you might also like our guides on [Docker registry mirror configuration](/en/article/docker-mirror-2026/)) and [self-hosting open-source applications](/en/article/self-host-apps/)). Happy composing! 🐳

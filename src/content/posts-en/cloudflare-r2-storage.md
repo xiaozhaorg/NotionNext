@@ -477,4 +477,4 @@ Cloudflare R2 is the most cost-effective object storage on the market for any ap
 
 The free tier alone is enough to host a portfolio site, a personal photo gallery, or backups for a side project. Sign up, create a bucket, and try it — the whole setup takes under five minutes.
 
-If you found this R2 tutorial useful, you might also enjoy our guides on [Cloudflare Tunnel for exposing local services](/en/articles/cloudflare-tunnel-tutorial) and [Docker Compose for multi-container apps](/en/articles/docker-compose-tutorial). Happy storing! 🚀
+If you found this R2 tutorial useful, you might also enjoy our guides on [Cloudflare Tunnel for exposing local services](/en/article/cloudflare-tunnel-tutorial/)) and [Docker Compose for multi-container apps](/en/article/docker-compose-tutorial/)). Happy storing! 🚀
