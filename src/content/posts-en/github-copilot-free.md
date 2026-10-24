@@ -82,9 +82,9 @@ Despite its limitations, it's more than enough for learning, light usage, and sm
 
 If you're a professional developer or team lead, the paid plan's unlimited completions and advanced features (such as Workspace) can significantly boost your efficiency, making the $10/month investment well worth it.
 
-[Previous: The Complete GitHub Student Developer Pack Guide — How Students Get $1,000+ Worth of Services Free](/article/github-student-pack)
+[Previous: The Complete GitHub Student Developer Pack Guide — How Students Get $1,000+ Worth of Services Free](/article/github-student-pack/))
 
-[Next: GitHub Actions Advanced — 5 Practical Tips to Supercharge Your CI/CD](/article/github-actions-advanced)
+[Next: GitHub Actions Advanced — 5 Practical Tips to Supercharge Your CI/CD](/article/github-actions-advanced/))
 
 - **Author:** [Xiaozha Blog](/about)
 - **Link:** [https://xiaozha.org/article/github-copilot-free](https://xiaozha.org/article/github-copilot-free)
@@ -92,14 +92,14 @@ If you're a professional developer or team lead, the paid plan's unlimited compl
 
 ## Related Articles
 
-[Scoring Big! Shawn AI's free LLM API relay — register and get 7,000 credits instantly (with integration tutorial)![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)
+[Scoring Big! Shawn AI's free LLM API relay — register and get 7,000 credits instantly (with integration tutorial)![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api/))
 
-[Claude Code Hands-On Guide: How to Use the AI Coding Agent in Your Terminal? (2026 China Edition)![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)
+[Claude Code Hands-On Guide: How to Use the AI Coding Agent in Your Terminal? (2026 China Edition)![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial/))
 
-[NextChat Deployment Guide: Deploy Your Own AI Assistant on Vercel in One Click, Supporting 16+ Models Including DeepSeek![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)
+[NextChat Deployment Guide: Deploy Your Own AI Assistant on Vercel in One Click, Supporting 16+ Models Including DeepSeek![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide/))
 
-[Zed Editor Review: Claimed to Be the Fastest Code Editor — How Powerful Is It Really?![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode)
+[Zed Editor Review: Claimed to Be the Fastest Code Editor — How Powerful Is It Really?![image](https://xiaozha.org/images/zed-vs-vscode-cover.jpg?t=3a9c55d5-e9ea-8179-b3b3-c654b8779007)](/article/zed-vs-vscode/))
 
-[The Complete Guide to the Windows Package Manager winget: Say Goodbye to Manual Downloads and Installs![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools)
+[The Complete Guide to the Windows Package Manager winget: Say Goodbye to Manual Downloads and Installs![image](https://xiaozha.org/images/winget-windows-tools-cover.jpg?t=3a9c55d5-e9ea-8125-9a64-e68f8868196e)](/article/winget-windows-tools/))
 
-[Essential VS Code Extensions for 2026: 20 Tools That Will Double Your Productivity![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg?t=3a9c55d5-e9ea-816d-a569-f20405ad6185)](/article/vscode-extensions-2026)
+[Essential VS Code Extensions for 2026: 20 Tools That Will Double Your Productivity![image](https://xiaozha.org/images/vscode-extensions-2026-cover.jpg?t=3a9c55d5-e9ea-816d-a569-f20405ad6185)](/article/vscode-extensions-2026/))

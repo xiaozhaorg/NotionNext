@@ -26,6 +26,9 @@ const zh = {
   // Card
   card_reading_time: "约 {min} 分钟",
 
+  // Related posts
+  related_title: "📚 相关阅读",
+
   // Tags page
   tags_all: "🏷️ 所有标签",
   tags_count: "共 {count} 个标签 · {total} 篇文章",
@@ -98,6 +101,9 @@ const en = {
 
   // Card
   card_reading_time: "{min} min read",
+
+  // Related posts
+  related_title: "📚 Related Posts",
 
   // Tags page
   tags_all: "🏷️ All Tags",

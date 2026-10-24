@@ -15,7 +15,7 @@ ogImage: "/images/mcp-ecosystem-real.jpg"
 coverAlt: "坐在长椅上操作平板电脑的人形机器人"
 ---
 
-上篇 [Cline 实战](/article/cline-tutorial) 里提到 MCP 接入，这篇就把 MCP 生态完整盘一遍——现在它已经是 AI 编程工具最重要的"外挂"标准了。
+上篇 [Cline 实战](/article/cline-tutorial/)) 里提到 MCP 接入，这篇就把 MCP 生态完整盘一遍——现在它已经是 AI 编程工具最重要的"外挂"标准了。
 
 ## 一、MCP 是什么
 
@@ -48,7 +48,7 @@ MCP（Model Context Protocol，模型上下文协议）由 Anthropic 在 2024 �
 
 - **GitHub / GitLab**：Issues、PR、代码搜索，开发工作流直通
 - **Context7**：按需拉取开源库的最新官方文档，写代码不靠猜 API
-- **codebase-memory-mcp**：毫秒级索引整个代码库，让 AI 真正"懂"你的项目（我之前专门写过 [实战介绍](/article/codebase-memory-mcp)）
+- **codebase-memory-mcp**：毫秒级索引整个代码库，让 AI 真正"懂"你的项目（我之前专门写过 [实战介绍](/article/codebase-memory-mcp/))）
 
 ### 数据库
 
@@ -98,4 +98,4 @@ MCP 正在从"AI 编程工具专用"走向"所有 AI 应用通用"：浏览器�
 
 ## 小结
 
-MCP 生态已经足够成熟，值得花半小时把主力工具接上：一个 Context7 加一个数据库 MCP，就能让 AI 编程体验上一个台阶。想从零体验的话，回看 [Cline 实战](/article/cline-tutorial) 或 [Claude Code 实战指南](/article/claude-code-tutorial) 先把客户端跑起来，再接 MCP 不迟。
+MCP 生态已经足够成熟，值得花半小时把主力工具接上：一个 Context7 加一个数据库 MCP，就能让 AI 编程体验上一个台阶。想从零体验的话，回看 [Cline 实战](/article/cline-tutorial/)) 或 [Claude Code 实战指南](/article/claude-code-tutorial/)) 先把客户端跑起来，再接 MCP 不迟。

@@ -10,7 +10,7 @@ ogImage: "/images/cloudflare-data-layer-real.jpg"
 coverAlt: "Data center server racks with dense cabling and blinking lights"
 ---
 
-Completing the Cloudflare series: I previously wrote about [building a free blog on Workers](/en/article/cloudflare-workers-blog) and [R2 object storage](/en/article/cloudflare-r2-storage). This post covers the data layer — D1, KV, and Queues, the three fundamentals for storing data in Worker apps: relational data, key-value data, and async tasks.
+Completing the Cloudflare series: I previously wrote about [building a free blog on Workers](/en/article/cloudflare-workers-blog/)) and [R2 object storage](/en/article/cloudflare-r2-storage/)). This post covers the data layer — D1, KV, and Queues, the three fundamentals for storing data in Worker apps: relational data, key-value data, and async tasks.
 
 ## Know the Three First
 
@@ -146,7 +146,7 @@ A full-stack Cloudflare blog/app can be assembled like this:
 
 - **D1**: posts, comments, user data
 - **KV**: homepage HTML cache, site config, session tokens
-- **R2**: images and static files (see the [R2 guide](/en/article/cloudflare-r2-storage))
+- **R2**: images and static files (see the [R2 guide](/en/article/cloudflare-r2-storage/)))
 - **Queues**: thumbnail generation and notifications after R2 uploads
 
 ## Pricing
@@ -155,4 +155,4 @@ All three come with generous free tiers (D1: storage and reads/writes; KV: opera
 
 ## Summary
 
-D1, KV, and Queues complete the "store" side of Worker apps: relational, key-value, and queueing, each covering its own lane — free-tier start, serverless, and globally distributed. Combined with the existing Workers + R2 + [Tunnel](/en/article/cloudflare-tunnel) guides, a full-stack app can run on Cloudflare at zero cost.
+D1, KV, and Queues complete the "store" side of Worker apps: relational, key-value, and queueing, each covering its own lane — free-tier start, serverless, and globally distributed. Combined with the existing Workers + R2 + [Tunnel](/en/article/cloudflare-tunnel/)) guides, a full-stack app can run on Cloudflare at zero cost.

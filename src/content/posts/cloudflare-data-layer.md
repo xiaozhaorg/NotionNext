@@ -14,7 +14,7 @@ ogImage: "/images/cloudflare-data-layer-real.jpg"
 coverAlt: "数据中心服务器机架中密集的线缆与闪烁的指示灯"
 ---
 
-Cloudflare 系列补全：之前写了 [Workers 免费建站](/article/cloudflare-workers-blog) 和 [R2 对象存储](/article/cloudflare-r2-storage)，这篇讲数据层——D1、KV、Queues 是 Worker 应用存数据的三个基本盘，覆盖了"关系型数据、键值数据、异步任务"三大需求。
+Cloudflare 系列补全：之前写了 [Workers 免费建站](/article/cloudflare-workers-blog/)) 和 [R2 对象存储](/article/cloudflare-r2-storage/))，这篇讲数据层——D1、KV、Queues 是 Worker 应用存数据的三个基本盘，覆盖了"关系型数据、键值数据、异步任务"三大需求。
 
 ## 一、先搞清楚三者的定位
 
@@ -151,7 +151,7 @@ export default {
 
 - **D1**：文章、评论、用户等结构化数据
 - **KV**：首页 HTML 缓存、站点配置、会话 token
-- **R2**：图片等静态文件（见 [R2 实战](/article/cloudflare-r2-storage)）
+- **R2**：图片等静态文件（见 [R2 实战](/article/cloudflare-r2-storage/))）
 - **Queues**：R2 上传后的缩略图生成、通知发送
 
 ## 六、成本
@@ -160,4 +160,4 @@ export default {
 
 ## 小结
 
-D1 / KV / Queues 补齐了 Worker 应用的"存"能力：关系型、键值、队列各管一摊，全部免费额度起步、无服务器、全球边缘。配上已有的 Workers + R2 + [Tunnel](/article/cloudflare-tunnel) 教程，一套全栈应用可以在 Cloudflare 上零成本跑起来。
+D1 / KV / Queues 补齐了 Worker 应用的"存"能力：关系型、键值、队列各管一摊，全部免费额度起步、无服务器、全球边缘。配上已有的 Workers + R2 + [Tunnel](/article/cloudflare-tunnel/)) 教程，一套全栈应用可以在 Cloudflare 上零成本跑起来。

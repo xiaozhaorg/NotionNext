@@ -10,7 +10,7 @@ ogImage: "/images/cline-tutorial-real.jpg"
 coverAlt: "Two developers at a laptop, one pointing at the screen"
 ---
 
-In the [Claude Code hands-on guide](/en/article/claude-code-tutorial), I mentioned that budget-sensitive developers who require on-prem data can choose Cline. This post covers it in depth.
+In the [Claude Code hands-on guide](/en/article/claude-code-tutorial/)), I mentioned that budget-sensitive developers who require on-prem data can choose Cline. This post covers it in depth.
 
 ## What Is Cline
 
@@ -39,7 +39,7 @@ The first thing after installation isn't writing code — it's **deciding which 
 
 ### Option A: Ollama local model (fully offline)
 
-If privacy matters above all, run a coding-oriented model with [Ollama local LLMs](/en/article/ollama-local-llm):
+If privacy matters above all, run a coding-oriented model with [Ollama local LLMs](/en/article/ollama-local-llm/)):
 
 ```bash
 ollama pull qwen2.5-coder:14b
@@ -55,8 +55,8 @@ OpenAI-compatible endpoints from domestic providers give good speed and capabili
 
 | Endpoint | Coding models | Notes |
 |---|---|---|
-| SiliconFlow | deepseek-ai/DeepSeek-V3, Qwen3-Coder, etc. | Free credits on signup, see the [SiliconFlow intro](/en/article/siliconflow-intro) |
-| DeepSeek official | deepseek-chat, deepseek-reasoner | Cheap and capable, see [DeepSeek coding practice](/en/article/deepseek-v4-coding) |
+| SiliconFlow | deepseek-ai/DeepSeek-V3, Qwen3-Coder, etc. | Free credits on signup, see the [SiliconFlow intro](/en/article/siliconflow-intro/)) |
+| DeepSeek official | deepseek-chat, deepseek-reasoner | Cheap and capable, see [DeepSeek coding practice](/en/article/deepseek-v4-coding/)) |
 | Zhipu AI | GLM-4 series | OpenAI-compatible, free starter packages |
 
 In Cline, pick `OpenAI Compatible` as the provider and fill in the Base URL and API key — most providers document the compatible configuration directly.
@@ -76,7 +76,7 @@ A practical rhythm: **talk it through in Plan first, then switch to Act to execu
 
 ## MCP Integration
 
-Cline natively supports MCP (Model Context Protocol); configuration lives in `MCP Servers` under settings. You can attach filesystem, database, browser, code-search, and other capabilities — usage matches Claude Code's MCP. For related practice, see my [Codebase Memory MCP walkthrough](/en/article/codebase-memory-mcp).
+Cline natively supports MCP (Model Context Protocol); configuration lives in `MCP Servers` under settings. You can attach filesystem, database, browser, code-search, and other capabilities — usage matches Claude Code's MCP. For related practice, see my [Codebase Memory MCP walkthrough](/en/article/codebase-memory-mcp/)).
 
 ## Cline vs Claude Code
 
@@ -102,4 +102,4 @@ In one sentence: **choose Cline to save money and keep data safe; choose Claude 
 
 Cline's significance is freeing "AI coding agents" from the paywall: models are swappable, data is controllable, permissions are transparent. Combined with domestic APIs or local Ollama, it's a fully compliant development environment.
 
-If your requirement is "code must not leave the country", this stack is worth trying; if you want the strongest model effects, go back to the [Claude Code hands-on guide](/en/article/claude-code-tutorial). Next up I'm planning an MCP ecosystem overview to cover the "plugin" capabilities of AI coding tools.
+If your requirement is "code must not leave the country", this stack is worth trying; if you want the strongest model effects, go back to the [Claude Code hands-on guide](/en/article/claude-code-tutorial/)). Next up I'm planning an MCP ecosystem overview to cover the "plugin" capabilities of AI coding tools.

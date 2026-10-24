@@ -10,7 +10,7 @@ ogImage: "/images/mcp-ecosystem-real.jpg"
 coverAlt: "A humanoid robot sitting on a bench using a tablet"
 ---
 
-In the previous post about [Cline in practice](/en/article/cline-tutorial), I mentioned MCP integration. This post takes a full tour of the MCP ecosystem — it's now the single most important way to extend AI coding tools.
+In the previous post about [Cline in practice](/en/article/cline-tutorial/)), I mentioned MCP integration. This post takes a full tour of the MCP ecosystem — it's now the single most important way to extend AI coding tools.
 
 ## What Is MCP
 
@@ -43,7 +43,7 @@ Basically every mainstream AI coding tool supports it in 2026; the differences a
 
 - **GitHub / GitLab**: Issues, PRs, code search — straight into your dev workflow
 - **Context7**: pulls up-to-date official docs of open-source libraries on demand, so the AI stops guessing API signatures
-- **codebase-memory-mcp**: indexes your entire codebase in milliseconds so the AI genuinely "understands" your project (I wrote a [hands-on intro](/en/article/codebase-memory-mcp) about it)
+- **codebase-memory-mcp**: indexes your entire codebase in milliseconds so the AI genuinely "understands" your project (I wrote a [hands-on intro](/en/article/codebase-memory-mcp/)) about it)
 
 ### Databases
 
@@ -93,4 +93,4 @@ MCP is moving from "for AI coding tools" to "for all AI applications": browsers,
 
 ## Summary
 
-The MCP ecosystem is mature enough that it's worth 30 minutes to wire up your main tools: one Context7 plus one database MCP already takes the AI coding experience to another level. To start from zero, go back to [Cline in practice](/en/article/cline-tutorial) or the [Claude Code hands-on guide](/en/article/claude-code-tutorial) to get a client running first, then add MCPs.
+The MCP ecosystem is mature enough that it's worth 30 minutes to wire up your main tools: one Context7 plus one database MCP already takes the AI coding experience to another level. To start from zero, go back to [Cline in practice](/en/article/cline-tutorial/)) or the [Claude Code hands-on guide](/en/article/claude-code-tutorial/)) to get a client running first, then add MCPs.

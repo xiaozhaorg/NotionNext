@@ -14,7 +14,7 @@ coverAlt: "两人围在笔记本电脑前讨论代码，一手指向屏幕"
 enSlug: "cline-tutorial"
 ---
 
-上篇 [Claude Code 实战指南](/article/claude-code-tutorial) 里说过，预算敏感、要求数据不出境的同学可以选 Cline，这篇就把它展开讲透。
+上篇 [Claude Code 实战指南](/article/claude-code-tutorial/)) 里说过，预算敏感、要求数据不出境的同学可以选 Cline，这篇就把它展开讲透。
 
 ## 一、Cline 是什么
 
@@ -43,7 +43,7 @@ Cline 是 VS Code / Cursor 生态里最出名的**开源 AI 编程代理**，定
 
 ### 方案 A：Ollama 本地模型（完全离线）
 
-如果你在意到极致，用 [Ollama 本地大模型](/article/ollama-local-llm) 跑一个编程向模型：
+如果你在意到极致，用 [Ollama 本地大模型](/article/ollama-local-llm/)) 跑一个编程向模型：
 
 ```bash
 ollama pull qwen2.5-coder:14b
@@ -59,8 +59,8 @@ Cline 的 API Provider 选 `Ollama`，Base URL 填 `http://localhost:11434`，�
 
 | 端点 | 编程模型 | 说明 |
 |---|---|---|
-| 硅基流动 | deepseek-ai/DeepSeek-V3、Qwen3-Coder 等 | 注册送额度，见[硅基流动入门](/article/siliconflow-intro) |
-| DeepSeek 官方 | deepseek-chat、deepseek-reasoner | 便宜量大，见 [DeepSeek 编程实战](/article/deepseek-v4-coding) |
+| 硅基流动 | deepseek-ai/DeepSeek-V3、Qwen3-Coder 等 | 注册送额度，见[硅基流动入门](/article/siliconflow-intro/)) |
+| DeepSeek 官方 | deepseek-chat、deepseek-reasoner | 便宜量大，见 [DeepSeek 编程实战](/article/deepseek-v4-coding/)) |
 | 智谱开放平台 | GLM-4 系列 | OpenAI 兼容，新用户有免费包 |
 
 Cline 的 API Provider 选 `OpenAI Compatible`，把 Base URL 和 API Key 填上就行，大部分厂商文档里直接给了兼容配置。
@@ -80,7 +80,7 @@ Cline 的命令行输入框旁有两个模式开关：
 
 ## 六、MCP 接入
 
-Cline 原生支持 MCP（Model Context Protocol），配置入口在设置里的 `MCP Servers`。可以把文件系统、数据库、浏览器、代码检索等能力接进来，用法和 Claude Code 的 MCP 一致，相关教程可以看我之前写的 [Codebase Memory MCP 实践](/article/codebase-memory-mcp)。
+Cline 原生支持 MCP（Model Context Protocol），配置入口在设置里的 `MCP Servers`。可以把文件系统、数据库、浏览器、代码检索等能力接进来，用法和 Claude Code 的 MCP 一致，相关教程可以看我之前写的 [Codebase Memory MCP 实践](/article/codebase-memory-mcp/))。
 
 ## 七、与 Claude Code 对比
 
@@ -106,4 +106,4 @@ Cline 原生支持 MCP（Model Context Protocol），配置入口在设置里的
 
 Cline 的意义在于把"AI 编程代理"从收费墙里解放了出来：模型可换、数据可控、权限透明，配上国内 API 或本地 Ollama 就是一套完全合规的开发环境。
 
-如果你的场景是"代码不想出国"，这套组合拳值得一用；如果你想要最强模型效果，回看 [Claude Code 实战指南](/article/claude-code-tutorial)。下一篇可以聊聊 MCP 生态大盘点，把 AI 编程工具的"外挂"能力一次讲全。
+如果你的场景是"代码不想出国"，这套组合拳值得一用；如果你想要最强模型效果，回看 [Claude Code 实战指南](/article/claude-code-tutorial/))。下一篇可以聊聊 MCP 生态大盘点，把 AI 编程工具的"外挂"能力一次讲全。

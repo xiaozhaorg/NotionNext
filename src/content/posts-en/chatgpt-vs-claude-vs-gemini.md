@@ -103,8 +103,8 @@ A good approach is to choose your primary AI based on your main use case, and su
 
 For developers, the Claude + GPT-5.6 combination covers nearly all needs.
 
-[Previous: Claude Sonnet 4 Full Analysis — Coding Ability at the Top, Claude Code Explained](/article/claude-sonnet-4)
-[Next: Logging into BT Panel Returns 404](/article/bt-panel-404)
+[Previous: Claude Sonnet 4 Full Analysis — Coding Ability at the Top, Claude Code Explained](/article/claude-sonnet-4/))
+[Next: Logging into BT Panel Returns 404](/article/bt-panel-404/))
 
 - **Author:** [Xiaozha Blog](/about)
 - **Link:** [https://xiaozha.org/article/chatgpt-vs-claude-vs-gemini](https://xiaozha.org/article/chatgpt-vs-claude-vs-gemini)
@@ -112,9 +112,9 @@ For developers, the Claude + GPT-5.6 combination covers nearly all needs.
 
 ## Related Articles
 
-[Free AI API Relay: Shawn AI gives away 7000 credits on signup (with integration tutorial)![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api)
-[Claude Code Hands-On Guide: How to Use the AI Coding Agent in Your Terminal (2026, China Edition)![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial)
-[NextChat Deployment Guide: One-Click Deploy Your Own AI Assistant on Vercel, Supporting 16+ Models Including DeepSeek![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide)
-[⚡ VS Code + OpenAI Codex Deep Integration: Ushering in a New Era of AI Pair Programming![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b)](/article/vscode-codex-integration)
-[Trae IDE Deep Dive: Is ByteDance's AI-Native Editor Worth It?![image](https://xiaozha.org/images/trae-ide-review-cover.jpg?t=3a9c55d5-e9ea-811a-a308-e6fca0fd4ea9)](/article/trae-ide-review)
-[Hands-On with Tencent Marvis: Six AI Helpers at Your Service the Moment You Install It![image](https://xiaozha.org/images/tencent-marvis-cover.jpg?t=3a9c55d5-e9ea-818f-9424-f0412536178b)](/article/tencent-marvis)
+[Free AI API Relay: Shawn AI gives away 7000 credits on signup (with integration tutorial)![image](https://xiaozha.org/images/shawn-ai-free-api-cover.jpg?t=3aec55d5-e9ea-81c8-929b-f8a61e29177f)](/article/shawn-ai-free-api/))
+[Claude Code Hands-On Guide: How to Use the AI Coding Agent in Your Terminal (2026, China Edition)![image](https://xiaozha.org/images/claude-code-tutorial-cover.jpg?t=3adc55d5-e9ea-813d-a1bd-ef7ad19790cc)](/article/claude-code-tutorial/))
+[NextChat Deployment Guide: One-Click Deploy Your Own AI Assistant on Vercel, Supporting 16+ Models Including DeepSeek![image](https://xiaozha.org/images/nextchat-deploy-guide-cover.jpg?t=3a9c55d5-e9ea-81e1-86b5-f70a820365a8)](/article/nextchat-deploy-guide/))
+[⚡ VS Code + OpenAI Codex Deep Integration: Ushering in a New Era of AI Pair Programming![image](https://xiaozha.org/images/vscode-codex-integration-cover.jpg?t=3a9c55d5-e9ea-814b-82af-c9e7eded310b)](/article/vscode-codex-integration/))
+[Trae IDE Deep Dive: Is ByteDance's AI-Native Editor Worth It?![image](https://xiaozha.org/images/trae-ide-review-cover.jpg?t=3a9c55d5-e9ea-811a-a308-e6fca0fd4ea9)](/article/trae-ide-review/))
+[Hands-On with Tencent Marvis: Six AI Helpers at Your Service the Moment You Install It![image](https://xiaozha.org/images/tencent-marvis-cover.jpg?t=3a9c55d5-e9ea-818f-9424-f0412536178b)](/article/tencent-marvis/))

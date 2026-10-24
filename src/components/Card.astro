@@ -7,7 +7,7 @@ type Props = { post: CollectionEntry<"posts"> | CollectionEntry<"posts-en">; loc
 const { post, locale = "zh" } = Astro.props;
 const { data, id } = post;
 const urlPrefix = locale === "en" ? "/en/article" : "/article";
-const url = `${urlPrefix}/${id}`;
+const url = `${urlPrefix}/${id}/`;
 const tagPrefix = locale === "en" ? "/en/tags" : "/tags";
 const dateLocale = locale === "en" ? "en-US" : "zh-CN";
 // 阅读时长估算（中文按字符数 ~350字/分，英文按词数 ~220词/分）

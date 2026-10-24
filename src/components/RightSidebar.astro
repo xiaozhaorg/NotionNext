@@ -40,7 +40,7 @@ const prefix = locale === "en" ? "/en" : "";
       {recentPosts.map((post, i) => (
         <li class="rank-item">
           <span class:list={["rank-num", `rank-${i + 1}`]}>{i + 1}</span>
-          <a href={`${prefix}/article/${post.id}`} class="rank-title">{post.data.title}</a>
+          <a href={`${prefix}/article/${post.id}/`} class="rank-title">{post.data.title}</a>
         </li>
       ))}
     </ol>

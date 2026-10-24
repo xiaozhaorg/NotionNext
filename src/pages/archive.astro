@@ -51,7 +51,7 @@ const total = posts.length;
                           day: "numeric",
                         })}
                       </time>
-                      <a href={`/article/${post.id}`} class="item-title">{post.data.title}</a>
+                      <a href={`/article/${post.id}/`} class="item-title">{post.data.title}</a>
                       {post.data.tags.length > 0 && (
                         <span class="item-tags">
                           {post.data.tags.slice(0, 3).map((tag) => (
