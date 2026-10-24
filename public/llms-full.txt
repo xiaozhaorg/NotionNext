@@ -1,0 +1,6233 @@
+# https://xiaozha.org — Full Content
+
+> 本站 20 篇核心文章全文，供 AI 一次性读取。生成时间：2026-10-24
+
+> Full text of 20 core articles from https://xiaozha.org, for one-shot AI ingestion.
+
+## n8n 自托管工作流自动化：Zapier 的开源替代，连接一切应用
+URL: https://xiaozha.org/article/n8n-workflow-automation/
+
+你大概率用过 Zapier："收到邮件 → 在表格里加一行"。挺好用——直到撞上免费版 100 次任务的上限，或者开始琢磨：为什么我业务的每条数据都要流经一个第三方 SaaS？
+
+**n8n** 是这件事的开源答案：400+ 应用集成、可视化拖拽编排、支持自己写代码节点，而且自托管免费无限次执行。
+
+这篇从核心概念讲到生产部署和三个完整实战场景。
+
+## n8n 是什么
+
+n8n（读作 "n-eight-n"）是一个工作流自动化平台。你把"触发器 + 一系列处理节点"用线连起来，数据顺着线流动，每个节点做一件事。
+
+和 Zapier 的关系：**同一个品类，n8n 是开源自托管版**。
+
+| | Zapier | n8n 自托管 |
+|---|---|---|
+| 费用 | 免费版 100 任务/月，付费 $19.99 起 | 免费，无限执行 |
+| 工作流数量 | 免费 5 个，付费 50 个 | 无限 |
+| 数据流向 | 经过 Zapier 服务器 | 全在自己机器 |
+| 自定义代码 | 有限 | 任意 JavaScript/Python |
+| 集成数量 | 5000+ | 400+（但可自己写） |
+
+**选 n8n 的理由**：执行次数不值钱（Zapier 的任务数是最容易超的）、数据不想过第三方、需要写代码做定制处理。
+**选 Zapier 的理由**：集成数量碾压、不想维护任何东西、愿意为省事付钱。
+
+## 核心概念
+
+### 节点（Node）
+
+工作流的最小单位，一个方框做一件事。分三类：
+
+- **触发器**：工作流的起点。定时、Webhook、收到邮件、表单提交
+- **常规节点**：处理数据。HTTP 请求、数据库读写、过滤、格式转换
+- **AI 节点**：调大模型。OpenAI、Claude、Hugging Face，或者接本地 Ollama
+
+### 工作流（Workflow）
+
+一堆节点连成的图。画布上看得很清楚：数据从左边进，经过处理，从右边出。
+
+### 触发器类型
+
+| 类型 | 说明 |
+|---|---|
+| **Schedule** | cron 定时，比如每天早上 8 点 |
+| **Webhook** | 外部系统 POST 一个 URL 触发，最常用 |
+| **Manual** | 手动点"执行" |
+| **App Event** | 某个应用里发生事件（新邮件、新 Issue） |
+
+### 凭证（Credentials）
+
+n8n 把 API Key、Token、密码集中管理。你配一次，多个工作流复用，不用在每个节点里硬编码密钥。
+
+## Docker Compose 部署
+
+生产环境别用默认的 SQLite——**并发一高就锁库**。用 PostgreSQL + Redis。
+
+### 目录与 `.env`
+
+```
+/opt/n8n/
+├── .env
+├── docker-compose.yml
+└── data/          # n8n 数据
+```
+
+`.env`：
+
+```bash
+# n8n
+N8N_HOST=n8n.example.com
+N8N_PORT=5678
+N8N_PROTOCOL=https
+WEBHOOK_URL=https://n8n.example.com/
+GENERIC_TIMEZONE=Asia/Shanghai
+# 关闭新手引导和个性化推荐
+N8N_DIAGNOSTICS_ENABLED=false
+N8N_PERSONALIZATION_ENABLED=false
+
+# Postgres
+POSTGRES_USER=n8n
+POSTGRES_PASSWORD=换成随机强密码
+POSTGRES_DB=n8n
+
+# Redis
+REDIS_PASSWORD=再换一个随机强密码
+```
+
+`WEBHOOK_URL` 必须填对——Webhook 触发器的回调地址靠它生成，填错的话外部系统找不到你的 n8n。
+
+### `docker-compose.yml`
+
+```yaml
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=${N8N_PORT}
+      - N8N_PROTOCOL=${N8N_PROTOCOL}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - N8N_DIAGNOSTICS_ENABLED=${N8N_DIAGNOSTICS_ENABLED}
+      - N8N_PERSONALIZATION_ENABLED=${N8N_PERSONALIZATION_ENABLED}
+      # 数据库与队列
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      # Redis 队列模式，多 worker 并行执行
+      - QUEUE_MODE=redis
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD}
+      # 加密密钥，工作流里的凭证靠它加密，丢了所有凭证要重配
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    volumes:
+      - ./data:/home/node/.n8n
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+
+volumes:
+  postgres-data:
+  redis-data:
+```
+
+`N8N_ENCRYPTION_KEY` 要用 `openssl rand -hex 32` 生成，**填进 `.env` 后永远别再改**——所有工作流里的凭证都用它加密，改了等于全部凭证作废。
+
+```bash
+cd /opt/n8n
+docker compose up -d
+docker compose logs -f n8n
+```
+
+访问 `http://服务器IP:5678`，第一次进要注册管理员账号。
+
+### 备份策略（别跳过）
+
+n8n 的数据分两处：PostgreSQL 里的工作流定义和凭证，`./data` 目录里的文件。**凭证是加密的，但加密密钥在 `.env` 里——三个都要备。**
+
+```bash
+# 1. dump 数据库
+docker exec n8n-postgres pg_dump -U n8n -d n8n | gzip > n8n-db-$(date +%F).sql.gz
+
+# 2. 打包 .env 和 data
+tar czf n8n-config-$(date +%F).tar.gz .env data/
+
+# 3. 同步到异地（R2/B2）
+rclone sync ./ r2:你的桶/n8n-backup/
+```
+
+恢复时：起空库 → 导入 SQL → 还原 `.env` 和 `data` → 启动。完整方案见《自托管数据备份完全指南》。
+
+## 400+ 集成怎么用
+
+按类别找你需要的：
+
+| 类别 | 常见节点 |
+|---|---|
+| **通讯** | Telegram、Slack、Discord、Email、企业微信、钉钉 |
+| **数据库** | PostgreSQL、MySQL、MongoDB、Redis |
+| **存储** | Google Drive、Dropbox、S3、R2 |
+| **开发** | GitHub、GitLab、Webhook、HTTP Request、SSH |
+| **AI** | OpenAI、Anthropic、Hugging Face、Ollama |
+| **办公** | Google Sheets、Notion、Airtable、飞书 |
+| **触发** | Schedule、RSS、表单、邮件接收 |
+
+**HTTP Request 节点是万能钥匙**——没有现成集成的服务，用它调 REST API 就行。
+
+## 实战一：定时 RSS → Telegram
+
+最经典的入门场景：每天抓一次博客更新，AI 生成摘要，推到 Telegram。
+
+**需要的节点**：Schedule Trigger → RSS Read → OpenAI → Telegram
+
+**搭建步骤**：
+
+1. **Schedule Trigger**：设 `0 8 * * *`（每天早 8 点，服务器时区）
+2. **RSS Read**：填 RSS 地址，比如 `https://xiaozha.org/rss.xml`。默认输出最新 N 条
+3. **IF 节点**（可选）：过滤掉已经推过的——用一个 Set 节点记录上次最后一条的 GUID，比对跳过
+4. **OpenAI 节点**：Model 选 `gpt-4o-mini`，Prompt 用 `{{ $json.title }}\n\n{{ $json.content }}` 让模型输出 50 字中文摘要
+5. **Telegram 节点**：填 Bot Token 和 Chat ID，消息体用 `{{ $json.title }}\n\n{{ $json.summary }}`
+
+**去重是关键**。不做去重的话每次执行都会把历史文章全推一遍。两种做法：
+
+- 简单版：RSS Read 的 `Limit` 设 3，只取最新三条，配合 cron 每天一次，重复一两条可以接受
+- 严谨版：加一个 Postgres 节点，建一张 `pushed_guids` 表，执行前查、执行后写
+
+**Bonus：把 Telegram 换成邮件**，节点换成 `Send Email`，填 SMTP 配置，就是一个邮件 Newsletter 系统。
+
+## 实战二：Webhook → 写入数据库
+
+"网站表单提交 → 存数据库 → 通知我"。比用表单服务靠谱，数据在自己手里。
+
+### Webhook 节点
+
+拖一个 **Webhook** 节点，n8n 会给你一个 URL：
+
+```
+https://n8n.example.com/webhook/abc123-def456
+```
+
+HTTP Method 选 `POST`，Respond 选 `Immediately`（不等后续节点跑完就返回，表单体验更好）。
+
+前端表单直接 POST 到这个地址：
+
+```html
+<form id="contact">
+  <input name="name" required>
+  <input name="email" required>
+  <textarea name="message"></textarea>
+  <button>提交</button>
+</form>
+<script>
+document.getElementById('contact').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  await fetch('https://n8n.example.com/webhook/abc123-def456', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(d),
+  });
+  alert('已收到');
+});
+</script>
+```
+
+### Postgres 节点
+
+接一个 **Postgres** 节点，Operation 选 `Insert`，Table 填 `contact_messages`，Columns 映射：
+
+```
+name    ← {{ $json.body.name }}
+email   ← {{ $json.body.email }}
+message ← {{ $json.body.message }}
+```
+
+先建表：
+
+```sql
+CREATE TABLE contact_messages (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  message TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+```
+
+**注意**：Webhook 节点输出的结构是 `{ headers, params, query, body }`，所以字段要取 `$json.body.xxx`，不是 `$json.xxx`。这是新手最容易卡住的地方。
+
+### 端到端测试
+
+Webhook 节点点 **Listen for test event**，然后用 curl 打一下：
+
+```bash
+curl -X POST https://n8n.example.com/webhook/abc123-def456 \
+  -H "Content-Type: application/json" \
+  -d '{"body":{"name":"测试","email":"t@t.com","message":"hello"}}'
+```
+
+n8n 画布上能看到数据流过每个节点，点任一节点都能检查它的输入输出——**调试比 Zapier 直观得多**。
+
+再加一个 Telegram 或邮件节点在最后，提交表单就通知你。
+
+## 实战三：AI 节点自动摘要
+
+"抓文章 → AI 摘要 → 存档/通知"。
+
+**流程**：Schedule → HTTP Request（抓文章 HTML）→ HTML Extract（取正文）→ OpenAI（摘要）→ Notion/Postgres（存档）
+
+关键在 **HTML Extract** 节点：用 CSS Selector 取正文，比如 `article` 或 `.post-content`。取错了后面全是噪声。
+
+OpenAI 节点的 Prompt 这样写效果稳定：
+
+```
+请用不超过 80 字概括下面文章的要点，直接输出摘要，不要客套话：
+
+标题：{{ $json.title }}
+正文：{{ $json.content }}
+```
+
+`Temperature` 设 0.3，摘要要的是稳定不是创意。
+
+### 进阶：AI Agent
+
+n8n 有 **AI Agent** 节点，能给模型挂工具（Tool）。比如一个"运维助手" agent，工具是"执行 SSH 命令"和"查询监控 API"，你用自然语言描述需求，它自己决定调哪个工具。
+
+这是从"固定流程"跨到"自主决策"的一步，适合把重复的运维判断交给 AI。**但涉及生产环境的操作一定要加人工确认节点**——Agent 会犯错。
+
+## 执行模式
+
+n8n 有两种跑法，影响你看到的行为：
+
+| 模式 | 说明 |
+|---|---|
+| **Regular** | 生产模式，用数据库里保存的激活工作流，Webhook 用 `WEBHOOK_URL` 那个地址 |
+| **Manual** | 编辑时手动点执行，用于调试 |
+
+**常见困惑**：改了工作流不生效。因为画布上方有个 **Active** 开关——没打开的工作流不会自动跑。保存 + 激活，两件事。
+
+## 安全加固
+
+自托管的 n8n 掌握着你所有服务的凭证，别裸奔：
+
+**1. 别暴露到公网。** 家庭/内网用填 IP + 端口就行；要外网访问用 Cloudflare Tunnel 或 Tailscale，别直接开防火墙端口。
+
+**2. 打开双重认证。** 设置 → Users → 你的用户 → Enable 2FA。n8n 支持 TOTP。
+
+**3. 加密密钥保管好。** `N8N_ENCRYPTION_KEY` 丢了，所有凭证要重配。它和 `.env` 一起备份。
+
+**4. Webhook 加认证。** 敏感工作流的 Webhook 节点，Header Auth 加一个自定义 Header 校验，防止别人猜到 URL 就乱调。
+
+**5. 反向代理 + HTTPS。** 用 Caddy 最简单：
+
+```caddy
+n8n.example.com {
+    reverse_proxy localhost:5678
+}
+```
+
+或者走 Cloudflare Tunnel，不开放任何端口。方案对比见《Tailscale vs Cloudflare Tunnel》。
+
+## n8n vs Zapier vs Make vs Node-RED
+
+| | n8n | Zapier | Make | Node-RED |
+|---|---|---|---|---|
+| 费用 | 自托管免费 | $19.99/月起 | $9/月起 | 完全免费 |
+| 执行次数 | 无限 | 按任务计费 | 按操作计费 | 无限 |
+| 集成数 | 400+ | 5000+ | 1000+ | 500+（偏 IoT） |
+| 可视化 | 节点画布 | 线性步骤 | 可视化场景 | 节点流 |
+| 自定义代码 | 强 | 弱 | 中 | 强（JavaScript） |
+| 数据归属 | 自己 | 服务商 | 服务商 | 自己 |
+| 适合 | 要无限执行 + 数据自主 | 要最多集成 + 省事 | 中量自动化 | 物联网 / 硬件 |
+
+**选 n8n**：执行次数会超免费额度、数据不能过第三方、需要写代码处理。
+**选 Zapier**：集成覆盖是刚需、完全不想维护。
+**选 Node-RED**：主要接硬件传感器、GPIO、MQTT。
+
+## 小结
+
+n8n 的核心价值：**把"无限次执行"和"数据在自己手里"同时给你**，这两点 Zapier 一个都不给。
+
+上手路径：Docker Compose 起 PostgreSQL + Redis 版 → 先做定时 RSS → Telegram 建立信心 → 再试 Webhook 写数据库 → 最后玩 AI 节点。四个场景走完，你就知道该拿它自动化什么了。
+
+部署细节配合《Docker Compose 入门到实战》，远程访问看《Tailscale vs Cloudflare Tunnel》，备份照《自托管数据备份完全指南》——n8n 里存着你所有服务的凭证，备份优先级比别的应用高一级。
+
+---
+
+## Ubuntu Server 初始化配置：拿到新服务器必做的 10 件事
+URL: https://xiaozha.org/article/ubuntu-server-setup/
+
+新开一台 VPS 或拿到一台新服务器，第一件事不是装应用，而是把地基打好。默认配置的服务器是暴露在公网上的：root 密码登录、没防火墙、没自动更新——上线几天就会被扫描器盯上。
+
+这份清单按顺序做一遍，大约二十分钟，能把绝大多数常见攻击路径堵掉。文末附一键脚本。
+
+## 一、更新系统
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+第一次登录就做。后面的步骤都基于最新的软件包。
+
+## 二、创建普通用户并授予 sudo
+
+**不要用 root 日常操作。** 建一个普通用户，需要提权时再用 `sudo`。
+
+```bash
+# 创建用户，-m 建家目录，-s 指定 shell
+sudo adduser deploy
+
+# 加入 sudo 组
+sudo usermod -aG sudo deploy
+
+# 切到新用户
+su - deploy
+```
+
+之后所有命令都以 `deploy` 身份执行，`deploy` 的家目录也是后续放项目和 Docker 配置的地方。
+
+## 三、配置 SSH 密钥登录，关掉密码登录
+
+这是整套清单里**最重要的一步**。密码登录意味着要跟全网的暴力破解脚本对抗，密钥登录基本杜绝这件事。
+
+先给自己生成密钥对（在**本地电脑**上执行，不要 ssh 登录时现生成）：
+
+```bash
+# macOS / Linux
+ssh-keygen -t ed25519 -C "your@email.com"
+
+# Windows PowerShell 同理，或用 WSL
+```
+
+默认存在 `~/.ssh/id_ed25519`（私钥）和 `~/.ssh/id_ed25519.pub`（公钥）。**私钥永远不要上传到服务器。**
+
+把公钥装到服务器：
+
+```bash
+# 本地电脑执行
+ssh-copy-id -i ~/.ssh/id_ed25519.pub deploy@你的服务器IP
+```
+
+如果 `ssh-copy-id` 不可用，手动来：
+
+```bash
+# 服务器上，以 deploy 身份
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+nano ~/.ssh/authorized_keys   # 粘贴本地 id_ed25519.pub 的全部内容
+chmod 600 ~/.ssh/authorized_keys
+```
+
+**先测试密钥能登录，再关密码登录**——顺序反了会把自己锁在门外。
+
+新开一个终端试一下：
+
+```bash
+ssh -i ~/.ssh/id_ed25519 deploy@你的服务器IP
+```
+
+能进，再改 SSH 配置：
+
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+
+```text
+Port 22                          # 可改成一个不常见的端口，减少扫描噪音
+PermitRootLogin no               # 禁止 root 直接登录
+PasswordAuthentication no        # 禁止密码登录
+PubkeyAuthentication yes         # 允许密钥登录
+```
+
+改端口要注意：防火墙和云服务商的安全组都要同步放行，否则改完就连不上了。
+
+```bash
+sudo systemctl restart sshd
+```
+
+### 顺手再加固一点
+
+```text
+MaxAuthTries 3                  # 每个连接最多试 3 次
+ClientAliveInterval 300         # 5 分钟无操作自动断开
+ClientAliveCountMax 2
+AllowUsers deploy               # 只允许这个用户登录
+```
+
+## 四、配置 UFW 防火墙
+
+UFW 是 iptables 的友好前端，几行命令搞定。
+
+```bash
+# 默认策略：拒绝所有入站，放行所有出站
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# 放行 SSH（端口如果改过，这里跟着改）
+sudo ufw allow 22/tcp
+
+# 放行 Web 服务
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# 只给某个 IP 开放管理端口（比如监控面板）
+sudo ufw allow from 203.0.113.10 to any port 3001
+
+# 启用，输入 y 确认
+sudo ufw enable
+```
+
+启用后立刻确认 SSH 端口是放行的——最好开着现有连接操作，万一配错连接还在。
+
+```bash
+sudo ufw status verbose      # 查看规则
+sudo ufw status numbered     # 带编号，方便删除
+```
+
+### 给 SSH 加限速
+
+```bash
+sudo ufw limit 22/tcp
+```
+
+同一 IP 30 秒内超过 6 次连接就被拒，配合密钥登录基本无懈可击。
+
+## 五、设置时区并同步时间
+
+时区错乱会让日志时间、cron 任务、证书校验全都对不上，是那种"不致命但能烦死你"的问题。
+
+```bash
+# 查看当前时区
+timedatectl
+
+# 设置（交互式选择，或直接指定）
+sudo timedatectl set-timezone Asia/Shanghai
+```
+
+NTP 默认开启，确认一下：
+
+```bash
+timedatectl status | grep -i synchronized
+```
+
+显示 `System clock synchronized: yes` 即可。对时间精度有要求（比如数据库主从），可以换 chrony：
+
+```bash
+sudo apt install chrony -y
+sudo systemctl enable --now chrony
+```
+
+## 六、安装 Docker 和 Docker Compose
+
+绝大多数自托管应用现在都是容器化部署，一次装好省掉后面反复折腾。
+
+```bash
+# 卸掉可能存在的旧版本
+sudo apt remove docker docker-engine docker.io containerd runc
+
+# 装依赖
+sudo apt update
+sudo apt install ca-certificates curl gnupg
+
+# 添加 GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# 添加仓库
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 安装引擎、CLI、Buildx 和 Compose 插件
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 让 deploy 用户免 sudo 跑 docker
+sudo usermod -aG docker deploy
+
+# 设置开机自启
+sudo systemctl enable --now docker
+```
+
+`usermod -aG` 之后要重新登录才生效。
+
+## 七、开启自动安全更新
+
+服务器不可能天天手动 `apt upgrade`。让安全补丁自动装上，是性价比最高的一件事。
+
+```bash
+sudo apt install unattended-upgrades -y
+sudo dpkg-reconfigure -plow unattended-upgrades
+```
+
+弹出的界面选 `<Yes>`。配置文件在 `/etc/apt/auto-upgrades`，默认只装安全更新，不装普通版本更新——这个默认值是对的，别改成全自动升级，那容易在半夜把服务搞挂。
+
+```bash
+# 查看自动更新日志
+sudo tail -f /var/log/unattended-upgrades/unattended-upgrades.log
+```
+
+## 八、安装 Fail2ban
+
+UFW 限速是一层，Fail2ban 是另一层：它读日志，发现某个 IP 反复失败就临时封掉。
+
+```bash
+sudo apt install fail2ban -y
+sudo systemctl enable --now fail2ban
+```
+
+默认就保护 SSH。本地配置放 `/etc/fail2ban/jail.local`：
+
+```ini
+[DEFAULT]
+bantime = 1h          # 封禁时长
+findtime = 10m        # 统计窗口
+maxretry = 5          # 窗口内失败几次就封
+
+[sshd]
+enabled = true
+```
+
+```bash
+sudo systemctl restart fail2ban
+sudo fail2ban-client status sshd    # 查看当前封禁的 IP
+```
+
+配合前面的密钥登录，SSH 这条线基本就堵死了。
+
+## 九、配置 Swap
+
+内存小的机器（1G/2G）装 Docker 很容易 OOM。加一点 Swap 作为缓冲，代价是慢一点，但比直接被 kill 好。
+
+```bash
+# 看当前 swap
+free -h
+swapon --show
+```
+
+创建 2G swap 文件：
+
+```bash
+sudo fallocate -l 2G /swapfile
+# 如果文件系统不支持 fallocate，改用 dd：
+# sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+
+# 权限必须只有 root 能读，否则 swap 不会被启用
+sudo chmod 600 /swapfile
+
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+
+持久化，写进 fstab：
+
+```bash
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+调一下使用倾向（`vm.swappiness`，默认 60，服务器上一般调到 10）：
+
+```bash
+echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+```
+
+注意：**Swap 不是内存的替代品**，只是防止突发流量把机器搞崩。长期靠 swap 换性能不如加内存。
+
+## 十、装监控
+
+看不见服务器状态，就等于闭着眼睛开车。三个由轻到重：
+
+```bash
+sudo apt install htop -y        # 基础：CPU/内存/进程
+```
+
+`glances` 是更全的系统仪表盘：
+
+```bash
+sudo apt install glances -y
+glances
+```
+
+要真正意义上的"挂了能知道"，装 Uptime Kuma，带告警推送：
+
+```bash
+sudo mkdir -p /opt/uptime-kuma && cd /opt/uptime-kuma
+```
+
+`docker-compose.yml`：
+
+```yaml
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+
+volumes:
+  uptime-kuma-data:
+```
+
+```bash
+sudo docker compose up -d
+```
+
+访问 `http://服务器IP:3001`，把 CPU、内存、磁盘、HTTP 服务都加上监控，再接上 Telegram 或 Server酱推送。详细配置见《Uptime Kuma 自建监控》。
+
+想要更深的指标（历史趋势、自定义面板）就上 netdata：
+
+```bash
+docker run -d --name=netdata -p 19999:19999 --restart unless-stopped \
+  -v netdataconfig:/etc/netdata -v netdatalib:/var/lib/netdata \
+  -v /proc:/host/proc:ro -v /sys:/host/sys:ro \
+  --cap-add SYS_PTRACE netdata/netdata
+```
+
+## 一键脚本
+
+把下面内容存成 `setup.sh`，按需修改配置区，`bash setup.sh` 一把梭。
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ===== 配置区，按需修改 =====
+NEW_USER="deploy"
+SSH_PORT="22"
+SWAP_SIZE="2G"
+TIMEZONE="Asia/Shanghai"
+# ==========================
+
+echo "==> 1/10 更新系统"
+apt update && apt upgrade -y
+
+echo "==> 2/10 创建用户 $NEW_USER"
+adduser --disabled-password --gecos "" "$NEW_USER" || true
+usermod -aG sudo "$NEW_USER"
+
+echo "==> 3/10 SSH 加固"
+sed -i "s/^#\?Port .*/Port $SSH_PORT/" /etc/ssh/sshd_config
+sed -i "s/^#\?PermitRootLogin .*/PermitRootLogin no/" /etc/ssh/sshd_config
+sed -i "s/^#\?PasswordAuthentication .*/PasswordAuthentication no/" /etc/ssh/sshd_config
+systemctl restart sshd
+
+echo "==> 4/10 UFW 防火墙"
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow "$SSH_PORT/tcp"
+ufw limit "$SSH_PORT/tcp"
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw --force enable
+
+echo "==> 5/10 时区与时间同步"
+timedatectl set-timezone "$TIMEZONE"
+
+echo "==> 6/10 安装 Docker"
+apt install -y ca-certificates curl gnupg
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+apt update
+apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+usermod -aG docker "$NEW_USER"
+systemctl enable --now docker
+
+echo "==> 7/10 自动安全更新"
+apt install -y unattended-upgrades
+dpkg-reconfigure -plow unattended-upgrades
+
+echo "==> 8/10 Fail2ban"
+apt install -y fail2ban
+systemctl enable --now fail2ban
+
+echo "==> 9/10 Swap"
+if [ ! -f /swapfile ]; then
+  fallocate -l "$SWAP_SIZE" /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=2048
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+  echo '/swapfile none swap sw 0 0' >> /etc/fstab
+fi
+
+echo "==> 10/10 监控工具"
+apt install -y htop glances
+
+echo "完成。请重新登录并验证 SSH 密钥可用。"
+```
+
+**用脚本前务必先确认 SSH 公钥已经装好**，否则 `PasswordAuthentication no` 一生效你就进不去了。
+
+## 小结
+
+这十件事按风险排序的话：**SSH 密钥登录 > 防火墙 > 自动更新 > 普通用户**，这四个是必做；Docker、Swap、监控按你的实际需要。
+
+做完了，这台服务器就有了一个像样的地基。接下来不管是搭博客、跑自托管应用还是部署 API，都从这儿开始。想接着装什么，可以看《自托管 20 个必备开源应用》或者《Docker Compose 入门到实战》。
+
+---
+
+## GitHub Actions 进阶：5 个实战技巧让你的 CI/CD 飞起来
+URL: https://xiaozha.org/article/github-actions-advanced/
+
+会写 `on: push` + `npm test` 只算入门。真正拖慢团队的是这几件事：每次构建都重新下载依赖、测试在单个 runner 上串行跑一小时、密钥到处复制、YAML 在十几个仓库里各存一份。
+
+这篇讲 5 个能立刻见效的进阶技巧，每个都附可用的 YAML。
+
+## 一、依赖缓存加速
+
+缓存用错地方，比不用还糟。
+
+### 最常见的错误：缓存 node_modules
+
+```yaml
+# 错误示范
+- uses: actions/cache@v4
+  with:
+    path: node_modules          # 不要直接缓存这个
+    key: deps-${{ hashFiles('package-lock.json') }}
+```
+
+`node_modules` 里含有按平台编译的原生模块（`sharp`、`esbuild`、`node-sass` 之类），在 Ubuntu runner 上构建的二进制拿到 Windows 或 macOS runner 上会直接崩。而且跳过了 `npm ci` 的完整性校验，lock 文件和实际安装内容悄悄不一致你也发现不了。
+
+### 正确做法：缓存包管理器的下载目录
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: '22'
+    cache: 'npm'                # 一行搞定，自动按 package-lock.json 生成 key
+
+- run: npm ci                   # 仍然要执行，只是省掉了网络下载
+```
+
+`cache: 'npm'` 支持 `npm` / `yarn` / `pnpm`，monorepo 可以指定具体 lock 文件：
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: '22'
+    cache: 'npm'
+    cache-dependency-path: |
+      apps/web/package-lock.json
+      packages/ui/package-lock.json
+```
+
+需要更细的控制时，用 `actions/cache` 手动配：
+
+```yaml
+- name: 获取 npm 缓存目录
+  id: npm-cache
+  run: echo "dir=$(npm config get cache)" >> "$GITHUB_OUTPUT"
+
+- uses: actions/cache@v4
+  with:
+    path: ${{ steps.npm-cache.outputs.dir }}
+    key: ${{ runner.os }}-node22-npm-${{ hashFiles('**/package-lock.json') }}
+    restore-keys: |
+      ${{ runner.os }}-node22-npm-
+      ${{ runner.os }}-node22-
+```
+
+`restore-keys` 是前缀回退：lock 文件变了没有精确命中时，退回最接近的旧缓存，拿到部分命中，总比冷启动快。
+
+### 三个容易踩的点
+
+| 现象 | 原因 |
+|---|---|
+| PR 里永远不生成新缓存 | `setup-node` 默认只在默认分支保存缓存，PR 上要加 `save-always: true` |
+| 缓存莫名失效 | 缓存按分支隔离，读不到不相关分支的缓存；fork 来的 PR 也读不到 |
+| 缓存越攒越慢 | 单仓库缓存上限 10 GB，LRU 淘汰。key 别图省事用一个大而全的前缀 |
+
+## 二、矩阵构建
+
+矩阵是把一组配置展开成多个并行 job。关键不在语法，在 `fail-fast`。
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false          # 一个组合失败不要拖垮其他组合
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+```
+
+不加 `fail-fast: false`，第一个组合一失败，其余全部取消，你只看到一条错误信息，排查成本反而更高。
+
+### 排除不需要的组合
+
+```yaml
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [18, 20, 22]
+        exclude:
+          - os: windows-latest
+            node-version: 18     # 这个组合没有支持必要
+```
+
+### 测试套件太长就分片
+
+单测跑 20 分钟，拆成 4 片并行大约 5 分钟：
+
+```yaml
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - run: npx vitest run --shard=${{ matrix.shard }}/4
+```
+
+Vitest 和 Jest 都原生支持 `--shard`，Playwright 用 `--shard` 参数同理。
+
+## 三、定时任务
+
+`schedule` 用 POSIX cron，五个字段，**分钟 小时 日 月 星期**。
+
+```yaml
+on:
+  schedule:
+    - cron: '0 2 * * *'          # 每天 02:00
+```
+
+### 最大的坑：cron 跑的是 UTC
+
+`'0 2 * * *'` 是 UTC 凌晨 2 点，对应北京时间上午 10 点。想要北京时间每天凌晨 2 点执行，得写 `'0 18 * * *'`。写错时区是定时任务失效的头号原因，而且它不会报错，只是安静地在错误的时间跑。
+
+### 另外两个限制
+
+- 最短间隔 5 分钟。写 `* * * * *` 每分钟触发，GitHub 会自动拉到 5 分钟档位，不要指望它做准实时监控。
+- **仓库连续 60 天没有任何提交活动，定时工作流会被自动禁用。**个人小站最容易中招——某个月没推送，定时任务就悄悄停了，恢复后需要手动去 Actions 页面重新启用。
+
+所以定时任务一定要配一个手动触发作为兜底：
+
+```yaml
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:            # 允许在 Actions 页面手动运行
+```
+
+## 四、密钥管理
+
+### 按作用域选对位置
+
+| 作用域 | 适用场景 |
+|---|---|
+| Repository secrets | 项目级密钥，只在本仓库可见 |
+| Environment secrets | 按环境区分，production / staging 各自一套 |
+| Organization secrets | 多个仓库共用，一次配置全局生效 |
+
+需要配准生产发布，用 Environment 的手动审批：
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production      # 可配置需要谁审批
+```
+
+### 能不用长期密钥就不用：OIDC
+
+部署到 AWS / Azure / GCP 时，不要把 Access Key 存进 secrets。OIDC 让 GitHub Actions 在运行时换取一个短时凭证，任务结束即失效，没有轮换成本，也没有泄露窗口。
+
+```yaml
+permissions:
+  id-token: write               # 必须显式声明，否则拿不到 OIDC token
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/github-actions-deploy
+          aws-region: ap-northeast-1
+      - run: npm run deploy
+```
+
+### 顺手做两件事
+
+**收紧 `GITHUB_TOKEN` 权限。** 默认权限往往过宽，在 workflow 或 job 级显式声明最小权限：
+
+```yaml
+permissions:
+  contents: read                # 只需要读代码就别给 write
+```
+
+**第三方 action 固定到 commit SHA。** 标签是可以被覆盖推送的，SHA 不能。这是成本最低的供应链防护：
+
+```yaml
+- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+```
+
+缺点是升级得手动改。可以用 Dependabot 自动提 PR 来管这件事。
+
+## 五、可复用工作流
+
+多个仓库的构建步骤雷同时，不要复制 YAML。用 `workflow_call` 定义一个可复用工作流：
+
+`.github/workflows/reusable-build.yml`
+
+```yaml
+name: Reusable Build
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: '22'
+      environment:
+        required: true
+        type: string
+    secrets:
+      DEPLOY_TOKEN:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - run: ./deploy.sh
+        env:
+          TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+```
+
+调用方：
+
+```yaml
+jobs:
+  build-staging:
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      environment: staging
+    secrets:
+      DEPLOY_TOKEN: ${{ secrets.STAGING_TOKEN }}
+```
+
+### 可复用工作流 vs 复合 action
+
+| | 可复用工作流 | 复合 action |
+|---|---|---|
+| 共享范围 | 跨仓库、跨组织 | 单个 action 内 |
+| secrets | 显式声明传入 | 自动继承 |
+| 运行可见性 | 独立 workflow run，UI 里能看到 | 内嵌在调用方，不单独显示 |
+| 适合 | 多 job 的完整流水线 | 几步总是捆绑出现的小操作 |
+
+经验法则：要共享的是一整条流水线，用可复用工作流；只是两三步固定组合，用复合 action。
+
+## 六、实战：一份完整的 workflow
+
+把上面所有技巧合起来。这份配置的目标是：常见场景 5 分钟内跑完，只在相关文件变化时触发，重复推送自动取消，部署走 OIDC。
+
+```yaml
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true        # 同一分支新推送取消旧任务，省 runner 时间
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+  deploy:
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    permissions:
+      contents: read
+      id-token: write            # 只为 OIDC 开通
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE }}
+          aws-region: ap-northeast-1
+      - run: npm run deploy
+```
+
+上线前对着这份清单过一遍：
+
+- 常见场景（功能分支推送）能在 5 分钟内跑完
+- 依赖和构建产物都有缓存
+- lint / typecheck / test 并行，不串行等待
+- 只有 `main` 分支且非 PR 才部署
+- 同一分支重复推送会取消旧任务
+- 配了 `paths` 过滤，改文档不触发构建
+- 部署用 OIDC，secrets 里没有长期云密钥
+- 每个 job 都有 `timeout-minutes`
+- 安装用 `npm ci` 而非 `npm install`
+
+最后一条常被忽略：`npm install` 会改 lock 文件，CI 里装的依赖可能和本地不是一套。`npm ci` 严格按 lock 安装，可复现，而且更快。
+
+---
+
+## 让 AI 引用你的网站：llms.txt 与 GEO 实战（附本站真实配置）
+URL: https://xiaozha.org/article/geo-llms-txt/
+
+越来越多人遇到问题的第一反应，已经不是打开 Google 或百度，而是直接问 ChatGPT、DeepSeek、Perplexity。
+
+这对个人博客是个新问题：传统 SEO 折腾的是搜索结果列表里的排名，而 AI 问答里的"答案位"是另一套逻辑。你写的文章就算在 Google 排第一，AI 回答时也可能引用别人的内容——因为它压根没"读"你的站，或者读了但没读懂你是干什么的。
+
+这篇文章讲个人博客怎么被 AI 引用。不是那种卖 GEO 服务的企业软文，是拿我自己的站（xiaozha.org）做的真实配置和整改。文末有完整清单。
+
+## 先澄清一个概念：GEO 不是新 SEO
+
+GEO（Generative Engine Optimization，生成式引擎优化）这词 2026 年被炒得很热，各种服务商张口就是"抢占 AI 答案位""构建 GEO 壁垒"。
+
+剥掉话术，它其实就三件事：**让 AI 爬虫进得来、让 AI 读得懂、让 AI 愿意引用你**。
+
+前两件是纯技术配置，一小时能搞定。第三件靠内容质量，没有捷径。本文只讲前两件——它们是放大器，能把好内容放大，但不能把差内容变好。如果你的文章本身没有信息增量，配了 llms.txt 也白搭。
+
+## 第一件事：robots.txt 里藏着两个陷阱
+
+大多数站的 robots.txt 是 `User-agent: * / Allow: /` 一把梭，看着没问题，其实漏掉了 AI 时代的关键区分。
+
+### 陷阱一：两类 AI 爬虫被混为一谈
+
+AI 爬虫分两种角色，目的完全不同：
+
+| 角色 | 干什么 | 代表 |
+|---|---|---|
+| **搜索引用爬虫** | AI 回答问题时实时抓网页、给答案标来源 | `OAI-SearchBot`、`Claude-SearchBot`、`PerplexityBot` |
+| **训练爬虫** | 抓内容喂给模型训练，与你的站能否被引用无关 | `GPTBot`、`ClaudeBot`、`Google-Extended`、`Bytespider` |
+
+关键认知：**拦掉训练爬虫，不影响 AI 搜索引用你**。
+
+很多人怕内容被白嫖训练，一气之下把 `GPTBot`、`ClaudeBot` 全禁了。这个决定本身没问题，但要知道——禁 `GPTBot` 不等于 ChatGPT 搜索看不到你的站，只要 `OAI-SearchBot` 还放行。反过来，如果连 `OAI-SearchBot` 一起禁了，那你的站就彻底从 AI 答案里消失了。
+
+### 陷阱二：`User-agent: *` 不等于覆盖一切
+
+有些 AI 爬虫不遵守通配符规则，或者遵守但优先级处理不同。最稳妥的做法是显式声明。下面是我给本站配的规则：
+
+```text
+# AI 搜索引用爬虫：放行，这是被 AI 引用的前提
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# AI 训练爬虫：按需管控。禁掉不影响 AI 搜索引用本站
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+```
+
+三个要点：
+
+1. **引用爬虫一律放行**。你的博客如果担心被训练，禁训练爬虫就够了，引用爬虫放行没有任何损失——它只在你内容被引用时才来抓。
+2. **国内入口别忘**。DeepSeek、Kimi、豆包这些的爬虫没有统一公开的 UA 规范，`Bytespider`（字节）是少数公开的。建议国内站对国内爬虫保持默认放行，先把入口占上。
+3. **`Sitemap:` 指令要写**。robots.txt 末尾补一行 `Sitemap: https://你的域名/sitemap.xml`，不依赖爬虫自己发现。
+
+## 第二件事：llms.txt 是给 AI 的站点导读
+
+sitemap.xml 是"通讯录"——罗列所有页面 URL。llms.txt 是"接待手册"——用结构化语言告诉 AI：这个站是干什么的、哪些内容最重要、先看哪篇。
+
+规范在 [llmstxt.org](https://llmstxt.org/)，格式是 Markdown，机器可读，人也能看懂。结构很简单：
+
+```markdown
+# 你的站名
+
+> 一句话概括这个站是做什么的、核心内容是什么。
+
+## 站点信息
+
+- 网址: https://example.com
+- 语言: 中文
+- 作者: 你的名字
+
+## 关键页面
+
+- 首页: https://example.com/
+- 标签索引: https://example.com/tags/
+- 关于: https://example.com/about/
+
+## 精选内容（优先索引）
+
+- 某篇核心文章: https://example.com/article/xxx
+- 另一篇核心文章: https://example.com/article/yyy
+```
+
+写法上有四条规矩，多数人第一条就栽了：
+
+**只列高价值页面，别堆全站 URL。** llms.txt 不是第二个 sitemap。全站堆砌会让 AI 分不清重点，反而稀释权重。我的一般原则是：站内 5% 的最优质内容，加上导航类页面。
+
+**链接顺序就是权重排序。** AI 会优先参考靠前的链接。把最想被引用的文章放最上面。
+
+**描述必须和实际页面一致。** 这是企业 GEO 服务商最爱犯的错——llms.txt 里把自己吹成行业领导者，打开官网全是空话。AI 交叉核验时发现口径不一致，反而降低可信度。宁可写得平淡，别写虚。
+
+**不放营销内容。** 促销、限时活动、引流话术都不要进 llms.txt。这个文件的可信度建立在"客观事实"上。
+
+### 本站的 llms.txt 实例
+
+下面是我站的完整配置，可以作为个人博客的模板：
+
+```markdown
+# llms.txt — Xiaozha Blog
+
+> 面向 AI 搜索引擎与爬虫的站点发现文件
+> 遵循 https://llmstxt.org/ 规范
+
+## 站点信息
+
+- **名称**: 小吒博客 (Xiaozha Blog)
+- **语言**: 中文为主，部分英文翻译
+- **网址**: https://xiaozha.org
+- **描述**: 一个专注于 AI 工具、云计算、自托管与开源应用的个人技术博客。
+- **作者**: 小吒 (@xiaozhaorg)
+- **RSS**: https://xiaozha.org/rss.xml
+- **Sitemap**: https://xiaozha.org/sitemap.xml
+
+## 主要内容主题
+
+1. **AI 工具与大模型**: LLM 评测、AI 编程助手、API 中转站、本地部署
+2. **Cloudflare 生态**: Pages / Workers / R2 / Tunnel / Speed 实战教程
+3. **自托管应用**: Jellyfin、Immich、n8n、Mealie、Vaultwarden 等
+4. **开源开发工具**: Git、Docker、VS Code/Cursor/Zed 编辑器
+5. **免费资源**: 域名优惠、GitHub Student Pack、免费 API 额度
+
+## 关键页面
+
+- 首页: https://xiaozha.org/
+- 英文首页: https://xiaozha.org/en/
+- 所有标签: https://xiaozha.org/tags/
+- 归档: https://xiaozha.org/archive/
+- 关于: https://xiaozha.org/about/
+
+## 精选文章（推荐优先索引）
+
+- Cloudflare 国内加速实战: https://xiaozha.org/article/cloudflare-ip-optimization
+- Ollama 本地部署大模型: https://xiaozha.org/article/ollama-local-llm
+- Vaultwarden 自托管密码管理器: https://xiaozha.org/article/bitwarden-self-host
+- Cloudflare Tunnel 免费内网穿透: https://xiaozha.org/article/cloudflare-tunnel-tutorial
+- Cline 实战教程: https://xiaozha.org/article/cline-tutorial
+- DeepSeek V4 编程能力实测: https://xiaozha.org/article/deepseek-v4-coding
+```
+
+部署方式：静态站直接放 `public/llms.txt`，WordPress 放站点根目录，访问 `域名/llms.txt` 能打开就行。
+
+## 第三件事：llms-full.txt，为长上下文模型准备的全文版
+
+llms.txt 是导读，只放链接。配套还有个 `llms-full.txt`——把核心页面的**全文内容**整合成一个文件，给长上下文模型（Gemini 1M、Claude 200K）一次性读完。
+
+适用场景：文档类、教程类、内容量中等的站点。如果你的站有一批高质量的、结构完整的文章，值得做。企业官网那种十几个营销页的就没必要。
+
+生成方式不手写——写脚本从 sitemap 或内容目录自动抓取。用 Astro 的可以这样（Node 脚本，构建后运行）：
+
+```javascript
+import fs from "node:fs";
+import path from "node:path";
+
+const SITE = "https://xiaozha.org";
+const POSTS_DIR = "src/content/posts";
+const OUT = "public/llms-full.txt";
+
+// 挑出重点文章：按 frontmatter 里标记或按篇幅排序
+const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"));
+const entries = files.map((f) => {
+  const raw = fs.readFileSync(path.join(POSTS_DIR, f), "utf8").replace(/\r\n/g, "\n");
+  const fm = raw.split("---")[1] || "";
+  const title = (/^title:\s*"?([^"\n]+)/m.exec(fm) || [])[1] || f;
+  const slug = f.replace(/\.md$/, "");
+  const body = raw.replace(/^---[\s\S]*?---/, "").trim();
+  return { title, slug, url: `${SITE}/article/${slug}/`, w: body.length, body };
+});
+
+// 按篇幅取前 20 篇，避免文件无限膨胀
+entries.sort((a, b) => b.w - a.w);
+const picked = entries.slice(0, 20);
+
+const lines = [
+  `# ${SITE} — Full Content`,
+  "",
+  "> 本站核心文章全文，供 AI 一次性读取。",
+  "",
+];
+for (const e of picked) {
+  lines.push(`## ${e.title}`, `URL: ${e.url}`, "", e.body, "", "---", "");
+}
+
+fs.writeFileSync(OUT, lines.join("\n"), "utf8");
+console.log(`llms-full.txt 生成完成，收录 ${picked.length} 篇`);
+```
+
+两个注意点：
+
+- **全文文件会很大**，控制在模型上下文能一次读完的范围（几十篇文章的量级合适）。全站 145 篇硬塞进去，Gemini 也读不完。
+- **内容更新后要重新生成**。过期的全文文件比没有更糟——AI 引用的是你三个月前的旧观点。
+
+## 第四件事：不同 AI 平台，信源偏好差得很远
+
+这是最多人忽略的一层。同一个站，在 ChatGPT 和 Perplexity 里的引用概率完全不同，因为它们的检索系统用的是不同底层数据：
+
+| AI 平台 | 检索/信源特点 | 你该做什么 |
+|---|---|---|
+| **ChatGPT** | 检索独立于 Google，主要依赖 Bing 索引 | 必做：Bing Webmaster Tools 提交站点 |
+| **Perplexity** | 约四成引用来自 Reddit 等社区的真实讨论 | 在相关社区参与真实讨论，不是发广告 |
+| **Claude** | 引用品牌自有网站的比例最高 | 把官网/博客内容做扎实，结构清晰 |
+| **Google AI 概览** | 对 YouTube、Reddit、LinkedIn 多源交叉印证权重高 | 有视频内容的站占优 |
+| **DeepSeek / Kimi / 豆包** | 国内入口，信源以公开网页为主 | 保证页面可被国内爬虫访问 |
+
+对个人博客最实际的一条：**去 Bing Webmaster Tools 提交站点**。五分钟的事，但 ChatGPT 的引用基本盘在 Bing。很多人 Google Search Console 配得齐齐的，Bing 那边空空如也。
+
+## Schema 结构化数据：你可能已经有一半
+
+如果你用 Astro、Next.js 这类现代框架，或者 WordPress 装了 SEO 插件，`BlogPosting`、`WebSite` 这类 Schema 大概率已经有了。本站的 Layout 里就带了 `WebSite` + `BlogPosting` 的 JSON-LD。
+
+AI 时代值得补的是这两类：
+
+**BreadcrumbList（面包屑）**：让 AI 理解页面层级。"首页 > 教程 > 某篇文章"这个路径，能帮 AI 判断你的站在某个主题下的内容深度。
+
+**FAQPage（常见问题）**：教程类文章结尾的 Q&A 如果标了 FAQPage，AI 抽出来直接当答案素材的概率高很多。注意 Google 2023 年后限制了 FAQ 富媒体展示，但 Schema 数据本身对 AI 理解内容仍然有效。
+
+检查方法：Google 的 [富媒体结果测试工具](https://search.google.com/test/rich-results) 贴 URL 进去，能解析出类型就说明没问题。
+
+## 本站的真实整改记录
+
+写这篇文章时我把自己站跑了一遍，发现两个实际缺口：
+
+**缺口一：robots.txt 完全没有 AI 爬虫规则。** 原来的 robots.txt 只有传统搜索引擎和百度的优化，`OAI-SearchBot`、`Claude-SearchBot` 一个都没显式声明。已按上面的模板补上。
+
+**缺口二：没有 llms-full.txt。** llms.txt 有，但全文版没有。长上下文模型来读的时候只能拿到链接列表。已补上生成脚本。
+
+这两个缺口很典型——大多数个人博客都卡在这。配置本身半小时的事，但没人告诉你该配。
+
+## 验证清单：配完这样查
+
+```bash
+# 1. llms.txt 能访问且返回 200
+curl -sI https://你的域名/llms.txt | head -1
+
+# 2. llms-full.txt 能访问
+curl -sI https://你的域名/llms-full.txt | head -1
+
+# 3. robots.txt 里 AI 爬虫规则生效
+curl -s https://你的域名/robots.txt
+
+# 4. sitemap 可访问，且 lastmod 是真实时间
+curl -s https://你的域名/sitemap.xml | grep lastmod | head -3
+```
+
+然后做一次"AI 视角自测"：打开 ChatGPT 或 Perplexity，问它"你是从哪知道 XXX（你的站名/主题）的"，或者直接问一个你站内有完整答案的问题，看它引不引用你。没被提到就是 GEO 还没起步，被提到了说明配置开始生效。
+
+## 预期管理：这是基建，不是开关
+
+最后说句实话，免得你配完失望：
+
+llms.txt 和 robots.txt 的**识别周期约 2-4 周**——AI 爬虫有自己的抓取频率，不是你今天配好明天就见效。全域语义权重稳固要 1-2 个月，随模型迭代逐步提升。
+
+它也不能雪中送炭。AI 引用的底层逻辑是"多源交叉核验下你的内容更可信"，llms.txt 只是让 AI 更容易找到并读你这个信源。内容不行，配了也白配；内容够硬，这是性价比最高的一小时。
+
+---
+
+**相关阅读**：这篇是本站 SEO 系列的延伸，传统搜索优化踩的坑见 [Astro 双语站 SEO 踩坑记](/article/astro-seo-pitfalls/)。想让站本身跑在免费额度上，看 [用 Cloudflare Pages 搭建导航站](/article/cloudflare-navigation-site/)；国内访问加速看 [Cloudflare 国内加速实战](/article/cloudflare-ip-optimization/)。
+
+---
+
+## Docker Compose 入门到实战：5 分钟学会容器编排
+URL: https://xiaozha.org/article/docker-compose-tutorial/
+
+跑过真实 Web 应用的人都懂那种痛：装数据库、配缓存、搭 Web 服务器，然后在自己笔记本、同事笔记本、生产服务器上把整套流程再走一遍。**Docker Compose** 就是让这件事有个好结局的工具。
+
+这篇带你用大约五分钟，从零到一个能跑的多容器环境。内容涵盖安装、第一个 `docker-compose.yml`、每天都会用的命令、一个完整的 WordPress + MySQL 项目、YAML 字段速查，以及区分"玩具项目"和"生产级栈"的最佳实践。
+
+## Docker Compose 是什么
+
+Docker Compose 用来定义和运行多容器 Docker 应用。你把整个栈——Web 应用、数据库、缓存、队列、反向代理——写在一个 YAML 文件里，然后用一条命令全部拉起来。
+
+```bash
+docker compose up -d
+```
+
+这一行能启动 Web 服务器、PostgreSQL 数据库、Redis 缓存和一个 worker 进程，把它们接到同一个私有网络，挂上持久化数据卷，并且只暴露你指定的端口。
+
+### Compose 和裸 `docker run` 的区别
+
+| 关注点 | 裸 `docker run` | Docker Compose |
+|---|---|---|
+| 多容器应用 | 一长串脆弱的 `docker run` 加 `--link` | 一份声明式的 `docker-compose.yml` |
+| 可复现性 | "在我机器上是好的" | 同一份文件在任何机器上行为一致 |
+| 环境变量 | 散落的 `-e` 参数，容易漏 | `.env` 文件 + `${VAR}` 插值 |
+| 拆除 | 手动删容器和网络 | `docker compose down` 一次清干净 |
+| 版本控制 | 困难 | YAML 文件对 diff 友好 |
+
+### 什么时候该用 Compose
+
+- 应用超过一个容器（几乎所有的真实应用）
+- 需要在不同机器上复现同一套环境
+- 想把"怎么跑起来"这件事写进 Git，而不是留在某人脑子里
+
+单容器、一次性的小工具，`docker run` 更直接。
+
+## 安装 Docker Compose
+
+现代 Docker 已经把 Compose 作为插件内置，装好 Docker 就有了，不用单独装。
+
+### macOS / Windows：装 Docker Desktop
+
+官网下载安装包即可，Compose 插件随 Desktop 一起提供。
+
+### Linux（Ubuntu / Debian）
+
+```bash
+# 卸掉可能存在的旧版本
+sudo apt remove docker docker-engine docker.io containerd runc
+
+# 添加官方仓库
+sudo apt update
+sudo apt install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 安装引擎和 Compose 插件
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 让当前用户免 sudo 跑 docker
+sudo usermod -aG docker $USER
+```
+
+最后一步要重新登录才生效。
+
+### 验证
+
+```bash
+docker --version
+docker compose version
+```
+
+两条都能输出版本号就绪。
+
+## Hello World：第一个 `docker-compose.yml`
+
+```yaml
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+```
+
+在同目录建一个 `html/index.html`，随便写点内容，然后：
+
+```bash
+docker compose up
+```
+
+浏览器打开 `http://localhost:8080` 就能看到。加上 `-d` 转后台运行。
+
+这份文件已经包含了 Compose 的三个核心概念：**services**（要跑什么）、**ports**（怎么访问）、**volumes**（数据放哪）。
+
+## 常用命令速查
+
+| 命令 | 作用 |
+|---|---|
+| `docker compose up -d` | 后台启动整个栈 |
+| `docker compose up -d --build` | 启动前先重新构建镜像 |
+| `docker compose up -d web` | 只启动指定服务 |
+| `docker compose down` | 停止并移除容器和默认网络 |
+| `docker compose down -v` | 同时删掉命名卷（**会丢数据**） |
+| `docker compose ps` | 列出运行中的服务 |
+| `docker compose logs -f` | 跟随所有服务的日志 |
+| `docker compose logs -f --tail=100 web` | 只看 web 服务最近 100 行 |
+| `docker compose exec web sh` | 进运行中的容器执行命令 |
+| `docker compose build` | 构建带 `build:` 段的服务 |
+| `docker compose restart db` | 重启指定服务 |
+| `docker compose pull` | 拉取最新镜像 |
+| `docker compose run --rm web npm test` | 起个临时容器跑一次性任务 |
+
+`down -v` 和 `down --rmi all` 是仅有的两个会真删东西的命令，用之前想清楚。
+
+## 实战：WordPress + MySQL
+
+### 目录结构
+
+```
+project/
+├── .env
+├── docker-compose.yml
+└── html/
+```
+
+### `.env`：把密钥挡在 YAML 外面
+
+```bash
+MYSQL_ROOT_PASSWORD=换成随机强密码
+MYSQL_DATABASE=wordpress
+MYSQL_USER=wp
+MYSQL_PASSWORD=再换一个随机强密码
+
+WORDPRESS_DB_HOST=db:3306
+WORDPRESS_DB_NAME=wordpress
+WORDPRESS_DB_USER=wp
+WORDPRESS_DB_PASSWORD=再换一个随机强密码
+```
+
+`.env` 加进 `.gitignore`。YAML 文件可以进 Git，`.env` 不行。
+
+### `docker-compose.yml`
+
+```yaml
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  wordpress:
+    image: wordpress:6-php8.2-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    ports:
+      - "8080:80"
+    volumes:
+      - wp_data:/var/www/html
+
+volumes:
+  db_data:
+  wp_data:
+```
+
+### 启动
+
+```bash
+docker compose up -d
+docker compose ps      # 两个服务都该是 running
+```
+
+等十几秒，访问 `http://localhost:8080` 就是 WordPress 安装界面。
+
+### 这份文件教了什么
+
+- `depends_on` 配合 `condition: service_healthy`，让 WordPress 真的等 MySQL 就绪，而不是赌启动顺序
+- 数据卷把数据库和 WordPress 文件放在容器外，`docker compose down` 不会丢数据
+- 所有密钥走 `${VAR}` 从 `.env` 读，YAML 里不出现明文
+
+## `docker-compose.yml` 字段速查
+
+### `services`（必填）
+
+栈里要跑的所有容器，键名自定义，后面命令用它引用。
+
+### `image` vs `build`
+
+用官方镜像填 `image`，用自己的代码填 `build`。两者可以同时存在——`build` 先构建，`image` 给产物打标签。
+
+```yaml
+services:
+  app:
+    build: .
+    image: myapp:latest
+```
+
+### `ports`
+
+`"宿主机端口:容器端口"`。冒号左边是你在机器上访问的端口，右边是容器内监听的端口。只暴露真正需要对外的端口，数据库端口通常不用映射。
+
+### `environment`
+
+两种写法等价：
+
+```yaml
+environment:
+  - NODE_ENV=production
+  # 或者
+  NODE_ENV: production
+```
+
+### `volumes`
+
+持久化数据或把宿主文件挂进去。
+
+```yaml
+volumes:
+  - named_vol:/var/lib/data          # 命名卷，Compose 管理
+  - ./config:/etc/app:ro             # 绑定挂载，右边是容器内路径
+  - /etc/localtime:/etc/localtime:ro # 同步宿主机时区
+```
+
+数据库、上传的文件、配置——凡是容器删了还想留着的东西，都该走卷。
+
+### `networks`
+
+不声明的话所有服务在同一个默认网络里，用服务名互相访问（`http://web`、`db:3306`）。需要隔离时自定义：
+
+```yaml
+services:
+  web:
+    networks: [frontend]
+  db:
+    networks: [backend]
+
+networks:
+  frontend:
+  backend:
+```
+
+### `depends_on`
+
+控制启动顺序，但**默认只等容器启动，不等服务就绪**。所以它单独用经常不够，要配合 `healthcheck`。
+
+### `healthcheck`
+
+告诉 Docker 怎么判断这个容器"真的能用了"：
+
+```yaml
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost/health"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+```
+
+配了之后，`depends_on` 才能用 `condition: service_healthy` 做真正的等待。
+
+### `restart`
+
+- `no`：默认，退出就不管
+- `always`：无论如何重启
+- `on-failed`：非零退出码才重启
+- `unless-stopped`：除非你手动 `stop`，否则一直重启
+
+生产环境用 `unless-stopped`，配合 Docker 守护进程开机自启，服务器重启后服务自动回来。
+
+### `command` 和 `entrypoint`
+
+覆盖镜像里的默认启动命令。改一次性的东西用 `command`，要替换镜像的入口才动 `entrypoint`。
+
+### 资源限制
+
+```yaml
+services:
+  app:
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+```
+
+防止某个容器把机器内存吃光，连带拖垮其他服务。
+
+## 最佳实践
+
+### 1. 环境变量全部走 `.env`
+
+YAML 进 Git，`.env` 不进。密码、Token、API Key 只出现在 `.env` 里。
+
+### 2. 健康检查 + `depends_on`
+
+不要赌启动顺序。给数据库类服务加 `healthcheck`，依赖方用 `condition: service_healthy`。
+
+### 3. 数据卷持久化
+
+`docker compose down` 不删命名卷，`down -v` 才删。所以只要别手滑加 `-v`，数据基本安全。但**卷不是备份**——定期还是要往机器外拷一份。
+
+### 4. 资源限制
+
+至少给可能吃内存的服务（数据库、带机器学习的应用）设 `limits`。小主机上这一条能救命。
+
+### 5. 网络隔离
+
+不需要互相访问的服务别放同一个网络。数据库只暴露给后端，不要接到前端网络。
+
+### 6. 构建上下文和 Dockerfile
+
+`build` 指向含 Dockerfile 的目录。把 `.dockerignore` 写好，别把 `node_modules`、`.git`、`.env` 塞进构建上下文——那会让构建慢几倍，还有把密钥打进镜像的风险。
+
+### 7. 用 override 文件区分环境
+
+基础文件保持干净，本地开发用的配置放 override：
+
+`docker-compose.yml`（生产）
+```yaml
+services:
+  app:
+    image: myapp:latest
+    restart: unless-stopped
+```
+
+`docker-compose.override.yml`（本地开发，Compose 自动合并）
+```yaml
+services:
+  app:
+    build: .
+    ports:
+      - "9229:9229"   # 调试端口，只在本地开
+    volumes:
+      - ./src:/app/src # 代码热重载
+```
+
+部署到服务器时删掉 override 文件，或者用 `-f` 显式指定只用基础文件：
+
+```bash
+docker compose -f docker-compose.yml up -d
+```
+
+## 小结
+
+Docker Compose 的核心价值不是"少打几条命令"，而是**把环境定义成了可以进版本控制的文件**。同一个 `docker-compose.yml`，在自己笔记本、同事机器、生产服务器上跑出完全相同的一套栈——这件事的价值远超省下的打字时间。
+
+如果你刚接触自托管，建议下一篇直接看《自托管 20 个必备开源应用》，里面每个应用都附了现成的 Compose 配置，可以直接抄。
+
+---
+
+## Cloudflare R2 对象存储完全指南：10GB 免费存储，替代 S3 的最佳选择
+URL: https://xiaozha.org/article/cloudflare-r2-storage/
+
+Cloudflare R2 提供 **10GB 免费存储 + 零出口流量费**，是目前个人开发者能拿到的最良心的对象存储。这篇把创建、API 访问、客户端工具、自定义域名、公开/私有、图片处理到迁移一次讲完。
+
+## R2 是什么，为什么用它
+
+对象存储就是"网盘级"的文件存取服务：上传文件、按 key 取文件、配 CDN 加速。AWS S3 是这个领域的标准，但它有个坑。
+
+### S3 的出口流量费
+
+S3 的收费分两块：**存储费**（每 GB 每月几分钱，便宜）和**出口流量费**（每 GB 九分钱起，贵）。一个日访问一万的图片站，光流量费一个月就能上百块——而且访问量涨它跟着涨，没有上限。
+
+### R2 的不同
+
+| | AWS S3 | Cloudflare R2 |
+|---|---|---|
+| 存储 | $0.023/GB/月 | $0.015/GB/月 |
+| **出口流量** | **$0.09/GB 起** | **免费** |
+| 免费额度 | 5GB/12 个月 | **10GB 永久** |
+| API | S3 原生 | S3 兼容 |
+| CDN | CloudFront 另收费 | 自带 |
+
+R2 的零出口费不是促销，是它商业模式决定的：Cloudflare 靠的是整体网络，不指望在流量上挣钱。对小站、个人项目、备份用途，这就是降维打击。
+
+## 定价：10GB 免费，超出部分
+
+- 存储：$0.015/GB/月（10GB 以内免费）
+- A 类操作（写入、列举）：$4.50/百万次
+- B 类操作（读取）：$0.36/百万次
+- **出口流量：$0**
+
+超出免费额度需要绑卡，但个人用量基本都在免费区间内。10GB 存图片能放几千张，存备份也够放不少东西。
+
+## 创建 R2 存储桶
+
+登录 Cloudflare Dashboard → 左侧 **R2** → **Create Bucket**。
+
+- **Bucket 名称**：全局唯一，小写字母数字连字符，比如 `my-blog-images`
+- **位置**：选自动（Automatic）即可，R2 会自动分布到离用户近的节点
+- **存储类**：Standard 就行，Infrequent Access 是给长期不读的冷数据用的，有取回费
+
+创建完进 Bucket 详情页，可以直接在网页上拖拽上传文件——适合临时传几个文件，批量还是用客户端。
+
+## S3 兼容 API 访问
+
+R2 的 API 完全兼容 S3 协议，所以任何支持 S3 的工具都能直接用，只改 endpoint 和密钥。
+
+### 创建 API Token
+
+R2 → **Manage R2 API Tokens** → **Create API Token**。
+
+- **Token 名称**：随意，比如 `rclone-backup`
+- **权限**：按需选。只读用 `Object Read Only`；要上传用 `Object Read & Write`；要管理桶用 `Admin Read & Write`
+- **TTL**：默认永久。介意的话设个过期时间
+
+创建后**立刻保存 Access Key ID 和 Secret Access Key**——Secret 只显示这一次，关掉页面就再也看不到了。
+
+### 拼 Endpoint URL
+
+R2 的 endpoint 格式：
+
+```
+https://<account-id>.r2.cloudflarestorage.com
+```
+
+`<account-id>` 在 Dashboard 右侧栏能看到。记住这个，下面所有客户端配置都要用。
+
+## 用 rclone 操作 R2
+
+rclone 是命令行里的"网盘瑞士军刀"，同步、挂载、校验都能干，配 R2 最顺手。
+
+### 安装
+
+```bash
+# Linux
+sudo apt install rclone     # 或 curl https://rclone.org/install.sh | sudo bash
+
+# macOS
+brew install rclone
+
+# Windows
+scoop install rclone
+```
+
+### 配置 R2 remote
+
+```bash
+rclone config
+```
+
+按提示走：选 `n`（new remote）→ 起名 `r2` → 存储类型选 `AWS S3`（R2 兼容它，没有专门的 R2 类型）→ provider 选 `Cloudflare`。
+
+关键几项：
+
+```text
+access_key_id: <你的 R2 Access Key ID>
+secret_access_key: <你的 R2 Secret Access Key>
+region: auto
+endpoint: https://<account-id>.r2.cloudflarestorage.com
+```
+
+其余保持默认，保存退出。
+
+### 常用命令
+
+```bash
+# 列出所有桶
+rclone lsd r2:
+
+# 列出桶内文件
+rclone ls r2:my-bucket
+
+# 本地目录同步到 R2
+rclone sync /path/to/local r2:my-bucket/path --progress
+
+# 从 R2 拉回本地
+rclone copy r2:my-bucket/path /path/to/local --progress
+
+# 把桶挂载成本地目录（Linux/macOS）
+rclone mount r2:my-bucket /mnt/r2 --vfs-cache-mode writes
+```
+
+`sync` 是镜像同步（删本地也删远端），`copy` 是单向复制（不删远端）。做备份用 `sync` 要谨慎，先 `--dry-run` 看一眼。
+
+## 用 AWS CLI 操作 R2
+
+已经习惯 AWS CLI 的话，加个 profile 就行，不用装新工具。
+
+```bash
+aws configure --profile r2
+```
+
+```text
+AWS Access Key ID: <你的 R2 Access Key ID>
+AWS Secret Access Key: <你的 R2 Secret Access Key>
+Default region name: auto
+Default output format: json
+```
+
+注意：**必须加 `--endpoint-url`**，否则 AWS CLI 会去连真正的 S3。
+
+```bash
+# 列出桶
+aws s3 ls --endpoint-url https://<account-id>.r2.cloudflarestorage.com --profile r2
+
+# 列出对象
+aws s3 ls s3://my-bucket/ --endpoint-url https://<account-id>.r2.cloudflarestorage.com --profile r2
+
+# 上传文件并设为公开可读
+aws s3 cp local-file.jpg s3://my-bucket/ \
+  --endpoint-url https://<account-id>.r2.cloudflarestorage.com \
+  --profile r2 --acl public-read
+
+# 递归同步
+aws s3 sync ./dist s3://my-bucket/ \
+  --endpoint-url https://<account-id>.r2.cloudflarestorage.com --profile r2
+```
+
+## 自定义域名（公开访问）
+
+R2 桶默认**私有**，直接用 API 才能访问。想让文件能通过 URL 公开下载，两条路：
+
+### 方案 A：r2.dev 公共域名
+
+Bucket → **Settings** → **Public Access** → 开启 `r2.dev` 域名。
+
+会得到一个 `https://pub-<hash>.r2.dev` 地址，桶内所有文件公开可访问。
+
+**缺点**：Cloudflare 已经**停止给新桶签发 r2.dev 域名**（滥用太多），且现有域名随时可能被收回。只适合临时测试。
+
+### 方案 B：绑定自定义域名（推荐）
+
+Bucket → **Settings** → **Public Access** → **Connect Domain** → 输入子域名，比如 `cdn.example.com`。
+
+Cloudflare 会自动配上 DNS 和 SSL。之后文件地址就是：
+
+```
+https://cdn.example.com/文件路径
+```
+
+这个域名走的是 Cloudflare 全球 CDN，国内访问速度取决于 Cloudflare 对你的线路优化情况（见《Cloudflare 国内加速实战》）。
+
+**建议**：生产用途一定绑自己的域名，别用 r2.dev。
+
+## 公开桶 vs 私有桶
+
+### 完全公开桶
+
+适合：博客图片、静态资源、前端打包产物。
+
+配好自定义域名后，任何人拿到 URL 都能下载。别放敏感文件——URL 泄露就等于文件泄露。
+
+### 私有桶 + 签名访问
+
+适合：用户上传的文件、备份数据、付费内容。
+
+桶保持私有，需要访问时用 R2 的 S3 API 生成**预签名 URL**，带过期时间：
+
+```bash
+aws s3 presign s3://my-bucket/private-file.jpg \
+  --endpoint-url https://<account-id>.r2.cloudflarestorage.com \
+  --expires-in 3600     # 一小时后失效
+```
+
+生成一个临时链接发给用户，过期自动作废。这是对接"用户头像""付费下载"这类场景的正确做法。
+
+## R2 + Workers 做图片处理
+
+R2 存原图，Workers 在边缘做缩放裁剪，按需返回。这是把 R2 当图床用的完整方案，省掉自己搭图片服务的麻烦。
+
+典型场景：文章里存一张 4000×3000 的原图，列表页要 400px 缩略图，详情页要 1200px，分享卡片要 630px。用 Workers 一个路由全搞定。
+
+```js
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    // /images/photo.jpg?w=400&h=300
+    const key = url.pathname.replace(/^\//, "");
+    if (!key) return new Response("Not found", { status: 404 });
+
+    const object = await env.MY_BUCKET.get(key);
+    if (!object) return new Response("Not found", { status: 404 });
+
+    // 带缩放参数才走图片处理，原图直接返回
+    const w = url.searchParams.get("w");
+    const h = url.searchParams.get("h");
+    if (!w && !h) {
+      return new Response(object.body, {
+        headers: { "Content-Type": object.httpMetadata?.contentType || "application/octet-stream" },
+      });
+    }
+
+    const image = object.body;
+    const transformed = await env.IMAGES
+      .input(image)
+      .transform({ width: w ? Number(w) : undefined, height: h ? Number(h) : undefined, fit: "cover" })
+      .output({ format: "image/webp", quality: 82 });
+
+    return new Response(transformed, {
+      headers: { "Content-Type": "image/webp", "Cache-Control": "public, max-age=31536000, immutable" },
+    });
+  },
+};
+```
+
+在 Worker 的 R2 绑定里把桶绑成 `MY_BUCKET`，配好自定义域名，就能用：
+
+```
+https://cdn.example.com/images/photo.jpg?w=400&h=300
+```
+
+返回自动裁剪 + 转 WebP 的缩略图。原图不动，一份存储多种尺寸。
+
+## 从 AWS S3 迁移
+
+已经在用 S3 的话，迁过去就是改 endpoint 的事。
+
+### 方案一：rclone 直接搬
+
+先在 `rclone config` 里配好源（`s3`）和目标（`r2`）两个 remote，然后：
+
+```bash
+# 先 dry-run 看看会传多少文件
+rclone copy s3:old-bucket r2:new-bucket --dry-run
+
+# 确认无误正式跑，多线程 + 断点续传
+rclone copy s3:old-bucket r2:new-bucket --transfers 16 --checksum --progress
+```
+
+几十 GB 的数据建议挂 `screen` 或 `nohup` 跑，网络断了重跑同一条命令，rclone 会跳过已传完的。
+
+### 方案二：Cloudflare 官方迁移工具
+
+Dashboard → R2 → **Migrate from S3**，填源桶和凭证，Cloudflare 后台帮你搬。适合不想在命令行折腾的，但可控性差一些。
+
+### 改应用代码
+
+只需要改 SDK 配置里的 endpoint 和密钥，代码逻辑不用动：
+
+```javascript
+// 旧（AWS S3）
+const s3 = new S3Client({ region: "us-east-1" });
+
+// 新（Cloudflare R2）
+const s3 = new S3Client({
+  region: "auto",
+  endpoint: "https://<account-id>.r2.cloudflarestorage.com",
+  credentials: {
+    accessKeyId: R2_ACCESS_KEY_ID,
+    secretAccessKey: R2_SECRET_ACCESS_KEY,
+  },
+});
+```
+
+`region` 固定填 `auto`，这是 R2 的特殊要求。
+
+## R2 vs S3 vs GCS vs Azure Blob
+
+| | R2 | AWS S3 | Google GCS | Azure Blob |
+|---|---|---|---|---|
+| 免费额度 | **10GB 永久** | 5GB / 12 月 | 5GB / 12 月 | 5GB / 12 月 |
+| 存储单价 | $0.015 | $0.023 | $0.020 | $0.018 |
+| **出口流量** | **免费** | $0.09/GB | $0.12/GB | $0.087/GB |
+| S3 兼容 | 是 | 原生 | 部分 | 部分 |
+| 自带 CDN | 是 | 否 | 是 | 否 |
+| 冷存储选项 | 有 | 有（Glacier） | 有 | 有 |
+
+结论很直接：**个人项目、小站、备份场景选 R2**，没有第二个选项。只有当你的应用深度绑定 AWS 生态（Lambda、SQS、DynamoDB 那一套）时，留在 S3 才合理。
+
+## 小结
+
+R2 的关键价值是**零出口流量费**——这一项就把它和 S3 拉开了代差。对小站长来说，流量费从"随访问量线性增长的恐惧"变成"不需要考虑的事"。
+
+用起来的路径：建桶 → 拿 API Token → 配 rclone → 绑自定义域名 → （可选）接 Workers 做图片处理。半小时能跑通，之后就是一个免费、不限流量、全球 CDN 加速的存储服务。
+
+接着可以看《Cloudflare 数据层三件套》给 Workers 应用加数据库，或者《Cloudflare Tunnel 免费内网穿透》把本地服务暴露到公网。
+
+---
+
+## Pi-hole 全网广告拦截：一个 DNS 黑洞，让全家设备告别广告
+URL: https://xiaozha.org/article/pihole-ad-blocking/
+
+手机装广告拦截、电脑装浏览器插件、电视盒子没办法装——最后总有几个设备在放广告。更麻烦的是，这些设备后台在往哪发数据，你根本不知道。
+
+**Pi-hole** 换了个思路：不改任何设备，改你整个网络的 DNS。一次配置，路由器底下所有设备——手机、平板、电视、IoT 音箱、扫地机器人——全部生效。
+
+这篇讲清原理、Pi-hole v6 部署，以及那些网上教程还在用 v5 旧架构、容易踩坑的地方。
+
+## DNS 广告拦截的原理
+
+你访问任何网站，第一步都是 **DNS 查询**：把 `ads.doubleclick.net` 这样的域名翻译成 IP 地址。
+
+Pi-hole 做的事：当网络里某台设备查询一个已知的广告/追踪域名时，它**不返回真实 IP，而是返回 `0.0.0.0`**——一个黑洞地址。广告请求根本发不出去，页面里的广告位就空着。
+
+关键是这个拦截发生在 **DNS 层，比浏览器更早**：
+
+| | 浏览器插件 | Pi-hole |
+|---|---|---|
+| 生效范围 | 只有这个浏览器 | 整个网络所有设备 |
+| 电视盒子 / IoT | 装不了 | 自动生效 |
+| App 内广告 | 部分能拦 | 大部分能拦 |
+| 性能开销 | 每个浏览器一份 | 全网一份 |
+
+附带好处：**你能看见后台到底在连什么**。IoT 设备往家里连过哪些域名，查询日志里一清二楚——这是最直接的"你的智能电视在偷偷干什么"的证据。
+
+## Pi-hole 还是 AdGuard Home
+
+这两个是主流选择，2026 年的现状：
+
+| | Pi-hole v6 | AdGuard Home |
+|---|---|---|
+| 开源 | 纯社区 | AdGuard 公司 |
+| GitHub stars | ~50k | ~26k |
+| 加密 DNS（DoH/DoT） | 需另配 cloudflared 或 Unbound | **内置** |
+| 规则语法 | 列表 + 正则 | Adblock 语法（`$client` 修饰符） |
+| 分组管理 | 强（按 IP/MAC 分组） | 有，按客户端 |
+| 家长控制 | 无 | 内置 SafeSearch |
+| 界面 | v6 已重做，够用 | 更现代 |
+
+**选 Pi-hole**：要最大控制权、想配 Unbound 做完全递归解析、看重社区生态和文档厚度。
+**选 AdGuard Home**：想开箱即用、要内置加密 DNS、需要按设备快速做家长控制。
+
+说实话两者拦截能力几乎一样（用的是同一批社区屏蔽列表），差别在管理方式。这篇以 Pi-hole 为主，AdGuard Home 的部署思路完全一致。
+
+## Pi-hole v6 的重要变化
+
+**如果你照着 2024 年以前的教程配，一定会卡住。** v6（2025 年 2 月发布）是架构级重构：
+
+- **内嵌 Web 服务器和 REST API 到 pihole-FTL 二进制里**，不再需要 lighttpd + PHP
+- 配置改成 **TOML 文件**（`/etc/pihole/pihole.toml`），不再是 `setupVars.conf`
+- 管理界面原生支持 **HTTPS**
+- 组件从四个缩到一个，升级更快、故障点更少
+
+Docker 部署的话影响不大（镜像都封装好了），但**改配置的方式变了**——以前是 `pihole -a -i` 那套命令，现在主要走 Web 界面和 TOML。
+
+## Docker Compose 部署
+
+### 目录结构
+
+```
+/opt/pihole/
+├── docker-compose.yml
+├── etc-pihole/      # Pi-hole 配置
+└── etc-dnsmasq.d/   # 自定义 DNS 配置
+```
+
+### `docker-compose.yml`
+
+```yaml
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"          # 管理界面，可改
+    environment:
+      # 时区，影响日志时间戳
+      TZ: "Asia/Shanghai"
+      # Web 界面密码，必填，设个强密码
+      FTLCONF_webserver_api_password: "换成强密码"
+      # 上游 DNS 服务器，可填多个
+      FTLCONF_dns_upstreams: "223.5.5.5;119.29.29.29"
+      # 监听所有接口（容器网络模式需要）
+      FTLCONF_dns_listeningMode: "all"
+      # 查不到结果时是否回退上游查询，默认 no 即可
+      FTLCONF_dns_revServer_active: "false"
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN           # 允许修改网络设置，DHCP 功能需要
+```
+
+### 几个容易踩的点
+
+**53 端口冲突**：如果机器上已经跑了 systemd-resolved（Ubuntu 默认开），它会占用 53。先释放：
+
+```bash
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+# 删除 /etc/resolv.conf 里的 127.0.0.53 指向，改成真实 DNS
+```
+
+**上游 DNS 选择**：国内用阿里 `223.5.5.5`、腾讯 `119.29.29.29`；想要解析结果干净可以用 `1.1.1.1`（但国内 CDN 解析可能不准，导致视频、下载变慢）。**建议默认用国内公共 DNS，把干净解析交给加密 DNS那一层去解决。**
+
+**`FTLCONF_` 前缀**：v6 的环境变量都带这个前缀，对应 TOML 里的配置项。这是 v6 的新写法，网上很多教程还在用 `ServerIP`、`WEBPASSWORD` 那套——**那些在 v6 已经废弃**。
+
+### 启动
+
+```bash
+cd /opt/pihole
+docker compose up -d
+docker compose logs -f pihole    # 看是否正常拉取 gravity
+```
+
+第一次启动会下载屏蔽列表并编译成本地数据库，叫 **gravity**，几万到几十万条域名，一两分钟。看到 `Compiled allowlist`、`Building gravity` 之类的日志走完就绪。
+
+访问 `http://服务器IP/admin`，用你设的密码登录。
+
+## 让全网设备用上它
+
+Pi-hole 装好了，但设备还不知道要找它解析。两种方式：
+
+### 方式 A：改路由器 DNS（推荐）
+
+登录路由器管理界面，找 **DHCP 设置**（或"内网设置"/"局域网设置"），把 **DNS 服务器**改成 Pi-hole 的 IP。
+
+这样所有设备自动获取，新设备接入也生效。**这是唯一能让电视、IoT 这些改不了 DNS 的设备也用上的办法。**
+
+缺点：部分路由器锁死了 DNS 配置，或者光猫拨号的情况下得改光猫。
+
+### 方式 B：逐个设备改
+
+适合只想给某台设备用：
+
+- **电脑**：网络设置里手动填 DNS
+- **手机**：Wi-Fi 高级设置里改 DNS（移动网络改不了，除非用私有 DNS）
+- **电视盒子**：大部分安卓盒子能改，Apple TV 要装描述文件
+
+麻烦，但精细。
+
+### 验证生效
+
+```bash
+# 在任意设备上
+nslookup ads.doubleclick.net
+# 应该返回 0.0.0.0 而不是真实 IP
+```
+
+或者直接打开一个有广告的网页，看广告位是不是空了。
+
+## 屏蔽列表：gravity 系统
+
+Pi-hole 的拦截能力来自屏蔽列表。默认带一个官方列表，但**建议自己加几套**，覆盖更全：
+
+| 列表 | 作用 |
+|---|---|
+| StevenBlack 统一列表 | 综合，广告 + 恶意 + 追踪 |
+| AdGuard DNS filter | 覆盖面广，更新快 |
+| EasyList / EasyPrivacy | 广告 + 追踪，最经典 |
+| OISD Big | 精简直达，误杀少 |
+| 乘风广告过滤规则 | **中文广告专门优化** |
+| anti-AD | 中文站点广告，命中率高 |
+
+添加位置：Web 界面 → **Adlists** → 粘贴 URL → 保存，然后：
+
+```bash
+pihole updateGravity
+# Docker 里
+docker exec pihole pihole updateGravity
+```
+
+**中文站点一定要加乘风或 anti-AD**——国际列表对国内广告网络覆盖很差，这两套是中文环境的关键补充。
+
+列表不是越多越好。每套都有误杀风险，加太多会把正常功能也拦掉。**5-8 套精选的，比 30 套杂乱的强。**
+
+## 分组与精细控制
+
+家庭网络里不同设备需要不同策略：孩子平板要严、自己笔记本要松、电视要能看广告（有些视频 App 检测到广告拦截会黑屏）。
+
+Pi-hole 用 **Group（组）** 管理：
+
+1. **Group Management → Groups** → 新建组，比如 `Kids`、`NoFilter`
+2. **Adlists** 里给每个列表指定生效的组
+3. **Clients** 里把设备 IP 分配到组
+
+这样孩子的平板只走严格列表，电视走空白组完全不拦。
+
+**按 MAC 地址识别客户端比按 IP 好**——IP 会随 DHCP 租期变，MAC 不变。但按 MAC 识别需要 Pi-hole 自己当 DHCP 服务器（关掉路由器的 DHCP），配置复杂度上升，家庭用按 IP 也够。
+
+## 白名单：误杀了怎么办
+
+装好第一天，很可能发现某个 App 用不了了、某张图加载不出来。八成是被误杀。
+
+**排错流程**：
+
+1. Web 界面 → **Query Log**，按时间倒序找刚被拦截的域名
+2. 看到可疑域名，点 **Whitelist** 加进白名单
+3. 刷新页面验证恢复
+
+常见需要白名单的：统计类域名（Google Analytics、百度统计）、某些 App 的 API 域名、广告联盟的追踪域名（拦了会导致"请关闭广告拦截后重试"）。
+
+**养成习惯**：遇到"网站打不开/功能异常"，先去 Query Log 看，别急着卸 Pi-hole。
+
+## 加密 DNS：别让上游看到你在查什么
+
+默认情况下，Pi-hole 把拦截后的查询转发给上游 DNS（阿里、Cloudflare 之类）——**这个转发是明文的**。你的 ISP 依然能看到你查了哪些域名。
+
+两个解决方案：
+
+### 方案 A：cloudflared（简单）
+
+跑一个 cloudflared 容器，把查询加密后发给 Cloudflare：
+
+```yaml
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: proxy-dns
+    environment:
+      TZ: "Asia/Shanghai"
+      PORT: "5053"
+    ports:
+      - "5053:5053/tcp"
+      - "5053:5053/udp"
+```
+
+然后 Pi-hole 的上游改成 `172.17.0.1#5053`（cloudflared 的地址，按实际容器网络调整）。
+
+### 方案 B：Unbound（彻底）
+
+Unbound 自己递归查询根服务器和权威服务器，**完全不依赖任何第三方 DNS**。隐私最好，配置稍麻烦：
+
+```yaml
+services:
+  unbound:
+    image: mvance/unbound:latest
+    restart: unless-stopped
+    ports:
+      - "5335:5335/tcp"
+      - "5335:5335/udp"
+    volumes:
+      - ./unbound.conf:/etc/unbound/unbound.conf:ro
+```
+
+`unbound.conf`：
+
+```text
+server:
+  verbosity: 0
+  interface: 0.0.0.0
+  port: 5335
+  do-ip4: yes
+  do-udp: yes
+  do-tcp: yes
+  access-control: 0.0.0.0/0 refuse
+  access-control: 127.0.0.0/8 allow
+  access-control: 172.16.0.0/12 allow   # Docker 网段
+```
+
+Pi-hole 上游指向 Unbound。
+
+**家庭用选 A 就够**，B 适合对隐私有执念的。
+
+## 冗余：DNS 不能只有一台
+
+DNS 是网络的咽喉，**Pi-hole 挂了，全家断网**。生产做法是跑两个实例：
+
+- 主：正常 Pi-hole，端口 53
+- 备：同样一套，改端口（比如 `5380:80`，DNS 端口没法同时占用，得用另一个 IP 或 network_mode: host 改端口）
+- 路由器 DHCP 里填两个 DNS：主 IP 和备 IP
+
+设备会优先用主，主挂了自动切备。列表同步用 [Gravity Sync](https://github.com/vmstan/gravity-sync) 这个工具，把主的白名单和列表同步到备。
+
+## 它拦不了什么
+
+提前说清楚，避免失望：
+
+- **YouTube / Twitch 广告**：广告和视频同一个域名，DNS 拦了视频也看不了。这类只能浏览器插件（uBlock Origin）
+- **App 内嵌广告**：部分 App 用内置 DoH 或硬编码 IP，绕过 DNS。YouTube App 就是典型
+- **搜索结果里的推广**：搜索引擎的广告位和自然结果同域名，拦不掉
+- **开了"隐私 DNS"的手机**：Android 的"私人 DNS"功能会强制走加密 DNS，绕过 Pi-hole。要用 Pi-hole 就在手机里关掉这个选项
+
+所以现实用法是：**Pi-hole 管网络级（IoT、电视、电脑系统层），浏览器再配个 uBlock Origin 管网页内嵌**。两层叠加才是完整的。
+
+## 远程访问与备份
+
+**别把 Pi-hole 管理界面裸暴露到公网**——查询日志等于你的浏览记录。要用 Cloudflare Tunnel：
+
+```bash
+cloudflared tunnel route dns pihole pihole.example.com
+```
+
+配置和《Cloudflare Tunnel 免费内网穿透》里一样，把 ingress 指向 `http://localhost:80`。Cloudflare 前面还能加 Access，做到"只有我的邮箱能登"。
+
+**备份**：Pi-hole 的配置就在 `etc-pihole` 目录，定期 tar 一下同步到 R2 或外部硬盘：
+
+```bash
+tar czf pihole-$(date +%F).tar.gz etc-pihole/ etc-dnsmasq.d/
+```
+
+gravity 数据库不用备份（能重新生成），要备的是白名单、分组、客户端分配这些你调过的东西。
+
+## 小结
+
+Pi-hole 是自托管里**收益最直接**的一个：装一次，全网设备受益，而且立刻让你看见自己网络里发生了什么。
+
+给新手的建议路径：先 Docker 部署 → 改路由器 DNS → 加中文屏蔽列表 → 用一周，遇到误杀就白名单 → 稳定后加 cloudflared 加密上游 → 最后考虑双机冗余。
+
+配好之后接着看《Tailscale vs Cloudflare Tunnel》决定怎么远程访问，或者《Uptime Kuma 自建监控》把 Pi-hole 自己也监控起来——DNS 挂了可不是小事。
+
+---
+
+## Claude Code 实战指南：终端里的 AI 编程代理怎么用？（2026 国内版）
+URL: https://xiaozha.org/article/claude-code-tutorial/
+
+⚡ 本文专门为国内开发者打造。
+
+除了常规的安装使用教程，重点详解如何通过 CC Switch、阿里云百炼、QuickRouter 等方案，无需魔法、无需海外账号也能爽用 Claude Code。
+
+2026 年，AI 编程工具已从「代码补全」进化到「自主执行」阶段。
+
+在 Cursor、Trae IDE 等 GUI 工具之外，Anthropic 推出的 Claude Code 走了一条完全不同的路：它放弃图形界面，回归终端原生，用命令行的方式重塑了「人机协作编程」的范式。
+
+但它在国内能用吗？怎么用？本文会给你一套完整答案。
+
+## 一、Claude Code 是什么？
+
+Claude Code 是 Anthropic 官方推出的命令行 AI 编程代理（Agent）。与 VS Code 插件、网页聊天不同，它直接运行在终端中，围绕你的本地项目目录进行工作。
+
+**核心特点：**
+
+- **终端原生**：没有 GUI，用自然语言在终端里和它对话
+- **项目级理解**：能读取整个项目结构、跨文件理解依赖关系
+- **自主执行**：可以自己拆解任务、读写文件、运行命令、跑测试、修 Bug
+- **百万级上下文**：可处理 50 万行+的超大型项目
+- **不绑定单一模型**：可以接入 Claude、GPT、DeepSeek、Qwen 等多种模型
+
+> 一句话理解：Claude Code 不是 IDE 插件，而是一个能独立干活的「AI 工程师」。你描述目标，它自主完成读代码、改文件、跑测试的全流程。
+
+## 二、Claude Code vs Cursor vs Cline：选型逻辑
+
+2026 年 AI 编程工具三足鼎立，三者代表了完全不同的技术哲学：
+
+| 维度 | Claude Code | Cursor | Cline |
+|------|-------------|--------|-------|
+| 定位 | 终端原生 Agent | AI 原生 IDE | VS Code 插件 |
+| 交互方式 | 命令行 | 图形界面 | VS Code 内 |
+| 自主执行 | ⭐⭐⭐⭐⭐ 顶级 | ⭐⭐⭐ 中等 | ⭐⭐⭐⭐ 强（需审批） |
+| 开源 | 否 | 否 | 是（MIT） |
+| 成本 | Pro $20/月 起 | Pro $20/月 | 免费 + API 费用 |
+
+**选型建议：**
+
+- 追求极致效率、习惯终端 → **选 Claude Code**
+- 日常编码、喜欢图形界面 → **选 Cursor**
+- 预算敏感、要求数据不出境 → **选 Cline**（可本地化部署）
+
+## 三、安装 Claude Code（国内镜像加速）
+
+Claude Code 依赖 Node.js 18+ 运行环境。Windows 用户建议同时安装 Git for Windows。
+
+### 3.1 安装 Node.js
+
+Windows 用户可用 winget 一键安装：
+
+```powershell
+winget install OpenJS.NodeJS.LTS
+```
+
+macOS 用户用 Homebrew：
+
+```bash
+brew install node@22
+```
+
+验证安装：
+
+```bash
+node -v
+npm -v
+```
+
+### 3.2 安装 Claude Code（国内镜像源）
+
+> ⚠️ 国内用户必须使用镜像源，否则下载会超时。这是第一步也是最常被忽略的一步。
+
+```bash
+# 使用淘宝镜像安装
+npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
+```
+
+验证安装：
+
+```bash
+claude --version
+```
+
+## 四、国内使用方案详解（重点）🎯
+
+Claude Code 默认调用 Anthropic 官方 API，国内直连会失败。下面是 3 套主流方案，按推荐度排序。
+
+### 方案一：CC Switch 可视化管理（⭐⭐⭐⭐⭐ 推荐）
+
+CC Switch 是一款开源桌面工具，专门解决多 AI 编程工具的 API 配置管理问题。它支持 Claude Code、Codex、Gemini CLI、OpenCode 等多款工具的统一管理。
+
+**核心优势：**
+
+- 图形化界面，零命令行基础也能用
+- 内置 50+ 供应商预设（DeepSeek、Qwen、Kimi、智谱 GLM、MiniMax 等）
+- 一键切换 Provider，无需手动改 JSON 配置
+- 内置本地 API 代理，支持自动故障转移
+- **用量统计**：实时查看 Token 消耗与费用
+- WebDAV 自动同步，多设备共享配置
+
+**安装步骤：**
+
+1. 访问 GitHub Releases 页面：<https://github.com/farion1231/cc-switch>
+2. 根据系统下载对应安装包：Windows 下载 `.msi` 或便携版 ZIP；macOS 用 Homebrew 安装；Linux 选 `.deb`/`.rpm`/`.AppImage`
+3. macOS 用户推荐一行命令：
+
+```bash
+brew tap farion1231/ccswitch && brew install --cask cc-switch
+```
+
+**以接入 DeepSeek 为例：**
+
+1. 在 DeepSeek 开放平台注册账号，创建 API Key（以 `sk-` 开头，注意只显示一次）
+2. 打开 CC Switch，顶部应用栏选择 Claude
+3. 点击「添加供应商」，在预设列表选 DeepSeek
+4. 粘贴 API Key，其他字段保持默认（已自动配置 DeepSeek-V4-Pro 和 Flash）
+5. 如需百万 Token 超长上下文，可勾选开启 1M 模式
+6. 点击「添加」即可，CC Switch 会自动修改 Claude Code 的配置文件
+
+CC Switch 配置示例（DeepSeek）：
+
+```json
+{
+  "apiKey": "sk-your-deepseek-api-key",
+  "baseURL": "https://api.deepseek.com/v1",
+  "model": "deepseek-chat"
+}
+```
+
+### 方案二：阿里云百炼 Token Plan（⭐⭐⭐⭐ 企业/团队首选）
+
+阿里云百炼平台提供了 Anthropic 协议兼容接口，支持 Qwen3.6-plus、Qwen3.7-max 等旗舰模型，并支持 Coding Plan 固定订阅、Token Plan 团队抵扣两种计费模式，适合团队规模化使用。
+
+**配置步骤：**
+
+1. 订阅阿里云百炼 Token Plan 团队版
+2. 获取专属 API Key
+3. 编辑 `~/.claude/settings.json` 配置文件
+
+配置文件示例：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/api/v1",
+    "ANTHROPIC_API_KEY": "sk-your-dashscope-api-key",
+    "ANTHROPIC_MODEL": "qwen-plus"
+  }
+}
+```
+
+> ⚠️ 必须将所有模型槽位（Haiku/Sonnet/Opus）都配置为国产模型，否则 Claude Code 会尝试调用 Anthropic 官方模型导致请求失败。
+
+### 方案三：环境变量直连（⭐⭐⭐ 简单方案）
+
+如果不想装额外工具，可以直接设置环境变量。适合「先跑起来看看效果」的场景。
+
+**Windows PowerShell（临时生效）：**
+
+```powershell
+$env:ANTHROPIC_BASE_URL = "https://api.deepseek.com/v1"
+$env:ANTHROPIC_API_KEY = "sk-your-key"
+$env:ANTHROPIC_MODEL = "deepseek-chat"
+claude
+```
+
+**Windows 永久生效：**
+
+```powershell
+[Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "https://api.deepseek.com/v1", "User")
+[Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-your-key", "User")
+[Environment]::SetEnvironmentVariable("ANTHROPIC_MODEL", "deepseek-chat", "User")
+```
+
+**macOS/Linux：**
+
+```bash
+export ANTHROPIC_BASE_URL="https://api.deepseek.com/v1"
+export ANTHROPIC_API_KEY="sk-your-key"
+export ANTHROPIC_MODEL="deepseek-chat"
+```
+
+### 方案对比与选型建议
+
+| 方案 | 难度 | 成本 | 适合人群 |
+|------|------|------|----------|
+| CC Switch | 低 | 按 API 用量 | 个人开发者、想试多家模型 |
+| 阿里云百炼 | 中 | 订阅制/团队抵扣 | 团队、企业、需要稳定 SLA |
+| 环境变量直连 | 低 | 按 API 用量 | 快速验证、不想装工具 |
+
+## 五、CLAUDE.md：项目的「记忆文件」
+
+`CLAUDE.md` 是 Claude Code 的项目级配置文件，用来设定你和 AI 的协作规则。
+
+它分两种：
+
+- **全局**：`~/.claude/CLAUDE.md`，所有项目生效
+- **项目级**：项目根目录下的 `CLAUDE.md`，只对当前项目生效
+
+**推荐模板：**
+
+```markdown
+# Project Rules
+
+## Tech Stack
+- TypeScript + Astro
+- Tailwind CSS
+- Node.js 22
+
+## Conventions
+- Use ESLint + Prettier
+- All commits in Chinese
+- Components under src/components/
+
+## Constraints
+- No external API calls without approval
+- Do NOT modify generated files
+- Keep bundle size under 100KB
+```
+
+> 💡 CLAUDE.md 是新手最容易忽略的文件。第一天就写好它，能省掉后续无数麻烦——AI 会自动遵守你设定的规则，不再需要每次提醒。
+
+## 六、5 个实战场景演示
+
+### 场景 1：接手新项目快速理解
+
+接手一个陌生项目时，先用 Claude Code 梳理架构：
+
+```bash
+claude
+> 帮我分析这个项目的架构，生成 CLAUDE.md
+```
+
+Claude Code 会扫描整个项目，生成 CLAUDE.md 文件，并输出模块依赖关系图。
+
+### 场景 2：智能代码重构
+
+重构一段混乱代码：
+
+```bash
+> 重构 src/utils/legacy.js，用现代 ES6+ 语法重写，加类型标注
+```
+
+### 场景 3：跨文件批量修改
+
+把所有 API 调用从 fetch 迁移到 axios：
+
+```bash
+> 把项目里所有 fetch 调用迁移到 axios，统一错误处理
+```
+
+Claude Code 会一次性产出所有文件的修改，按文件分组展示 diff，确认后一键应用。
+
+### 场景 4：Bug 排查与修复
+
+```bash
+> npm test 失败了，帮我看看什么问题
+```
+
+Claude Code 会自主运行测试、读日志、定位问题、修改代码、再跑测试验证，形成完整闭环。
+
+### 场景 5：自动化测试生成
+
+```bash
+> 为 src/api/user.ts 生成完整的单元测试，用 Vitest
+```
+
+## 七、常用斜杠命令速查
+
+Claude Code 内置大量 `/` 开头的斜杠命令，掌握这些能大幅提升效率：
+
+| 命令 | 作用 |
+|------|------|
+| `/clear` | 清空当前对话，开始新会话 |
+| `/compact` | 压缩历史上下文，保留关键信息 |
+| `/init` | 生成项目 CLAUDE.md 文件 |
+| `/plan` | 进入计划模式，先规划后执行 |
+| `/context` | 查看当前上下文消耗 |
+| `/branch` | 复制当前对话作为分支 |
+| `/fork` | 后台启动子 Agent 处理辅助任务 |
+| `/status` | 查看模型、Base URL、API Key 配置 |
+| `/memory` | 编辑项目记忆文件 |
+
+## 八、进阶技巧与避坑指南
+
+### 8.1 国内启用 Web Search
+
+Claude Code 内置的 web_search 工具在国内常受限。推荐安装 Fetch MCP 替代：
+
+```bash
+# 在 CC Switch 或 claude_desktop_config.json 中添加
+{
+  "mcpServers": {
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    }
+  }
+}
+```
+
+Fetch MCP 优势：不受 Anthropic 政策限制、自动 HTML→Markdown 转换、支持代理配置、内置 15 分钟缓存。
+
+### 8.2 防止上下文污染
+
+> ⚠️ **永远不要在电脑根目录（如 `C:\`）启动 Claude Code！** 否则它会扫描整个磁盘，不仅慢还可能误操作。
+
+正确做法：为每个项目建独立文件夹，`cd` 进去再启动 claude。
+
+### 8.3 VS Code 集成
+
+Claude Code 提供官方 VS Code 扩展，在扩展市场搜索安装即可。配合 CC Switch 中开启「启用到 Claude Code 插件」选项，可以在 VS Code 里直接调用。
+
+### 8.4 成本控制技巧
+
+- 用 `/compact` 压缩上下文，减少 Token 消耗
+- 日常用 DeepSeek/Qwen，复杂任务才切到 Claude Opus
+- CC Switch 设置用量阈值告警，避免账单爆炸
+- 长任务用 `--dangerously-skip-permissions` 减少交互（仅在信任的沙箱环境）
+
+## 九、总结：该不该切换到 Claude Code？
+
+Claude Code 不是 IDE 的替代品，而是 IDE 的补充。它的真正价值在于「Agent 模式」——你描述目标，它自主完成全流程。
+
+**适合切换的场景：**
+
+- 需要跨文件大规模重构
+- 接手陌生项目，想快速理解架构
+- DevOps/CI-CD 场景，需在服务器端无 GUI 操作
+- 追求极致效率，愿意学习终端工作流
+
+**不建议切换的场景：**
+
+- 完全不会命令行，且不想学
+- 只是写写小脚本、改改小 bug（Cursor 更顺手）
+- 项目高度依赖 IDE 的可视化调试能力
+
+> 模型会被替代，但好的 Agent 框架是更持久的基础设施。Claude Code 就是 2026 年最值得掌握的那一个。
+
+🌟 本文涉及的 CC Switch 项目地址：<https://github.com/farion1231/cc-switch> —— 完全开源免费，给作者点个 Star 支持一下国产开源。
+
+下一篇我会写《Cline 实战：开源免费版 Claude Code》—— 重点讲本地化部署和数据不出境方案，敬请关注。
+
+---
+
+## Astro 双语站 SEO 踩坑记：5 个不跑全量校验就发现不了的问题
+URL: https://xiaozha.org/article/astro-seo-pitfalls/
+
+这个博客最早跑在 NotionNext 上，今年重构到了 Astro 7。重构完功能都正常，`astro check` 零错误，构建 259 页全出，看着挺健康。
+
+然后我做了一次全量校验——把构建产物里每一条 hreflang 链接、每一个 sitemap 条目、每一个 noindex 页面拉出来对账——**查出 60 条死链和一堆收录问题**。
+
+这篇按严重程度倒序记录这 5 个坑。重点不是"怎么配 Astro"，而是**为什么它们能绕过常规检查**。
+
+## 坑一：hreflang 尾斜杠，137 个页面集体中招
+
+### 症状
+
+中文文章页声明英文版长这样：
+
+```html
+<link rel="alternate" hreflang="en" href="https://xiaozha.org/en/article/gemma-4-local-deploy">
+```
+
+注意**没有尾斜杠**。而同一个页面的 canonical 是：
+
+```html
+<link rel="canonical" href="https://xiaozha.org/article/gemma-4-local-deploy/">
+```
+
+带尾斜杠。
+
+实测访问那个不带斜杠的地址，返回 **308 永久重定向**到带斜杠版本。
+
+### 根因
+
+`build.format: "directory"` 下，Astro 生成的 URL 都带尾斜杠。但文章页传给 Layout 的 `altURL` 是手写拼的：
+
+```astro
+altURL={post.data.enSlug ? `/en/article/${post.data.enSlug}` : null}
+```
+
+少了一个 `/`。反向同理，英文页指向中文版也没斜杠。两个方向全错，137 个文章页无一幸免。
+
+### 为什么难发现
+
+Google 对 hreflang 的要求是**目标必须是规范 URL，不能有跳转**。带 308 的 hreflang 会被判定为无效，然后——**它不报错**。Search Console 里只会显示"Alternate page with proper canonical tag"，看起来像正常状态。页面能打开，分享卡片正常，肉眼完全看不出问题。
+
+### 修法
+
+```astro
+altURL={post.data.enSlug ? `/en/article/${post.data.enSlug}/` : null}
+```
+
+一个字符。但要知道该加这一个字符，得先去做全量校验。
+
+## 坑二：标签页 hreflang 指向 404
+
+### 症状
+
+中文标签页 `/tags/教程/` 的 head 里声明：
+
+```html
+<link rel="alternate" hreflang="en" href="https://xiaozha.org/en/tags/教程/">
+```
+
+访问它：**HTTP 404**。
+
+### 根因
+
+Layout 里有个 `getAltURL()`，逻辑是纯路径前缀变换：
+
+```ts
+// /xxx → /en/xxx
+if (targetLocale === "en") {
+  return `/en${pathname}`;
+}
+```
+
+对 `/about/`、`/archive/`、`/tags/` 这类页面完全正确——因为它们中英双语都存在同名路径。
+
+但具体标签页不是。**中文标签叫「教程」，英文标签叫 `Tutorial`**，路径前缀变换推出来的 `/en/tags/教程/` 根本不存在。
+
+20 个中文标签页全部在向搜索引擎声明一个死链。
+
+### 为什么难发现
+
+和坑一同一类问题：不报错，只是静默无效。而且它只在"有具体标签"的页面上出错，`/tags/` 聚合页是对的——抽样检查很容易刚好抽到那个对的。
+
+### 修法
+
+分情况处理。聚合页保留互指，单标签页没有对应语言版本就不声明：
+
+```astro
+const altURL = tag ? null : "/en/tags/";
+```
+
+`altURL={null}` 会让 Layout 彻底跳过这一方向的 hreflang 输出。**没有对应版本就不声明**，这是 Google 明确认可的做法——比声明一个错链接好得多。
+
+## 坑三：404 页面被写进 sitemap
+
+### 症状
+
+`sitemap-0.xml` 里躺着一条：
+
+```xml
+<loc>https://xiaozha.org/en/404/</loc>
+```
+
+一个 `noindex,follow` 的错误页，被当成可收录 URL 提交给了搜索引擎。
+
+### 根因
+
+`src/pages/404.astro` 在根级，Astro 把它当站点 404 页，sitemap 集成自动排除。
+
+但 `src/pages/en/404.astro` 是**嵌套路由**，不在根级，不被排除。于是英文 404 页进了 sitemap，中文 404 页没进——不对称，很难第一眼注意到。
+
+### 为什么难发现
+
+`sitemap.xml` 有 258 条 URL，没人会逐条看。而且 404 页本身工作完全正常——访问不存在 URL 确实返回 404 页面。问题只存在于"你主动告诉搜索引擎去收录一个不该收录的页面"这件事上。
+
+Search Console 会报 `Sitemap contains a URL marked "noindex"`，但你不去看就不会知道。
+
+### 修法
+
+```ts
+sitemap({
+  filter: (page) => !/\/404\/?$/.test(new URL(page).pathname),
+  // ...
+})
+```
+
+注意**不能写 `includes("404")`**——那会误杀 `/article/bt-panel-404/` 这篇正常文章。必须锚定路径结尾。
+
+## 坑四：noindex 和 sitemap 必须成对
+
+### 症状
+
+修完坑三，我顺手做了一件事：给只有 1 篇文章的标签页加 `noindex`。站点有 94 个英文标签页，其中 66 个只挂 1 篇文章——薄内容，占 sitemap 44% 的条目。
+
+页面 meta 改好了。但我一开始**没同步改 sitemap**。
+
+### 根因
+
+这是我最开始的理解盲区。我以为 `noindex` 是页面自己的事，sitemap 是收录的事，两边各管各。
+
+实际上不是。**sitemap 里出现 noindex URL，本身就是一条 Search Console 报错**，等于我刚修掉坑三，又造了个新的。
+
+### 修法
+
+两边必须同步：
+
+```astro
+// 页面侧
+const thin = tag ? filtered.length < 2 : false;
+<Layout noindex={thin} ...>
+```
+
+```ts
+// sitemap 侧，用同一套判定标准
+filter: (page) => {
+  const p = new URL(page).pathname;
+  if (/\/404\/?$/.test(p)) return false;
+  const m = /^(\/en)?\/tags\/(.+)\/$/.exec(p);
+  if (m && (tagCounts.get(`${m[1] ?? ""}/tags/${m[2]}`) ?? 0) < 2) return false;
+  return true;
+}
+```
+
+这里有个实现难点：sitemap 的 `filter` 只拿到 URL 字符串，拿不到内容集合。所以得在 `astro.config.ts` 里自己读一遍 `src/content`，统计每个标签的文章数，建一张查找表。
+
+改完的效果：
+
+| 指标 | 改前 | 改后 |
+|---|---|---|
+| sitemap URL 总数 | 257 | 191 |
+| 其中标签页 | 114 | 46 |
+| sitemap 收录 noindex 页 | 若干 | **0** |
+| 带 `lastmod` 的条目 | 0 | 137 |
+
+顺手把 `lastmod` 也加了——内容源里 `modDatetime` 字段早就存在但从没接进 sitemap，白浪费一个 freshness 信号。
+
+## 坑五：CRLF 让 frontmatter 解析静默失效
+
+这个坑最阴，放在最后。
+
+### 症状
+
+改完坑四，我对账时发现数字对不上：
+
+- 标签详情页共 111 个，其中 noindex 65 个、可收录 46 个
+- 但 sitemap 里标签 URL 有 46 条——**看起来刚刚好**
+
+然而另外两个页面被排除了：
+
+```
+/tags/Docker/         ← 页面显示 index,follow，却不在 sitemap
+/tags/资源分享/        ← 同上
+```
+
+页面说"我可收录"，sitemap 说"我不收"。矛盾。
+
+### 根因
+
+我在 `astro.config.ts` 里手写了 frontmatter 解析，用来统计标签文章数：
+
+```ts
+function frontmatterOf(file: string): string {
+  return fs.readFileSync(file, "utf8").split("---")[1] ?? "";
+}
+
+function tagsIn(fm: string): string[] {
+  const block = /^tags:\n((?:[ \t]*-[ \t]*.+\n?)+)/m.exec(fm);
+  // ...
+}
+```
+
+正则写的是 `\n`。但 md 文件是 **CRLF 行尾**（`\r\n`）。
+
+于是 `^tags:\n` 匹配不到任何东西——`tags:` 后面跟的是 `\r` 不是 `\n`。**整个标签统计静默返回空**，不是报错，是安静地少算。
+
+实际影响：
+
+| 标签 | 我统计到 | 实际 |
+|---|---|---|
+| Docker | 1 篇 | 2 篇 |
+| 资源分享 | 1 篇 | 4 篇 |
+
+少算的直接后果：`Docker` 被判定为薄标签（<2 篇），从 sitemap 排除；`资源分享` 同样。两个本该收录的页面被错误下线。
+
+### 为什么最难发现
+
+这是唯一一个**纯逻辑 bug**，前面四个都是配置疏漏。它的特征是：
+
+1. **不报错**——正则匹配失败只是返回 null，代码继续跑
+2. **结果看起来合理**——统计出的标签数比实际少，但仍是"一批数字"
+3. **只有全量对账能暴露**——你抽查 `/tags/AI/`（碰巧是 LF 行尾的文件）一切正常，抽查 `/tags/Docker/`（CRLF）才发现问题
+
+而且我第一版校验脚本自己也有 bug：正则写成 `/\/tags\/[^/]+\/$/`，漏掉所有中文标签页（相对路径没有前导斜杠），一度让我以为问题只在英文侧。
+
+### 修法
+
+一行：
+
+```ts
+function frontmatterOf(file: string): string {
+  return fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n").split("---")[1] ?? "";
+}
+```
+
+**手写 frontmatter 解析，第一步永远是行尾归一化。** 正解是用 `gray-matter` 这类成熟库，我当时为了少一个依赖自己写了——结果省下的依赖用一倍调试时间还了。
+
+## 顺手记一个环境坑
+
+升级 Astro 7.4.2 之后构建直接失败：
+
+```
+Node.js v22.22.2 is not supported by Astro!
+Please upgrade Node.js to a supported version: ">=22.23.4"
+```
+
+Astro 7.4.x 把 `engines.node` 提到了 22.23.4，而机器默认 Node 是 22.22.2。这种"升了个补丁版结果跑不起来"的情况，报错信息其实说得很清楚，难的是**你根本想不到去升 Node**——毕竟只是个 patch 版本。
+
+解法是写了个 `scripts/astro.mjs` 包装器：检测 `process.version`，不满足就自动切到本机另一个 Node（`D:\Tools\Node` 的 v24）。所有 astro 相关 npm script 都走它。
+
+## 校验方法：为什么抽样一定漏
+
+这 5 个坑有个共同点——**都不影响页面正常渲染**。你能打开、能跳转、能搜索、`astro check` 零错误、构建 259 页全出。
+
+唯一能揪出它们的是全量对账：
+
+```js
+// 遍历构建产物，把每一条 hreflang 链接和真实页面集合比对
+for (const p of pages) {
+  const h = fs.readFileSync(p, "utf8");
+  for (const m of h.matchAll(/<link rel="alternate" hreflang="[^"]+" href=".../g)) {
+    if (!exists.has(m[1])) bad++;
+  }
+}
+```
+
+跑完一行输出：`hreflang 死链 60 → 0`。这比任何"看起来正常"都可靠。
+
+顺带说三个我自己在校验脚本上犯的错，都是真实成本：
+
+1. **URL 和文件路径比对前必须归一化**。含空格标签（`AI Coding`）的产物目录是字面空格，hreflang 里是 `%20`，直接字符串比会误报 58 条死链。两侧都要做 `decodeURIComponent` / `encodeURI`。
+2. **判断页面类别的正则要考虑相对路径**。`/tags/xxx/` 的正则漏掉 `tags/xxx/`（无前导斜杠），导致中文标签页整体漏算。
+3. **别用 `curl -x` 探测代理可用性**，它返回 000 像是通了其实没连上。判断端口存活要用 `(echo > /dev/tcp/127.0.0.1/6046)` 做真实 TCP 连接。
+
+## 收尾
+
+迁移类项目最危险的心态是"构建通过了就是好了"。构建只验证**页面能生成**，不验证**页面之间的关系是对的**——而 SEO 全在关系里：canonical 指向谁、hreflang 互指谁、sitemap 收录谁、noindex 排除了谁。
+
+花半小时写个对账脚本，比之后几个月在 Search Console 里一点点捞错误便宜得多。
+
+---
+
+## 零成本建站！用 Cloudflare Workers 免费搭建个人博客完整教程
+URL: https://xiaozha.org/article/cloudflare-workers-blog/
+
+Cloudflare 被网友亲切地称为「赛博活佛」，因为它的 Free 账号提供了大量实用功能。今天我们就来用 Cloudflare Workers 搭建一个完全免费的个人博客，无需购买服务器，享受全球 CDN 加速。
+
+先说明一点：**这篇会带你完整走一遍 Workers 方案，但最后我会告诉你为什么大多数人的博客应该用 Pages 而不是 Workers。** 看完再决定，别急着 `wrangler deploy`。
+
+## 为什么选 Cloudflare Workers
+
+传统建站通常需要：购买服务器（年费几百到几千）+ 配置环境 + 维护安全。而 Cloudflare Workers 让你跳过所有这些步骤：
+
+- **完全免费**：每天 10 万次请求额度，个人博客绰绰有余
+- **全球 CDN**：Cloudflare 在全球 300+ 城市有节点，访问速度极快
+- **无需服务器**：代码运行在边缘节点，不用管运维
+- **自定义域名**：支持绑定自己的域名，还自动配 HTTPS
+- **自动扩缩容**：流量暴增也不用担心
+
+## 先选型：Workers Sites vs Pages vs Workers + KV
+
+Cloudflare 上有三种跑博客的方式，选错会白费很多功夫：
+
+| 方案 | 内容存哪 | 适合 |
+|---|---|---|
+| **Workers Sites** | 静态文件打包进 Worker | 纯静态、内容不常变 |
+| **Cloudflare Pages** | Git 仓库，构建后分发 | **大多数博客** |
+| **Workers + KV** | KV 键值存储 | 需要运行时动态读内容 |
+
+- **纯静态博客**（Markdown 编译成 HTML）：用 **Pages**，Git 推送即部署，最省事
+- **想做个能后台发文章的博客**：用 **Workers + KV**，文章存 KV，Worker 运行时读取渲染
+- **Workers Sites**：Cloudflare 已不推荐新项目使用，被 Pages 取代了
+
+这篇讲 **Workers + KV** 方案，因为它最能体现 Workers 的能力。但先说清楚：**如果你只是想把 Markdown 博客挂上去，直接跳到文末看 Pages 方案，那才是你的答案。**
+
+## 前置准备
+
+- 一个 Cloudflare 账号（免费注册）
+- 安装 Node.js（建议 18+）
+- 安装 Wrangler CLI
+- （可选）一个自己的域名
+
+### 安装 Wrangler
+
+```bash
+npm install -g wrangler
+```
+
+登录 Cloudflare 账号：
+
+```bash
+wrangler login
+```
+
+浏览器会自动打开授权页面，点允许。
+
+## 创建项目
+
+用 Hono 框架——专为边缘计算设计的轻量 Web 框架，在 Workers 上跑得极快。
+
+```bash
+npm create hono@latest my-blog -- --template cloudflare-workers
+cd my-blog
+npm install
+```
+
+## 编写 Worker 代码
+
+创建 `src/index.ts`：
+
+```typescript
+import { Hono } from 'hono'
+
+const app = new Hono()
+
+// 首页
+app.get('/', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+      <meta charset="UTF-8">
+      <title>我的博客</title>
+    </head>
+    <body>
+      <h1>欢迎来到我的博客！</h1>
+      <p>这是用 Cloudflare Workers 搭建的免费博客。</p>
+    </body>
+    </html>
+  `)
+})
+
+// 文章列表：从 KV 读
+app.get('/posts', async (c) => {
+  const list = await c.env.BLOG_POSTS.list()
+  return c.json(list.keys)
+})
+
+// 单篇文章：从 KV 读
+app.get('/posts/:slug', async (c) => {
+  const slug = c.req.param('slug')
+  const post = await c.env.BLOG_POSTS.get(slug)
+  if (!post) return c.notFound()
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head><meta charset="UTF-8"><title>${slug}</title></head>
+    <body><article>${post}</article></body>
+    </html>
+  `)
+})
+
+export default app
+```
+
+## 配置 Wrangler
+
+`wrangler.toml`：
+
+```toml
+name = "my-blog"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# 静态资源（CSS、图片等）交给 Workers 静态资源托管
+[assets]
+directory = "./assets"
+binding = "ASSETS"
+
+# KV 命名空间绑定
+[[kv_namespaces]]
+binding = "BLOG_POSTS"
+id = "<your-kv-id>"
+```
+
+`compatibility_date` 决定用哪个版本的 Workers 运行时，设新一点能用到更多特性，但别设成未来日期。
+
+## 用 KV 存储文章
+
+### 1. 创建命名空间
+
+```bash
+wrangler kv:namespace create "BLOG_POSTS"
+```
+
+会输出一个 `id`，填进 `wrangler.toml` 的 `id = "..."`。
+
+### 2. 灌入内容
+
+```bash
+# 写入第一篇文章（value 可以是 HTML，也可以存 Markdown 让 Worker 渲染）
+wrangler kv:key put --binding=BLOG_POSTS "hello-world" "$(cat posts/hello-world.html)"
+```
+
+批量写入用脚本：
+
+```bash
+for f in posts/*.html; do
+  slug=$(basename "$f" .html)
+  wrangler kv:key put --binding=BLOG_POSTS "$slug" "$(cat "$f")"
+done
+```
+
+**KV 的写入额度要注意**：免费版每天 1000 次写、10 万次读。写操作用来发文章绰绰有余，但**别在每次请求时写 KV**（比如做访问计数），那很快就会超。
+
+### 3. 从代码里验证
+
+```bash
+wrangler kv:key get --binding=BLOG_POSTS "hello-world"
+```
+
+能输出内容就对了。
+
+## 本地预览与部署
+
+### 本地跑
+
+```bash
+npm run dev
+```
+
+浏览器开 `http://localhost:8787`。Wrangler 会用 `miniflare` 在本地模拟 Workers + KV 环境，**KV 数据也会本地模拟一份**，不用连线上就能调试。
+
+### 部署
+
+```bash
+npm run deploy
+# 或直接
+wrangler deploy
+```
+
+成功后会得到 `https://my-blog.<你的子域>.workers.dev`。博客上线了。
+
+### 绑定自定义域名
+
+域名在 Cloudflare 的话，两种方式：
+
+**方式 A：Dashboard**
+
+Workers & Pages → 你的项目 → Settings → Triggers → Custom Domains → 添加域名。DNS 和 SSL 自动配好。
+
+**方式 B：Wrangler**
+
+```bash
+wrangler deploy --routes '["blog.example.com/*"]'
+```
+
+## 缓存与性能优化
+
+Workers 默认不缓存 HTML 响应。给动态内容加缓存能大幅降低 KV 读取和提升速度：
+
+```typescript
+app.get('/posts/:slug', async (c) => {
+  const slug = c.req.param('slug')
+  const cache = caches.default
+  const cacheKey = new Request(`https://cache.local/posts/${slug}`)
+
+  // 1. 先查缓存
+  let res = await cache.match(cacheKey)
+  if (res) {
+    res = new Response(res.body, res)
+    res.headers.set('X-Cache', 'HIT')
+    return c.newResponse(res.body, res)
+  }
+
+  // 2. 缓存没有，读 KV
+  const post = await c.env.BLOG_POSTS.get(slug)
+  if (!post) return c.notFound()
+
+  res = c.html(renderPost(slug, post))
+  res.headers.set('Cache-Control', 'public, max-age=3600')
+
+  // 3. 写进缓存，等下次命中
+  c.executionCtx.waitUntil(cache.put(cacheKey, res.clone()))
+
+  return res
+})
+```
+
+三个关键点：
+
+- **`caches.default`** 是 Workers 内置的 Cache API，按数据中心缓存，不需要额外配置
+- **`waitUntil`**：缓存写入放到后台做，不阻塞响应返回
+- **Cache-Control**：同时控制浏览器缓存和 Cloudflare 边缘缓存
+
+发新文章后想立即生效，用 Cache API 的 purge，或者简单点——把文章 key 加个版本号（`hello-world-v2`），旧的自然就失效了。
+
+## 免费额度限制
+
+| 项目 | 免费额度 | 注意 |
+|---|---|---|
+| 请求数 | 10 万次/天 | 个人博客很难超 |
+| CPU 时间 | **单请求 10ms** | 纯文本处理够，重计算不行 |
+| KV 读 | 10 万次/天 | 加了缓存基本用不完 |
+| KV 写 | 1000 次/天 | 只用来发文章 |
+| 子请求 | 50 次/请求 | 别在 Worker 里循环调外部 API |
+| 脚本大小 | 1 MB（免费） | Hono 打包后几百 KB，够 |
+
+**10ms CPU 限制是最容易撞的一条。** 它只算 CPU 时间，不算等待（等 KV、等外部 API 的时间不计数），所以大部分场景没问题。但如果你要在 Worker 里做图片缩放、大 JSON 解析，会超。
+
+## 重要：默认你该用 Pages
+
+说了这么多 Workers，现在说结论。
+
+**如果你只是想把博客内容挂上去供人阅读，用 Cloudflare Pages，不要用 Workers。**
+
+理由：
+
+| | Workers + KV | Cloudflare Pages |
+|---|---|---|
+| 内容管理 | 要自己写灌数据的脚本 | Git 推送，平台构建 |
+| 部署方式 | `wrangler deploy` | push 即部署 |
+| 缓存 | 自己写 Cache API | 平台自动 |
+| 预览环境 | 无（要自己搭） | 每个 PR 一个预览 URL |
+| 构建集成 | 自己接 | 原生支持 Astro/Hugo/Next 等 |
+| 适合 | 需要运行时动态逻辑 | 内容展示 |
+
+Pages 把"构建 + 分发 + 缓存 + 预览"全包了，而 Workers 方案这些都要自己拼。本站自己就是从 Workers 方案迁到 Pages + Astro 的，工作量降了一个数量级。
+
+**什么时候才该用 Workers + KV？**
+
+- 文章要能在线编辑、保存，不想重新构建部署
+- 要做多用户、评论、权限这类运行时逻辑
+- 要按请求参数动态生成内容
+
+这些需求 Pages 做不到，才值得上 Workers。
+
+## 成本分析
+
+| 项目 | 传统建站 | Cloudflare Workers |
+|---|---|---|
+| 服务器 | ¥300-3000/年 | **免费** |
+| CDN 加速 | ¥100-500/年 | **免费** |
+| SSL 证书 | ¥0-800/年 | **免费** |
+| 域名 | ¥50/年 | ¥50/年（可选） |
+| **总成本** | **¥450-4350/年** | **¥0-50/年** |
+
+## 小结
+
+Workers 的能力是真的强——10ms 冷启动、全球 300+ 节点、免费额度慷慨到离谱。但**能力强不等于适合**。
+
+给你的决策路径：
+
+1. **Markdown / 静态博客 → 直接上 Cloudflare Pages**，配 Astro 或 Hugo，Git 推送即部署。本站就是这个方案，构建和部署见《Vercel vs Cloudflare Pages》的对比
+2. **要在线编辑、动态逻辑 → Workers + KV**，用这篇的方案
+3. **需要数据库 → 加 D1**，见《Cloudflare 数据层三件套》
+4. **要存图片/文件 → 加 R2**，见《Cloudflare R2 对象存储完全指南》
+
+零成本建站这件事，Workers 和 Pages 都能做到。选对方案，比选对框架更重要。
+
+---
+
+## Immich 自建相册：Google Photos 的完美替代，AI 自动分类人脸识别
+URL: https://xiaozha.org/article/immich-photo-backup/
+
+手机相册大概是普通人最值钱的数字资产，也是被云服务绑得最死的一个。Google Photos 取消了免费无限存储，iCloud 每月收钱，还存在被扫一眼的隐私顾虑。
+
+**Immich** 是目前最成熟的自托管相册方案：AI 人脸识别、按时间/地点/人物搜索、地图视图、手机自动备份，体验已经非常接近 Google Photos，而数据全在你自己硬盘上。
+
+## Immich 能做什么
+
+- **手机自动备份**：iOS / Android 官方 App，后台静默上传
+- **AI 人脸识别**：自动聚类，按人物浏览
+- **智能搜索**：CLIP 模型支持自然语言搜图（"海边的日落"）
+- **地图视图**：按 EXIF GPS 信息在地图上呈现
+- **格式支持全**：RAW、HEIC、Live Photo、视频
+- **共享相册**：生成公开链接给朋友，可设过期时间
+- **多用户**：家人各自账号，权限隔离
+
+## 前置条件
+
+Immich 用 Docker Compose 部署，需要机器上已经有 Docker 和 Compose 插件。没装的话先看《Docker Compose 入门到实战》或《Ubuntu Server 初始化配置》第六节。
+
+硬件建议：
+
+| 用途 | 最低 | 舒适 |
+|---|---|---|
+| 内存 | 2 GB | 4 GB 以上 |
+| 存储 | 照片体积 × 2 | SSD 放数据库，HDD 放原图 |
+| AI 识别 | CPU 慢跑 | 有 Intel/NVIDIA GPU 快十倍 |
+
+## Docker Compose 部署
+
+### 目录结构
+
+```
+/opt/immich/
+├── .env
+├── docker-compose.yml
+└── upload/          # 照片实际存放位置
+```
+
+### `.env`
+
+```bash
+# 上传文件存放路径（容器内固定，改这个会丢数据）
+UPLOAD_LOCATION=./upload
+
+# 数据库密码，改成一个随机强密码
+DB_PASSWORD=换成随机强密码
+DB_DATABASE=immich
+DB_USERNAME=postgres
+
+# Redis
+REDIS_PASSWORD=再换一个随机强密码
+
+# Immich 版本标签，升级前先看 release note
+IMMICH_VERSION=release
+```
+
+### `docker-compose.yml`
+
+```yaml
+services:
+  immich-server:
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION}
+    restart: unless-stopped
+    ports:
+      - "2283:2283"
+    volumes:
+      - ./upload:/data
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      redis:
+        condition: service_started
+      database:
+        condition: service_healthy
+    environment:
+      DB_HOSTNAME: database
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      REDIS_HOSTNAME: redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      IMMICH_PUBLIC_REGISTER: "false"     # 关闭公开注册
+      IMMICH_MACHINE_LEARNING_ENABLED: "true"
+
+  immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
+    restart: unless-stopped
+    volumes:
+      - model-cache:/cache
+
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+  database:
+    image: tensorchord/pgvecto-rs:pg14-v0.2.7
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+
+volumes:
+  model-cache:
+  pgdata:
+```
+
+注意 `immich-server` 挂的是 `./upload`，对应 `.env` 里的 `UPLOAD_LOCATION=./upload`。**这个路径一旦开服就别再改**，改了 Immich 会认为所有照片都丢了。
+
+### 启动
+
+```bash
+cd /opt/immich
+docker compose up -d
+docker compose logs -f immich-server    # 看启动日志
+```
+
+没有报错就可以访问 `http://服务器IP:2283`。
+
+## 首次配置
+
+**注册第一个账号**，这个账号就是管理员。
+
+注册完立刻确认关闭注册——否则任何人都能往你的相册里传东西。在 `docker-compose.yml` 里已设 `IMMICH_PUBLIC_REGISTER: "false"`，重启后新用户就注册不了。要加家人账号，由管理员在网页端手动创建。
+
+**存储模板**：设置 → 存储模板，选一个和现有文件夹结构匹配的模板（比如 `{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}`）。这个决定导入的照片怎么归档，一次设好省得后面乱。
+
+**机器学习设置**：开启智能搜索和人脸识别。CPU 跑第一遍全库扫描会比较久，几万张照片大概几小时，之后增量就快了。
+
+**库扫描**：如果 `upload/` 里已经有旧照片，点"库扫描"让 Immich 索引它们。
+
+## 手机端配置
+
+App Store / Google Play 搜 Immich 官方 App。
+
+**连接服务器**：填 `http://服务器IP:2283` 或你的域名。只在家庭网内用填 IP 就行；想在外面也能备份，需要配域名 + 反向代理，或者用 Cloudflare Tunnel 把服务暴露出去（见《Cloudflare Tunnel 免费内网穿透》）。
+
+**开启后台自动上传**：Android 在 App 设置里开"后台相册备份"；iOS 受系统限制，见下一节。
+
+**相册选择**：默认备份相机胶卷，可以勾选"排除截图"之类的文件夹。
+
+### iOS 的后台限制
+
+iOS 对后台任务管得严，Immich 在后台可能被系统挂起。实测经验：
+
+- 打开 App 时上传最可靠，系统一般给几分钟窗口
+- 关掉 iOS 的"后台 App 刷新"反而更稳——刷新会唤醒 App 但很快又被杀，反复启动更耗电
+- 照片多的时候，第一次备份建议插着电、开着 App 放一晚
+
+这是 iOS 的系统限制，不是 Immich 的问题，所有同类 App 都一样。
+
+## 从 Google Photos 迁移
+
+### 第一步：Google Takeout 导出
+
+浏览器登录，访问 `takeout.google.com`。**只勾选 Google Photos**，别整个账号打包——那会大到离谱。
+
+格式选"单个压缩包"，每个 2 GB 或 10 GB 都行。导出完成后下载，一个相册一个压缩包。
+
+### 第二步：导入 Immich
+
+最省事的做法：把压缩包解开到服务器的 `upload/` 目录下，然后在网页端点"库扫描"。
+
+```bash
+# 在服务器上
+mkdir -p /opt/immich/upload/takeout
+# 把下载的 zip 传上去后解压
+cd /opt/immich/upload/takeout
+unzip "*.zip"
+```
+
+解压后 Google Takeout 会带一堆 `.json` 伴随文件（存着拍摄时间、EXIF、地点）。**这些 json 别删**，Immich 靠它们恢复原始的拍摄时间和 GPS 信息，否则所有照片的日期会变成导入那天。
+
+扫描完确认一下：随机抽几张老照片，看拍摄时间对不对、地图视图有没有点位。
+
+## 备份策略
+
+照片是**不可再生**的资产，手机丢了能买，照片丢了就真没了。Immich 本身有数据库和文件两层，都要备份。
+
+### 1. 本地镜像到外部硬盘
+
+```bash
+# 挂上外部硬盘后
+rsync -av --delete /opt/immich/upload/ /mnt/backup/immich-upload/
+```
+
+`--delete` 会同步删除，确认硬盘挂对了再用。建议每周一次，写进 cron。
+
+### 2. 异地副本到对象存储
+
+本地备份防硬盘坏，异地备份防火灾水灾。Backblaze B2、Cloudflare R2、阿里云 OSS 都行，用 rclone 同步：
+
+```bash
+rclone sync /opt/immich/upload r2:你的桶名/immich-upload \
+  --transfers 8 --checksum
+```
+
+R2 有 10GB 免费额度，小规模相册基本不花钱。详细配置见《Cloudflare R2 对象存储完全指南》。
+
+### 3. 数据库备份
+
+照片文件 rsync 就行，但人脸聚类、标签、用户信息在 PostgreSQL 里，也要定期dump：
+
+```bash
+docker compose exec database pg_dump \
+  -U postgres -d immich | gzip > /opt/immich/backup/db-$(date +%F).sql.gz
+```
+
+**遵循 3-2-1 原则**：3 份副本、2 种介质、1 份异地。做到这三条，照片数据就基本不可能丢了。
+
+## 性能优化：GPU 加速
+
+人脸识别和 CLIP 搜索默认跑 CPU，几万张照片要跑很久。有 GPU 的话快一个数量级。
+
+### NVIDIA（CUDA）
+
+宿主机装好 NVIDIA Container Toolkit，然后改 `immich-machine-learning` 服务：
+
+```yaml
+  immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
+    restart: unless-stopped
+    volumes:
+      - model-cache:/cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+```
+
+### Intel（OpenVINO）
+
+核显也能用，加一段设备映射：
+
+```yaml
+    devices:
+      - /dev/dri:/dev/dri
+```
+
+并在环境变量里设 `MACHINE_LEARNING_WORKERS=1`（核显并发别开高）。
+
+### macOS（CoreML）
+
+Apple 芯片自动走 Core ML，不用额外配置，装完就比 CPU 快不少。
+
+### 降低后台扫描频率
+
+机器学习设置里，把"定时扫描"改成"不频繁"。相册不会天天大变，每天跑一次足够，还能省电。
+
+## Immich 和其他方案对比
+
+| | Immich | Google Photos | Nextcloud Photos | PhotoPrism |
+|---|---|---|---|---|
+| 费用 | 免费 | 超量收费 | 免费 | 免费 |
+| 人脸识别 | 有，效果好 | 有 | 插件，一般 | 有 |
+| 自然语言搜图 | 有（CLIP） | 有 | 无 | 有限 |
+| 手机 App | 官方，体验好 | 官方 | 官方 | 无官方 |
+| 地图视图 | 有 | 有 | 插件 | 有 |
+| 资源占用 | 中等 | — | 较重 | 中等 |
+| 多用户 | 完善 | 完善 | 完善 | 有限 |
+
+选型建议：要 Google Photos 的完整体验选 **Immich**；已经有一套 Nextcloud 想顺带用，选 Nextcloud Photos；机器配置很差、只想要个能看的图库，选 PhotoPrism。
+
+## 小结
+
+Immich 是目前自托管相册的最优解，没有之一。部署本身半小时的事，真正花时间的是首次全库扫描和从 Google Photos 导出迁移——后者取决于你有多少照片。
+
+装好之后记得做两件事：**关掉公开注册**、**配上备份**。前者防陌生人，后者防硬盘坏。相册这东西，丢一次就够后悔一辈子。
+
+---
+
+## Git 进阶技巧：10 个让同事对你刮目相看的高级命令
+URL: https://xiaozha.org/article/git-advanced-tips/
+
+Git 远不止 `commit` 和 `push`。掌握这 10 个命令，你能把提交历史整理得像教科书、在三十秒内定位引入 bug 的那次提交、甚至救回"删掉"的代码。
+
+每个命令都配可直接抄的用法。
+
+## 一、`git rebase -i` 交互式变基
+
+把一团乱的提交整理成线性历史。还没 push 的本地提交，随便改。
+
+```bash
+# 整理最近 3 个提交
+git rebase -i HEAD~3
+```
+
+弹出编辑器，每行一个提交，前面的指令决定怎么处理：
+
+```text
+pick a1b2c3d  feat: 加登录
+squash e4f5g6h  wip
+reword h7i8j9k  fix: 改 bug
+edit k1l2m3n  debug
+drop n4o5p6q  临时测试
+```
+
+| 指令 | 作用 |
+|---|---|
+| `pick` | 保留这个提交 |
+| `reword` | 保留，但改提交信息 |
+| `edit` | 停下来，让你改内容再继续 |
+| `squash` | 合并到上一个提交，信息也合并 |
+| `fixup` | 合并到上一个，丢弃这个的信息 |
+| `drop` | 删掉这个提交 |
+
+**最常见的用法**：`squash` 把一堆 "wip"、"fix typo" 合成一个干净提交。
+
+```bash
+git rebase -i main        # 把功能分支的提交全整理一遍再合入
+```
+
+**铁律：只 rebase 没 push 过的提交。** 改了已推送的历史，别人 pull 会冲突，你得 `push --force`，然后收获同事的怨恨。
+
+## 二、`git cherry-pick` 精选提交
+
+把别的分支上的**某一个**提交拿到当前分支，不用把整条分支合过来。
+
+```bash
+# 把 hotfix 分支上的 a1b2c3d 拿到 main
+git cherry-pick a1b2c3d
+
+# 一次拿多个
+git cherry-pick a1b2c3d e4f5g6h
+
+# 拿一段连续提交（不含起点）
+git cherry-pick a1b2c3d^..e4f5g6h
+```
+
+典型场景：生产出 bug，同事在 `hotfix` 分支修好了，你只想把那个修复拿到自己的 `develop`，不要他分支上其他改动。
+
+有冲突时，Git 会停下来，你解完：
+
+```bash
+git add .
+git cherry-pick --continue
+# 或者放弃
+git cherry-pick --abort
+```
+
+## 三、`git worktree` 多工作目录
+
+一个仓库同时检出到多个目录，各在不同分支。**不用 stash 来切分支了。**
+
+```bash
+# 为主仓库旁挂一个 hotfix 工作目录
+git worktree add ../myproject-hotfix hotfix
+
+# 基于新分支挂
+git worktree add -b feature-x ../myproject-feature feature-x
+```
+
+现在 `../myproject-hotfix` 和 `../myproject-feature` 是两个独立目录，各自在不同分支，**改互不影响**。IDE 里开两个窗口就行。
+
+用完了清理：
+
+```bash
+git worktree remove ../myproject-hotfix
+git worktree list      # 看当前所有工作目录
+```
+
+**适用场景**：正在写功能，突然要修线上 bug；或者要对比两个分支的构建产物。比 `git stash` 干净得多——stash 是"暂停"，worktree 是"并行"。
+
+## 四、`git bisect` 二分查找
+
+自动定位"是哪次提交引入的 bug"。提交历史 500 个，二分查找只要 9 步。
+
+```bash
+git bisect start
+git bisect bad                  # 当前版本有 bug
+git bisect good v2.1.0          # 这个版本是好的
+```
+
+Git 会检出一个中间提交，你测一下，然后告诉它结果：
+
+```bash
+git bisect good     # 这个版本没 bug
+git bisect bad      # 这个版本有 bug
+```
+
+重复几次，Git 会指出第一个坏提交：
+
+```
+a1b2c3d is the first bad commit
+```
+
+结束：
+
+```bash
+git bisect reset
+```
+
+**自动化版本**——如果你有测试能自动判断：
+
+```bash
+git bisect start HEAD v2.1.0
+git bisect run npm test
+```
+
+`npm test` 返回 0（通过）Git 就标 good，非 0 就标 bad，全程无人值守。**这个在 CI 里定位 flaky test 引入点特别好用。**
+
+## 五、`git stash` 临时存储
+
+手头活没干完，要去切分支。别急着commit 半个功能。
+
+```bash
+git stash                  # 存起来，工作区变干净
+git stash list             # 看存了哪些
+git stash pop              # 取回最近一个，并从栈里删掉
+git stash apply            # 取回但保留在栈里
+```
+
+进阶用法：
+
+```bash
+git stash -u               # 连未跟踪的新文件一起存
+git stash push -m "登录功能写一半"   # 加个备注，list 时看得懂
+git stash drop             # 删掉栈顶
+git stash clear            # 全清
+```
+
+**比 stash 更好的是 worktree**——如果是要长时间并行两份工作，见上面第三条。
+
+## 六、`git reflog` 找回丢失的提交
+
+**这条是救命用的。** 误操作 `reset --hard`、`branch -D` 删了分支、rebase 出错——只要提交进过仓库，reflog 都记着。
+
+```bash
+git reflog
+```
+
+输出类似：
+
+```text
+a1b2c3d HEAD@{0}: reset: moving to HEAD~3
+e4f5g6h HEAD@{1}: commit: feat: 登录功能
+h7i8j9k HEAD@{2}: checkout: moving from feature to main
+```
+
+`HEAD@{n}` 就是你每一步的操作历史。找回被 reset 掉的提交：
+
+```bash
+git reset --hard e4f5g6h
+# 或者只把那个提交捡出来
+git cherry-pick e4f5g6h
+```
+
+**reflog 默认保留 90 天**（可配置），过期就真没了。所以发现误操作**立刻**查 reflog，别拖。
+
+这条值得单独记：**Git 里没有"彻底删除"这回事，只有"暂时找不到"。** reflog 就是那个能找到的地方。
+
+## 七、`git log` 美化输出
+
+默认输出又长又乱。配一个别名：
+
+```bash
+git config --global alias.lg "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+```
+
+之后 `git lg` 输出：
+
+```text
+* a1b2c3d - (2 hours ago) feat: 登录功能 - 小吒 (HEAD -> main)
+* e4f5g6h - (5 hours ago) fix: 修 typo - 小吒
+|\
+| * h7i8j9k - (1 day ago) feat: 支付 - 同事 (feature/pay)
+|/
+* k1l2m3n - (2 days ago) chore: 升级依赖 - 小吒
+```
+
+分支合并关系一目了然。
+
+常用过滤：
+
+```bash
+git log --oneline -10              # 最近 10 条，一行一条
+git log --author="小吒"            # 只看某人的
+git log --since="1 week ago"       # 最近一周
+git log --grep="登录"              # 搜提交信息
+git log -S "function login"        # 搜代码内容（pickaxe）
+git log --oneline --decorate --graph --all   # 全部分支图
+```
+
+**`git log -S` 特别有用**——想知道某行代码什么时候引入的、又被谁删了，直接搜字符串。
+
+## 八、`git blame` 追责与解惑
+
+逐行看最后一次修改是谁、哪个提交。
+
+```bash
+git blame src/index.ts
+```
+
+```text
+a1b2c3d (小吒 2026-07-21 10:30:12 +0800 42) export function login() {
+e4f5g6h (小吒 2026-07-20 15:22:08 +0800 43)   const token = await verify();
+```
+
+别用它来"追责"——它真正的价值是**读懂代码为什么这么写**。看到可疑的一行，`git blame` 拿到 commit，再 `git show <commit>` 看当时的完整改动和提交信息，往往能找到答案。
+
+```bash
+# 只看某几行
+git blame -L 40,50 src/index.ts
+
+# 忽略空白字符变动（reformat 后特别有用）
+git blame -w src/index.ts
+
+# 追踪代码移动（跨文件复制也能追）
+git blame -M -C src/index.ts
+```
+
+## 九、`git diff` 高级用法
+
+不只是 `git diff`。
+
+```bash
+# 比较工作区和暂存区
+git diff
+
+# 比较暂存区和最后一次提交（即将提交的内容）
+git diff --staged
+git diff --cached              # 同上
+
+# 比较两个提交
+git diff a1b2c3d e4f5g6h
+
+# 比较两个分支
+git diff main feature/x
+
+# 只看统计，不看内容
+git diff --stat
+
+# 只看某个文件
+git diff -- src/index.ts
+
+# 忽略空白字符
+git diff -w
+
+# 显示函数名（看 diff 时知道在改哪个函数）
+git diff --function-context
+```
+
+**提交前必做**：`git diff --staged`。确认你到底暂存了什么，比提交后发现多带了 debug 代码再回滚省事。
+
+## 十、`git submodule` 子模块
+
+在一个 Git 仓库里嵌另一个 Git 仓库。适合引入第三方库但又要锁定版本。
+
+```bash
+# 添加子模块
+git submodule add https://github.com/vmstan/gravity-sync.git scripts/gravity-sync
+
+# 克隆带子模块的仓库
+git clone --recursive <repo>
+
+# 已经克隆了，补拉子模块
+git submodule update --init --recursive
+
+# 更新所有子模块到远端最新
+git submodule update --remote
+```
+
+`.gitmodules` 记录子模块，主仓库只存一个 commit 指针。
+
+**实话实说：submodule 用起来麻烦**（忘记 `--recursive` 就拉不到内容、更新要手动）。2026 年的替代方案：
+
+- **Git Subtree**：把子仓库内容直接并入主仓库，没有指针问题
+- **包管理器**：npm/pnpm workspace、Go module、Rust crate——如果你的"子模块"是代码依赖，用语言自带的
+- **直接 vendoring**：把第三方代码复制进仓库，简单粗暴但有效
+
+**只有一种情况我推荐 submodule**：你真的需要"主仓库锁定第三方仓库的某个 commit，且经常要同步上游"。其他情况，上面三个替代方案都更省心。
+
+## 小结
+
+这 10 个里，按使用频率排：
+
+| 命令 | 什么时候用 |
+|---|---|
+| `rebase -i` | 提交前整理历史（几乎每天） |
+| `diff --staged` | 提交前检查（每次） |
+| `log --graph` | 看分支关系（经常） |
+| `stash` | 临时切分支（经常） |
+| `cherry-pick` | 挑单个提交（偶尔） |
+| `reflog` | **误操作救命（关键时刻）** |
+| `blame` | 读懂代码为什么这么写（偶尔） |
+| `worktree` | 并行两份工作（偶尔） |
+| `bisect` | 定位 bug 引入点（排查时） |
+| `submodule` | 嵌第三方仓库（尽量别用） |
+
+真正值得形成肌肉记忆的是前四个。尤其 `git diff --staged`——这个习惯能避免 90% 的"手滑提交"。
+
+Git 的哲学是"一切操作可逆"。理解了这一点，`reflog`、`rebase`、`reset` 这些命令就不再可怕——它们都在那个"可逆"的框架里。
+
+---
+
+## 自托管数据备份完全指南：别让硬盘带走你的一切
+URL: https://xiaozha.org/article/selfhost-backup-strategy/
+
+你花两周搭好了 Immich、Jellyfin、Vaultwarden，照片、电影、密码全在里面。然后某天早上硬盘挂了。
+
+自托管社区有句老话：**没有备份的 RAID 不是备份。** 更极端一点：没有验证过的备份不算备份。
+
+这篇讲一套能落地的备份方案——不是"记得定期复制文件"这种废话，而是自动化、加密、可验证、能真的把你从灾难里捞回来的那一套。
+
+## 先接受一个事实：硬盘一定会坏
+
+机械硬盘的 AFR（年化故障率）大约 1-3%。你有 4 块盘，一年内至少一块出问题的概率不低。SSD 更好，但掉盘是突发性的，通常没有预警。
+
+更常见的不是硬件故障，而是：
+
+- **误操作**：`rm -rf` 打错路径、`docker compose down -v` 手滑、改配置把库覆盖了
+- **勒索软件**：扫到你的公网服务，加密后要比特币
+- **系统升级搞坏数据**：数据库版本不兼容，升级完打不开
+- **机器物理损坏**：进水、雷击、熊孩子拔线
+
+共同点：**都发生在你最没有防备的时候，且都无法靠"再买一块硬盘"解决。**
+
+## 3-2-1 原则
+
+备份领域的黄金法则，三十年没变过：
+
+- **3** 份数据副本（1 份生产 + 2 份备份）
+- **2** 种不同介质（比如内置硬盘 + 外部硬盘）
+- **1** 份异地（防火、防盗、防熊孩子）
+
+对应到家庭自托管：
+
+| 副本 | 位置 | 介质 |
+|---|---|---|
+| 生产数据 | 服务器内置盘 | SSD/HDD |
+| 本地备份 | 同一台机器的外挂盘 / NAS | 另一块盘 |
+| 异地备份 | 对象存储（R2/B2/OSS） | 云端 |
+
+第三条是绝大多数人跳过的——"我机器上已经有两份了"。但机器被偷、着火、雷击，两份一起没。
+
+## 工具选择：Restic
+
+备份工具很多，家庭场景我推荐 **Restic**：
+
+- **增量 + 去重**：只传变化的数据块，第二次备份通常几分钟
+- **加密**：本地就加密，传到公网云端也不用担心内容泄露
+- **快照**：每次备份一个快照，可以按时间点恢复
+- **存储后端多**：本地目录、SFTP、S3、B2、R2、Azure、Google Cloud 全支持
+- **单文件二进制**：无依赖，下载即用
+
+另一个选择 **Kopia**，有 GUI、界面更友好，功能类似。想要图形界面用 Kopia，要脚本化和稳定用 Restic。
+
+这篇以 Restic 为主。
+
+## Restic 上手
+
+### 安装
+
+```bash
+# Linux
+curl -L https://github.com/restic/restic/releases/latest/download/restic_0.17.0_linux_amd64 -o restic
+chmod +x restic && sudo mv restic /usr/local/bin/
+
+# macOS
+brew install restic
+
+# Windows
+scoop install restic
+```
+
+### 初始化仓库
+
+```bash
+# 本地目录作为仓库
+restic init --repo /mnt/backup/restic-repo
+
+# 或者直接初始化到 R2（推荐，异地）
+export AWS_ACCESS_KEY_ID=<R2 Access Key>
+export AWS_SECRET_ACCESS_KEY=<R2 Secret Key>
+restic -r s3:https://<account-id>.r2.cloudflarestorage.com/我的备份桶 init
+```
+
+R2 的配置见《Cloudflare R2 对象存储完全指南》。**强烈建议异地仓库直接建在 R2**，一份投入同时解决"本地备份"和"异地备份"。
+
+### 设置密码
+
+`init` 时会要求设仓库密码。**这个密码丢了，备份就彻底废了**——Restic 是客户端加密，没有后门。把它存进你的密码管理器（希望那是 Vaultwarden，见《Vaultwarden 自托管密码管理器》）。
+
+### 第一次备份
+
+```bash
+restic -r /mnt/backup/restic-repo backup /opt/immich/upload /opt/jellyfin/media
+```
+
+第一次会全量上传，慢。之后每次只传变化的块：
+
+```bash
+$ restic -r /mnt/backup/restic-repo backup /opt/immich/upload
+Files:           3 new     0 changed     12450 unchanged
+Dirs:            1 new     0 changed     230 unchanged
+Added to the repo: 412.8 MiB
+duration: 0:02:14
+```
+
+12450 个文件没变，只传了 412MB——这就是增量的价值。
+
+## 该备份什么
+
+不是所有东西都值得备份。按优先级：
+
+### 必须备份（不可再生或极难重建）
+
+| 数据 | 位置 | 说明 |
+|---|---|---|
+| 用户上传文件 | Immich 的 `upload/`、Nextcloud 的 `data/` | 照片、文档，**丢了就是永远丢了** |
+| 密码数据库 | Vaultwarden 的 `data/` | 丢了等于全部账号失守 |
+| 应用数据库 | PostgreSQL/MySQL 数据目录 | 元数据、用户、设置 |
+| 配置文件 | `/opt/*/docker-compose.yml`、`.env` | 重建服务的依据 |
+| 自托管服务数据 | n8n、Uptime Kuma、Gitea 的卷 | 工作流、监控项、代码仓库 |
+
+### 不用备份
+
+- **媒体库的原始文件**：电影、音乐你有原盘或能重新下载
+- **容器镜像**：`docker compose pull` 能拉回来
+- **模型文件**：Ollama 的模型重新 `pull` 就行，几 GB 一个
+- **日志和缓存**：没有价值
+- **Pagefind 索引**：构建产物，重新 build 就有
+
+原则：**能重新获得的东西不要占备份空间。** 备份越精简，越快越可靠。
+
+### 数据库要单独 dump
+
+数据库正在运行时直接复制数据目录，可能得到不一致的状态（写了一半的页）。正确做法是用数据库自己的导出工具：
+
+```bash
+# PostgreSQL
+docker exec immich-database pg_dump -U postgres -d immich | gzip > immich-db.sql.gz
+
+# MySQL / MariaDB
+docker exec mariadb mysqldump -u root -p<密码> --all-databases | gzip > all-db.sql.gz
+```
+
+Restic 再备份这个 dump 文件。恢复时先起空库，再把 SQL 灌进去。
+
+## 自动化：让它自己跑
+
+手动备份 = 迟早忘了。写进 cron：
+
+```bash
+sudo crontab -e
+```
+
+```cron
+# 每天凌晨 3 点：先 dump 数据库，再 restic 备份
+0 3 * * * /usr/local/bin/backup.sh >> /var/log/backup.log 2>&1
+```
+
+`backup.sh`：
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+export RESTIC_REPOSITORY="s3:https://<account-id>.r2.cloudflarestorage.com/我的备份桶"
+export AWS_ACCESS_KEY_ID="<R2 Access Key>"
+export AWS_SECRET_ACCESS_KEY="<R2 Secret Key>"
+export RESTIC_PASSWORD_FILE=/root/.restic-pass
+
+TS=$(date +%F)
+
+# 1. dump 各服务的数据库
+docker exec immich-database pg_dump -U postgres -d immich | gzip > /tmp/immich-db-$TS.sql.gz
+docker exec vaultwarden /usr/bin/sqlite3 /data/db.sqlite ".backup '/tmp/vw-$TS.sqlite'"
+
+# 2. 备份文件数据 + dump
+restic backup \
+  /opt/immich/upload \
+  /opt/vaultwarden/data \
+  /tmp/immich-db-$TS.sql.gz \
+  /tmp/vw-$TS.sqlite \
+  --tag daily
+
+# 3. 清理：保留 7 天日备、4 周周备、6 月月备
+restic forget --tag daily \
+  --keep-daily 7 --keep-weekly 4 --keep-monthly 6 \
+  --prune
+
+rm -f /tmp/immich-db-$TS.sql.gz /tmp/vw-$TS.sqlite
+
+echo "$(date '+%F %T') 备份完成"
+```
+
+`--prune` 会真正删除过期数据，**它可能跑很久**（要重写仓库索引），建议放在凌晨。
+
+## 关键：验证能恢复
+
+这是整套方案里最容易被跳过、又最关键的一步。
+
+**备份了但从没恢复过，等于没备份。** 你以为在保护数据，实际上可能存了一堆损坏的快照——直到灾难发生才发现，那时候已经晚了。
+
+定期做恢复演练：
+
+```bash
+# 列出所有快照
+restic -r <repo> snapshots
+
+# 把某个快照恢复到临时目录（不动生产数据！）
+restic -r <repo> restore latest --target /tmp/restore-test
+
+# 检查关键文件在不在、能不能用
+ls -la /tmp/restore-test/opt/immich/upload/ | head
+gunzip -t /tmp/restore-test/tmp/immich-db-2026-10-24.sql.gz && echo "dump 完整"
+
+# 清理测试目录
+rm -rf /tmp/restore-test
+```
+
+建议**每季度做一次完整恢复演练**，随机挑一个快照，恢复到临时位置，验证文件能读、数据库能导入。花二十分钟，买一个安心。
+
+更严谨的可以用 `restic check` 检查仓库完整性：
+
+```bash
+restic -r <repo> check --read-data
+```
+
+这会下载并校验所有数据块，很慢（几小时），但能发现静默损坏。半年跑一次。
+
+## 加密与安全
+
+Restic 默认客户端加密，仓库里的数据在本地就加密了，传到公网云端内容也不可读。但有几条要注意：
+
+**别把密码写在脚本里**（像上面示例那样直接写 `RESTIC_PASSWORD`）。用密码文件，且权限收紧：
+
+```bash
+umask 077
+echo "你的仓库密码" > /root/.restic-pass
+chmod 600 /root/.restic-pass
+```
+
+**R2 的 Access Key 用最小权限**：只给这个桶的读写，不要给账户级权限。泄露了损失可控。
+
+**考虑备份的备份**：R2 本身有冗余，但账号被封/密钥泄露/误删桶，备份一样没。极重要的数据（照片、密码库），本地盘再留一份，或者用第二个云端。
+
+## 常见错误
+
+| 错误 | 后果 |
+|---|---|
+| 只备份到同机器另一块盘 | 机器被偷/着火，两份一起没 |
+| 备份从不验证 | 灾难时才发现备份是坏的 |
+| 数据库直接复制数据目录 | 可能备份到不一致状态，恢复失败 |
+| 备份脚本无人监控 | 悄悄失败三个月你不知道 |
+| 没有清理策略 | 磁盘被历史备份塞满，新备份失败 |
+| 密码只存在一处 | 仓库密码丢了，备份全废 |
+
+最后一条尤其致命——**把仓库密码和备份位置写进密码管理器**，且确认那个管理器本身有备份。听起来像递归，但这就是关键数据的现实。
+
+## 和 Uptime Kuma 配合
+
+备份脚本失败了你不知道？用 Push 监控：
+
+```bash
+# crontab 里，备份成功后 ping 一下
+0 3 * * * /usr/local/bin/backup.sh && curl -fsS https://kuma.example.com/api/push/xxxxx
+```
+
+Uptime Kuma 超过 24 小时没收到这个 ping 就告警——意味着备份脚本挂了、机器宕了、或者磁盘满了。这是监控"备份这件事本身"的唯一可靠办法，配置见《Uptime Kuma 自建监控》。
+
+## 小结
+
+自托管的备份不需要复杂方案，需要的是**真的执行**。最小可用配置：
+
+1. Restic 仓库建在 R2（异地 + 免费额度）
+2. 每天 cron 跑：dump 数据库 → 备份 → forget/prune
+3. 备份成功 ping 一下 Uptime Kuma
+4. 每季度恢复演练一次
+5. 仓库密码存进密码管理器
+
+做到这五条，你的自托管数据就真的安全了。剩下的——加密、多后端、Kopia——都是锦上添花。
+
+上一篇《自托管 20 个必备开源应用》告诉你装什么，这一篇告诉你怎么守住。两边都做到，自托管才完整。
+
+---
+
+## Jellyfin 影音库搭建指南：Plex 免费替代，4K 硬解全平台
+URL: https://xiaozha.org/article/jellyfin-media-server/
+
+Jellyfin 是完全免费开源的媒体服务器，是 Plex 和 Emby 的最佳替代品。没有账号要求、没有功能墙、没有广告，转码和多平台客户端全都有。
+
+这篇从部署讲到硬件转码调优——那是 Jellyfin 体验的分水岭。
+
+## 为什么选 Jellyfin 而不是 Plex
+
+Plex 免费版在 2025 年的涨价和远程播放收费，把大量用户推到了 Jellyfin：
+
+| | Jellyfin | Plex 免费版 |
+|---|---|---|
+| 费用 | 完全免费 | 远程播放/硬件转码要 Plex Pass |
+| 账号 | 不需要 | 必须注册 |
+| 追踪 | 无 | 有 |
+| 硬件转码 | 免费 | 付费功能 |
+| 客户端 | 全平台官方 | 全平台，TV 端更强 |
+| 元数据刮削 | TMDB 等 | 自家数据库，更全 |
+
+**Plex 的优势**在 TV 端客户端更成熟、元数据更准。但如果你主要在自己设备上看、不想被收费墙卡住，Jellyfin 是更合理的选择。
+
+## Docker 部署
+
+### 目录结构
+
+```
+/opt/jellyfin/
+├── docker-compose.yml
+├── config/          # Jellyfin 配置和数据库
+└── media/
+    ├── movies/
+    ├── tv/
+    └── music/
+```
+
+### `docker-compose.yml`
+
+```yaml
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+    volumes:
+      - ./config:/config
+      - ./media:/media
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - JELLYFIN_PublishedServerUrl=http://你的服务器IP:8096
+```
+
+**硬件转码版本**需要额外挂载渲染设备，见下文。
+
+### 启动
+
+```bash
+cd /opt/jellyfin
+docker compose up -d
+```
+
+访问 `http://服务器IP:8096`。
+
+## 初始配置向导
+
+**第一步：创建管理员账号。** 这个账号能管理一切，密码设好。
+
+**第二步：添加媒体库。** 内容类型选对很重要——选 `Movies` 会按电影刮削，选 `Shows` 会按剧集刮削，选错会导致元数据一团糟。文件夹填容器内路径 `/media/movies`、`/media/tv`。
+
+**第三步：语言和地区。** 元数据语言选 `Chinese` 优先， country 选 `China`，这样刮削器会优先找中文标题和简介。
+
+**第四步：远程访问。** 先跳过，最后单独配（见下文远程访问）。
+
+## 媒体库配置
+
+### 电影
+
+文件夹按"一部电影一个目录"组织，Jellyfin 认这个结构：
+
+```
+media/movies/
+├── 肖申克的救赎 (1994)/
+│   └── The.Shawshank.Redemption.1994.1080p.BluRay.x264.mkv
+├── 星际穿越 (2014)/
+│   └── Interstellar.2014.2160p.UHD.BluRay.x265.mkv
+```
+
+**文件名带年份**是关键——`肖申克的救赎 (1994)` 比 `肖申克的救赎` 刮削成功率高得多。
+
+### 剧集
+
+```
+media/tv/
+└── 绝命毒师 (2008)/
+    ├── Season 01/
+    │   ├── Breaking.Bad.S01E01.1080p.mkv
+    │   ├── Breaking.Bad.S01E02.1080p.mkv
+```
+
+`Season 01` 和 `S01E01` 这种命名是行业标准，Jellyfin 和所有刮削器都认。
+
+### 音乐
+
+```
+media/music/
+└── 周杰伦/
+    └── 叶惠美 (2003)/
+        ├── 01 - 以父之名.flac
+```
+
+音乐库走的是另一套元数据源（MusicBrainz），命名规范宽松些，但有"歌手/专辑/曲目"三层结构体验最好。
+
+## 元数据刮削
+
+Jellyfin 默认用几个刮削器，推荐主力配 TMDB（电影电视剧数据最全、更新最快）。
+
+**配置步骤**：
+
+1. Dashboard → Libraries → 点你的库 → Manage Library
+2. **Metadata downloaders**：把 TheMovieDB 拖到最上面，禁用不靠谱的
+3. **TMDB API Key**：免费申请，去 [themoviedb.org](https://www.themoviedb.org/settings/api) 注册后拿
+4. 勾选 **Save artwork into media folders**——海报和背景图存到媒体目录旁边，换机器不用重下
+5. **Language** 优先 `Chinese`
+
+### 单个条目重新刮削
+
+某个条目识别错了，进条目详情 → 右上角 **⋯ → Identify**，手动搜正确的标题。比删库重扫快得多。
+
+### NFO 文件（本地元数据）
+
+如果你在别处（比如 Emby、Kodi）已经整理好了元数据，把 `.nfo` 文件放到媒体旁边，Jellyfin 会优先读本地文件，不去网上刮。适合精心整理过的收藏。
+
+## 硬件转码
+
+这是 Jellyfin 体验的核心。**没有硬解，4K HEVC 在手机上基本播不动**；有硬解，N100 这种百元小主机都能同时转两三路 1080p。
+
+### 在容器里启用
+
+Docker 部署要额外挂载渲染设备：
+
+**Intel Quick Sync（核显，最推荐）**
+
+```yaml
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    devices:
+      - /dev/dri:/dev/dri          # 挂载渲染节点
+    volumes:
+      - ./config:/config
+      - ./media:/media
+    group_add:
+      - "109"                       # render 组 GID，用 getent group render 查
+```
+
+**NVIDIA（独显）**
+
+宿主机先装 NVIDIA Container Toolkit，然后：
+
+```yaml
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu,video,utility]
+```
+
+**AMD**
+
+```yaml
+    devices:
+      - /dev/dri:/dev/dri
+```
+
+### 在 Jellyfin 里开启
+
+Dashboard → **Playback** → **Transcoding**：
+
+- **Hardware acceleration**：Intel 选 `Intel QuickSync (QSV)`，NVIDIA 选 `NVIDIA NVENC`，AMD 选 `AMD AMF`
+- **Enable hardware decoding for**：勾上 `H264`、`HEVC`、`AV1`（按你的片源）
+- **Throttling**：开启，避免转码吃满 CPU
+
+### 验证硬解真的在工作
+
+播放一个 4K 视频，转到低画质，然后看 Dashboard → **Playback** 里的转码信息：
+
+```bash
+# Intel 生效时能看到
+hwaccel: qsv
+
+# NVIDIA
+hwaccel: nvenc
+```
+
+如果显示 `hwaccel: none`，说明设备没挂对，转码还在吃 CPU。
+
+## 客户端
+
+| 平台 | 客户端 |
+|---|---|
+| Web | 内置，浏览器直接访问 |
+| iOS | Jellyfin Mobile（App Store） |
+| Android | Jellyfin for Android |
+| Android TV / Fire TV | Jellyfin for Android TV |
+| Apple TV | Swiftfin 或 Infuse |
+| 桌面 | Jellyfin Media Player |
+
+**手机端**装官方 App 就行，能投屏、能下载离线看。
+
+**TV 端**是体验重点。Jellyfin for Android TV 免费好用；Apple TV 上 Swiftfin 是开源原生客户端，Infuse 画质和界面更好但要付费。
+
+## 远程访问
+
+### 方案 A：反向代理
+
+用 Caddy 最简单，自动 HTTPS：
+
+```caddy
+jellyfin.example.com {
+    reverse_proxy localhost:8096
+}
+```
+
+需要域名已经解析到服务器，且 80/443 端口没被墙。
+
+### 方案 B：Cloudflare Tunnel（推荐）
+
+没有公网 IP、不想开端口、或者端口被运营商封了，用 Tunnel：
+
+```bash
+# 安装 cloudflared
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+chmod +x cloudflared && sudo mv cloudflared /usr/local/bin/
+
+# 登录并创建隧道
+cloudflared tunnel login
+cloudflared tunnel create jellyfin
+cloudflared tunnel route dns jellyfin jellyfin.example.com
+```
+
+`config.yml`：
+
+```yaml
+tunnel: <tunnel-id>
+credentials-file: /root/.cloudflared/<tunnel-id>.json
+
+ingress:
+  - hostname: jellyfin.example.com
+    service: http://localhost:8096
+  - service: http_status:404
+```
+
+```bash
+sudo cloudflared service install
+```
+
+家里网不用开任何端口，外面就能看。详细配置见《Cloudflare Tunnel 免费内网穿透》。
+
+## 实用技巧
+
+### 命名规范
+
+最重要的两条：**电影带年份**、**剧集用 `S01E01` 格式**。做到这两条，刮削成功率 95% 以上，剩下的手动 Identify 补。
+
+### 字幕
+
+Jellyfin 不自动下字幕，但支持外挂字幕文件。把 `.srt` / `.ass` 和视频放同目录、同名，播放时自动加载。
+
+需要自动下载字幕可以装 bazarr（Sonarr 生态那个），或者用 OpenSubtitles 插件。
+
+### 整理好的收藏导出
+
+如果你用 Kodi 或 Emby 整理过元数据，把 `.nfo` 和图片一起拷过来，Jellyfin 会直接复用，省去重新刮削。
+
+## Jellyfin vs Plex vs Emby
+
+| | Jellyfin | Plex | Emby |
+|---|---|---|---|
+| 费用 | 免费 | 部分功能付费 | 部分功能付费 |
+| 硬件转码 | 免费 | Premiere | Premiere |
+| 账号 | 不需要 | 需要 | 需要 |
+| TV 客户端 | 好 | **最好** | 好 |
+| 元数据 | TMDB | 自家，最全 | 自家 |
+| 插件生态 | 丰富 | 丰富 | 丰富 |
+| 中文支持 | 好 | 好 | 好 |
+
+**选 Jellyfin**：不想付费、要硬件转码、能接受 TV 端稍微差一点。
+**选 Plex**：愿意为最好的 TV 体验和元数据付钱。
+**选 Emby**：介于两者之间，但社区已经很小了。
+
+## 小结
+
+Jellyfin 的核心价值：**免费获得 Plex 八成体验**。硬件转码这个 Plex 收费的功能它白给，而这是自建影音库能不能用的关键。
+
+部署本身半小时，真正花时间的是整理媒体文件命名——这部分没有捷径，但一次做好以后永久受益。
+
+配好之后，把《Cloudflare Tunnel 免费内网穿透》也看了，你的影音库就能在任何地方看了。存储不够的话，大盘子可以接《Cloudflare R2 对象存储》做冷备份。
+
+---
+
+## Ollama 本地部署大模型完全指南：5分钟跑起 Llama 3 / Qwen 3 / DeepSeek
+URL: https://xiaozha.org/article/ollama-local-llm/
+
+把大模型跑在自己机器上，以前是件麻烦事：装 CUDA、配环境、转格式、调量化。**Ollama** 把这件事压缩成一条命令。
+
+这篇覆盖安装、跑通第一个模型、模型管理、API 调用、配 Web UI，以及按自己硬件选型的建议。
+
+## Ollama 是什么
+
+Ollama 是一个本地大模型运行时，把模型下载、量化、推理、API 服务全打包在一起。你不需要懂 GGUF 格式，不需要手动配 CUDA，甚至不需要写一行代码——装好、拉模型、对话。
+
+适合谁：想让数据不出本机的开发者、想白嫖本地算力的人、想给应用接个本地 AI 的人。
+
+## 安装
+
+### macOS
+
+官网下载 `.app` 拖进应用程序，或者：
+
+```bash
+brew install ollama
+```
+
+Apple Silicon 芯片自动走 Metal 加速，M 系列跑 8B 模型很流畅。
+
+### Windows
+
+从官网下载安装包：https://ollama.com/download
+
+装完 Ollama 会在托盘运行。Windows 上默认用 CPU 或 Vulkan，有 NVIDIA 卡会自动用 CUDA。
+
+### Linux
+
+一条命令：
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+装完验证：
+
+```bash
+ollama version
+# ollama version is 0.x.x
+```
+
+Ollama 默认监听 `11434` 端口。只想本机用不用改；想让局域网其他机器访问：
+
+```bash
+# Linux（systemd）
+sudo systemctl edit ollama.service
+```
+
+```ini
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0"
+```
+
+```bash
+sudo systemctl restart ollama
+```
+
+**注意**：`0.0.0.0` 会让同网段任何人都能调用你的模型，公网部署必须加反向代理 + 认证。
+
+## 跑通第一个模型
+
+```bash
+ollama run qwen3:8b
+```
+
+第一次执行会自动下载（几 GB，看网速），下完直接进入对话：
+
+```
+>>> 你好，请用一句话介绍你自己
+您好，我是通义千问……
+```
+
+输入 `/bye` 退出，`/?` 看所有交互命令。
+
+到这里，本地大模型已经跑起来了。整个流程就是一条命令。
+
+## 可选模型
+
+| 模型 | 定位 | 大小 |
+|---|---|---|
+| `qwen3` | 通用 + 中文强 | 0.6B ~ 235B |
+| `llama3.1` / `llama3.2` | Meta 出品，英文强 | 1B ~ 405B |
+| `deepseek-r1` | 推理强，思维链 | 1.5B ~ 671B |
+| `deepseek-coder-v2` | 代码专用 | 16B ~ 236B |
+| `gemma3` | Google 出品，轻量 | 1B ~ 27B |
+| `mistral` / `mixtral` | 欧洲系，MoE | 7B ~ 8x22B |
+| `phi4` | 微软小钢炮，3.8B 打 7B | 3.8B / 14B |
+| `nomic-embed-text` | 向量嵌入（RAG 用） | 0.27B |
+
+选型口诀：**中文优先 qwen3，代码优先 deepseek-coder-v2，极小显存用 phi4**。
+
+具体标签看 [ollama.com/library](https://ollama.com/library)，每个模型页都写了推荐参数。
+
+## 模型管理
+
+```bash
+ollama pull qwen3:8b        # 下载模型
+ollama list                 # 看已安装的模型和占用
+ollama show qwen3:8b        # 看模型详情、参数、模板
+ollama ps                   # 看正在运行的模型
+ollama rm qwen3:8b          # 删除模型
+ollama cp qwen3:8b my-qwen  # 复制一份改配置用
+```
+
+模型默认存在 `~/.ollama/models`，几个模型轻松吃掉几十 GB。空间紧张时把不用的 `rm` 掉，需要再 `pull`。
+
+## REST API
+
+Ollama 起服务的同时就开了 API，默认 `http://localhost:11434`。
+
+### `/api/generate` — 单轮补全
+
+```bash
+curl http://localhost:11434/api/generate -d '{
+  "model": "qwen3:8b",
+  "prompt": "用一句话解释什么是内网穿透",
+  "stream": false
+}'
+```
+
+### `/api/chat` — 多轮对话
+
+```bash
+curl http://localhost:11434/api/chat -d '{
+  "model": "qwen3:8b",
+  "messages": [
+    {"role": "system", "content": "你是一个简洁的技术助手"},
+    {"role": "user", "content": "Cloudflare Tunnel 是什么？"}
+  ],
+  "stream": false
+}'
+```
+
+### Python 调用
+
+```python
+import requests
+
+r = requests.post("http://localhost:11434/api/chat", json={
+    "model": "qwen3:8b",
+    "messages": [{"role": "user", "content": "你好"}],
+    "stream": False,
+})
+print(r.json()["message"]["content"])
+```
+
+用官方 SDK 更省事：
+
+```python
+from ollama import chat
+resp = chat(model="qwen3:8b", messages=[{"role": "user", "content": "你好"}])
+print(resp.message.content)
+```
+
+### JavaScript 调用
+
+```javascript
+const res = await fetch("http://localhost:11434/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    model: "qwen3:8b",
+    messages: [{ role: "user", content: "你好" }],
+    stream: false,
+  }),
+});
+const data = await res.json();
+console.log(data.message.content);
+```
+
+### OpenAI 兼容接口
+
+Ollama 还提供 `/v1/chat/completions`，**任何支持 OpenAI SDK 的代码都能零改动接过来**，只要把 base_url 指到 Ollama：
+
+```python
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+resp = client.chat.completions.create(
+    model="qwen3:8b",
+    messages=[{"role": "user", "content": "你好"}],
+)
+print(resp.choices[0].message.content)
+```
+
+这个兼容层很实用——大量现成工具（NextChat、Chatbox、各种 IDE 插件）填个地址就能用。
+
+## Open WebUI：给它一个 ChatGPT 界面
+
+命令行对话不够好用，装个 Web UI：
+
+```yaml
+# docker-compose.yml
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui-data:/app/backend/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  open-webui-data:
+```
+
+```bash
+docker compose up -d
+```
+
+访问 `http://localhost:3000`，注册账号，在设置里把 Ollama 地址填 `http://host.docker.internal:11434`，模型列表就出来了。
+
+白送的功能：多用户、对话历史、知识库（RAG）、文档上传问答、模型切换、参数调节。想要团队用或自己用得舒服，装这个。
+
+## 硬件要求：按模型大小选
+
+| 模型规模 | 内存/显存 | 体验 |
+|---|---|---|
+| 1B – 3B | 4 GB | 快，但能力有限，适合分类、提取 |
+| 7B – 8B | 8 GB | **甜点区间**，日常问答、写代码够用 |
+| 13B – 14B | 16 GB | 明显更聪明，需要好一点的卡 |
+| 32B | 24 GB | 接近商业模型水平 |
+| 70B | 40 GB+ | 消费级基本别想，上服务器 |
+
+### 各平台情况
+
+- **CPU**：能跑，慢。8B 模型生成速度大概每秒几个 token，勉强能用
+- **Apple Silicon**：统一内存，M 系列 Pro/Max 跑 8B 很舒服，速度取决于内存带宽
+- **NVIDIA**：最优先。8GB 显存跑 8B 量化模型刚好，12GB 能上 14B
+- **AMD / Intel 显卡**：Ollama 支持 Vulkan，能用但比 NVIDIA 慢一截
+
+量化模型（Q4_K_M 之类）是默认选项，已经把显存需求砍到原版的六成左右，画质损失很小。
+
+## 进阶：Modelfile 自定义
+
+想固定系统提示词、调参数，不用改代码，写个 Modelfile：
+
+```dockerfile
+FROM qwen3:8b
+
+SYSTEM """你是一个资深后端工程师，回答必须：
+1. 直接给结论，不说客套话
+2. 代码示例必须能直接运行
+3. 不确定时明说不知道
+"""
+
+PARAMETER temperature 0.3
+PARAMETER num_ctx 8192
+PARAMETER top_p 0.9
+```
+
+```bash
+ollama create my-coder -f Modelfile
+ollama run my-coder
+```
+
+常用参数：
+
+| 参数 | 作用 | 建议 |
+|---|---|---|
+| `temperature` | 随机性 | 写代码 0.2-0.4，创意 0.7-1.0 |
+| `num_ctx` | 上下文长度 | 默认 2048 太小，设 8192+ |
+| `top_p` | 采样范围 | 0.9 通用 |
+| `repeat_penalty` | 重复惩罚 | 1.1 左右 |
+
+### 做 RAG 用嵌入模型
+
+```bash
+ollama pull nomic-embed-text
+```
+
+配合向量数据库就能做文档问答。本地 RAG 的完整链路：嵌入模型 + Chroma/Qdrant + Open WebUI 的知识库功能，不需要写代码。
+
+## Ollama 和其他工具对比
+
+| | Ollama | LM Studio | text-generation-webui | vLLM |
+|---|---|---|---|---|
+| 上手难度 | 极简 | 极简（GUI） | 中等 | 较难 |
+| 部署方式 | CLI + 服务 | 桌面 App | Web UI | 服务端 |
+| API | 完整，OpenAI 兼容 | 兼容 | 兼容 | OpenAI 兼容 |
+| 多模型并发 | 弱 | 弱 | 弱 | **强** |
+| 生产环境 | 个人/小团队 | 个人尝鲜 | 个人 | 企业级 |
+
+选型：**自己用选 Ollama**；完全不想碰命令行选 LM Studio；要给生产服务做高并发推理选 vLLM。
+
+## 小结
+
+Ollama 的核心价值是**把本地大模型的门槛降到一条命令**。五分钟跑起来不是夸张——装、拉模型、对话，就这三步。
+
+真正花时间的是后面：按硬件选对模型、用 Modelfile 调教系统提示词、接 Web UI。这些做完，你就有了一个完全免费、数据不出本机、不被限额的 AI 助手。
+
+如果想让本地模型有 ChatGPT 那样的完整体验，接着看《NextChat 部署指南》；想接进编程工作流，看《Cline 实战》里本地模型那部分。
+
+---
+
+## Uptime Kuma 自建监控：免费替代 UptimeRobot，漂亮又强大
+URL: https://xiaozha.org/article/uptime-kuma-monitor/
+
+Uptime Kuma 是一款漂亮的自托管监控工具，GitHub 60k+ Stars。功能对标 UptimeRobot，但免费额度无限、界面更好看，而且能自己掌握所有监控数据。
+
+这篇从部署讲到告警、状态页、SSL 监控和安全暴露。
+
+## 为什么不用 UptimeRobot
+
+UptimeRobot 免费版 50 个监控项、5 分钟检查间隔。听起来够用，但：
+
+- 5 分钟间隔意味着你的站最长挂了 5 分钟你才知道
+- 状态页定制受限，品牌化要付费
+- 数据在别人手里，历史记录导出麻烦
+
+Uptime Kuma 没有这些限制：监控项无限、间隔最低 20 秒、状态页完全自定义、数据在自己 SQLite 里。
+
+## Docker Compose 部署
+
+### 目录结构
+
+```
+/opt/uptime-kuma/
+└── docker-compose.yml
+```
+
+数据存在容器内的 `/app/data`，用命名卷持久化。
+
+### `docker-compose.yml`
+
+```yaml
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+
+volumes:
+  uptime-kuma-data:
+```
+
+### 启动
+
+```bash
+cd /opt/uptime-kuma
+docker compose up -d
+docker compose logs -f uptime-kuma
+```
+
+日志出现 `Listening on 3001` 就成了。访问 `http://服务器IP:3001`，第一次进会要你建管理员账号——**这个账号只有一次机会，密码忘了基本只能重置数据**，设完记好。
+
+### 升级
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+数据在卷里，升级不丢。但大版本升级前建议先备份（见下文）。
+
+## 添加第一个监控
+
+左侧 **+ New Monitor**，以监控一个网站为例：
+
+- **Monitor Type**：`HTTP(s)`
+- **Friendly Name**：`我的博客`
+- **URL**：`https://xiaozha.org`
+- **Heartbeat Interval**：`60` 秒（个人用够了，重要服务可以 30）
+- **Retries**：`3`（连续失败 3 次才告警，避免网络抖动误报）
+- **Request Timeout**：`10` 秒
+
+保存后列表里就会出现一条，绿点表示正常。点进去能看响应时间曲线和详细日志。
+
+## 监控类型详解
+
+Uptime Kuma 支持十几种，常用的：
+
+| 类型 | 监控什么 | 典型用途 |
+|---|---|---|
+| `HTTP(s)` | 网址可用性 + 状态码 + 响应时间 | 网站、API 健康检查 |
+| `TCP Port` | 端口是否开放 | 数据库、SSH、游戏服 |
+| `Ping` | 主机是否可达 | 服务器、路由器 |
+| `DNS` | 域名解析记录 | 盯着解析有没有被改 |
+| `Push` | **反向监控**，你定时来"打卡" | cron 任务是否还在跑 |
+| `Docker Container` | 容器状态 | 本机 Docker 服务 |
+| `Steam / GameDig` | 游戏服务器 | Minecraft 等 |
+| `Keyword` | 页面内容包含关键词 | 监控页面被篡改 |
+| `gRPC` | gRPC 服务 | 微服务 |
+
+### Push 监控值得单独说
+
+这是最容易被忽略但极好用的类型。它反过来：**不是 Uptime Kuma 去访问你，而是你的 cron 任务每隔一段时间 ping 一下 Uptime Kuma**。
+
+```bash
+# crontab 里
+*/5 * * * * curl -fsS https://kuma.example.com/api/push/xxxxx > /dev/null
+```
+
+如果你的备份脚本凌晨 2 点执行，执行完就 curl 一下。**Uptime Kuma 超过 5 分钟没收到这个 ping 就告警**——意味着你的 cron 挂了、机器宕了、或者脚本报错没跑完。
+
+这是监控"监控不到的东西"（定时任务本身）的唯一可靠办法。
+
+## 告警通知配置
+
+Uptime Kuma 支持 90+ 通知渠道。点监控项的 **Notifications** 或全局 **Settings → Notifications** 配置。
+
+### Telegram（推荐）
+
+1. 找 [@BotFather](https://t.me/BotFather) 发 `/newbot`，拿到 Bot Token
+2. 给你的 Bot 发条消息，然后访问 `https://api.telegram.org/bot<token>/getUpdates` 拿到 Chat ID
+3. Uptime Kuma 里选 **Telegram**，填 Token 和 Chat ID，点 Test
+
+好处：免费、实时、支持群组（可以把家人的监控都推到同一个群）。
+
+### Discord / Slack（Webhook）
+
+频道设置 → 集成 → Webhook → 复制 URL，粘到 Uptime Kuma 对应渠道。团队协作时好用。
+
+### 邮件（SMTP）
+
+设置里填 SMTP 服务器、端口、账号密码。适合作为兜底渠道——IM 挂了邮件还能到。
+
+### 通用 Webhook
+
+任何能收 POST 的服务都行。接自己的告警系统、飞书机器人、或者写个脚本转发到微信，都用这个。
+
+### Ntfy — 免费手机推送
+
+[ntfy.sh](https://ntfy.sh) 是开源推送服务，不用注册：
+
+1. 手机装 ntfy App，订阅一个随机 topic（比如 `my-alerts-abc123`）
+2. Uptime Kuma 选 **Ntfy**，Topic 填 `my-alerts-abc123`，服务器 `https://ntfy.sh`
+
+告警直接推送到手机通知栏，比邮件及时，又不需要像 Telegram 那样配 Bot。**国内网络访问 ntfy.sh 不稳的话，可以自托管 ntfy 服务端**（一个二进制文件，Docker 一条命令）。
+
+### 国内常用渠道
+
+- **Server酱 / ServerChanTurbo**：推到微信，配置最简单
+- **Bark**：iOS 推送，免费
+- **企业微信 / 钉钉群机器人**：团队场景
+
+## 公开状态页
+
+想让别人看到你的服务状态（或者自己出门在外也能看），用 Status Page：
+
+**Status Pages → New Status Page**，起个名，勾选要展示的监控项，保存后会得到一个公开链接。
+
+可以自定义：域名（`status.example.com`）、主题色、Logo、描述文字、显示哪些指标。
+
+这个页面不需要登录就能看，适合放在博客底部或文档里，让用户自查"是不是服务挂了"。
+
+## SSL 证书过期监控
+
+证书过期是经典的"半夜全站挂掉"事故。Uptime Kuma 能提前警告：
+
+监控项里 **Advanced → Certificate Expiry Notification**，填提前多少天提醒（建议 30 天）。
+
+配了之后，证书剩 30 天会告警一次，剩 7 天再告警一次。Cloudflare 的自动证书一般 90 天续期，有这个监控足够从容处理。
+
+## 安全暴露到公网
+
+监控页面上有你的服务器拓扑、服务地址、响应时间，**不要裸暴露**。
+
+### 方案 A：反向代理 + HTTPS
+
+用 Caddy 最简单，自动签证书：
+
+```caddy
+status.example.com {
+    reverse_proxy localhost:3001
+}
+```
+
+但这样端口还是对外开的，只是套了 HTTPS 和域名。要加认证的话，Uptime Kuma 本身有账号系统，但**没有二次验证**。
+
+### 方案 B：Cloudflare Tunnel（推荐）
+
+不开放任何端口，通过 Cloudflare 内网穿透出去：
+
+```bash
+# 服务器上安装 cloudflared（详见《Cloudflare Tunnel 免费内网穿透》）
+cloudflared tunnel login
+cloudflared tunnel create uptime-kuma
+cloudflared tunnel route dns uptime-kuma status.example.com
+```
+
+`config.yml`：
+
+```yaml
+tunnel: <tunnel-id>
+credentials-file: /root/.cloudflared/<tunnel-id>.json
+
+ingress:
+  - hostname: status.example.com
+    service: http://localhost:3001
+  - service: http_status:404
+```
+
+```bash
+cloudflared tunnel run uptime-kuma
+```
+
+好处：机器上没有对外开放的端口，扫描器根本看不到你。Cloudflare 还能在前面加 Access 策略（邮箱验证、一次性密码），做到"只有你能看"。
+
+## 备份与迁移
+
+### 备份数据目录
+
+```bash
+# 先停容器，保证数据一致
+cd /opt/uptime-kuma && docker compose stop
+
+# 打包数据目录（命名卷在 docker volume 里）
+docker run --rm \
+  -v uptime-kuma-data:/data \
+  -v "$(pwd)":/backup \
+  alpine tar czf /backup/kuma-$(date +%F).tar.gz -C /data .
+
+docker compose start
+```
+
+把这个 tar.gz 加进你现有的备份流程（比如 rclone 同步到 R2）。
+
+### 内置备份功能
+
+Uptime Kuma 1.23+ 在设置里有 **Backup** 页，可以直接下载 SQLite 数据库文件，也能上传恢复。比手动 tar 方便。
+
+### 迁移到新机器
+
+把备份文件拷过去，新机器上起容器，从设置里上传恢复，所有监控项和通知配置都回来了。
+
+## 进阶用法
+
+### Prometheus API
+
+Uptime Kuma 提供 `/metrics` 端点，Prometheus 可以直接抓。接 Grafana 就能把监控数据画成漂亮的仪表盘，和服务器指标放一起看。
+
+### 维护模式
+
+计划内停机（升级、迁移）不想收到告警？监控项里开 **Maintenance**，设个时间窗，期间不告警。比临时关监控项方便，而且不容易忘着重开。
+
+### 分组与标签
+
+监控项多了之后，用 **Groups** 分类（按项目、按机器、按重要程度）。配合标签筛选，状态页可以按组展示。
+
+## Uptime Kuma vs 其他方案
+
+| | Uptime Kuma | UptimeRobot | StatusCake | 自建 Prometheus |
+|---|---|---|---|---|
+| 费用 | 免费无限 | 50 个/5 分钟 | 10 个起 | 免费 |
+| 部署 | Docker 一条命令 | 无需部署 | 无需部署 | 复杂 |
+| 界面 | 现代好看 | 一般 | 一般 | 取决于 Grafana |
+| 状态页 | 完全自定义 | 有限定制 | 有限定制 | 自己搭 |
+| 数据归属 | 自己 | 服务商 | 服务商 | 自己 |
+| 历史趋势 | 有 | 付费版才有 | 付费版才有 | 极强 |
+
+结论：**个人和小团队用 Uptime Kuma**，除非你需要 Prometheus 那种级别的指标查询能力——那种场景一般是 Uptime Kuma 管可用性，Prometheus 管性能，两个一起用。
+
+## 小结
+
+Uptime Kuma 是自托管里**投入产出比最高**的应用之一：一条 Docker 命令部署完，五分钟配上第一个监控和告警，之后你的服务挂了第一时间知道。
+
+建议部署顺序：先装它，再装其他服务。原因很直接——**没有监控的自托管是盲飞**，等服务出问题你才发现，还不如不自己折腾。
+
+配好之后接着看《Cloudflare Tunnel 免费内网穿透》把它安全暴露到公网，或者《Ubuntu Server 初始化配置》把服务器地基打好。
+
+---
+
+## Windows 包管理器 winget 完全指南：告别手动下载安装软件
+URL: https://xiaozha.org/article/winget-windows-tools/
+
+macOS 有 Homebrew，Linux 有 apt，Windows 现在有 **winget**——微软官方的包管理器。一条命令装软件，不用再开浏览器、找官网、防捆绑、点下一步。
+
+这篇讲清常用命令、批量装机脚本，以及它和 Scoop 该怎么选。
+
+## 安装 winget
+
+**Windows 11** 自带，直接 `winget --version` 验证。
+
+**Windows 10** 需要手动装：
+
+- **方式一**：Microsoft Store 搜 "App Installer" 安装（推荐，能自动更新）
+- **方式二**：去 GitHub Releases 下载 msixbundle 手动装
+  `https://github.com/microsoft/winget-cli/releases`
+
+装完开新终端，输入：
+
+```powershell
+winget --version
+```
+
+能输出版本号就行。注意 **winget 只认 Windows 10 1709 之后的版本**，更老的系统升不了。
+
+## 常用命令
+
+```powershell
+# 搜索软件
+winget search "visual studio code"
+
+# 看详细信息（含所有可装版本）
+winget show Microsoft.VisualStudioCode
+
+# 安装（自动接受协议，静默）
+winget install --id Microsoft.VisualStudioCode -e --accept-source-agreements --accept-package-agreements
+
+# 用名字装（更短，但可能匹配到多个）
+winget install "Microsoft Visual Studio Code"
+
+# 卸载
+winget uninstall Microsoft.VisualStudioCode
+
+# 升级所有可升级的软件
+winget upgrade
+
+# 升级指定软件
+winget upgrade Microsoft.VisualStudioCode
+
+# 列出已安装的软件
+winget list
+
+# 导出已安装软件列表（换机神器）
+winget export -o apps.json
+
+# 从列表批量恢复（新电脑一条命令装回全部）
+winget import -i apps.json
+```
+
+**`winget export` / `import` 是换机时最值得记住的一对。** 旧电脑导出 JSON，新电脑导入，常用软件全回来。
+
+### 常用参数
+
+| 参数 | 作用 |
+|---|---|
+| `-e` / `--exact` | 精确匹配 ID，避免搜出同名软件 |
+| `-h` / `--silent` | 静默安装，不弹 UI |
+| `--scope user` | 装到当前用户，不需要管理员 |
+| `--scope machine` | 装到全局，需要管理员 |
+| `-l` / `--location` | 指定安装路径 |
+| `--version` | 装指定版本 |
+| `--source` | 指定软件源（winget / msstore） |
+| `--accept-source-agreements` | 自动接受源协议 |
+
+## 批量安装开发环境
+
+新机器装开发环境，一行一行 `winget install` 太慢。写成脚本一把梭：
+
+**PowerShell 版**（`setup-dev.ps1`）：
+
+```powershell
+$packages = @(
+  "Microsoft.VisualStudioCode",
+  "Microsoft.WindowsTerminal",
+  "Git.Git",
+  "OpenJS.NodeJS.LTS",
+  "Python.Python.3.12",
+  "Docker.DockerDesktop",
+  "Google.Chrome",
+  "7zip.7zip",
+  "Microsoft.PowerToys",
+  "VideoLAN.VLC"
+)
+
+foreach ($pkg in $packages) {
+  Write-Host "==> 安装 $pkg" -ForegroundColor Cyan
+  winget install --id $pkg -e --accept-source-agreements --accept-package-agreements --silent
+}
+
+Write-Host "全部完成" -ForegroundColor Green
+```
+
+```powershell
+# 以管理员身份运行
+Set-ExecutionPolicy -Scope Process Bypass
+.\setup-dev.ps1
+```
+
+**CMD 批处理版**（`setup-dev.bat`，不想开 PowerShell 的话）：
+
+```bat
+@echo off
+for %%p in (
+  Microsoft.VisualStudioCode
+  Git.Git
+  OpenJS.NodeJS.LTS
+  Google.Chrome
+  7zip.7zip
+) do (
+  echo ==^> 安装 %%p
+  winget install --id %%p -e --accept-source-agreements --accept-package-agreements --silent
+)
+echo 全部完成
+```
+
+**建议做法**：把这个脚本存进 Git 仓库或网盘，换机器、重装系统后直接跑。比记一堆下载链接靠谱。
+
+## 与 PowerShell 脚本结合
+
+winget 的返回值能判断装没装上，方便做条件逻辑：
+
+```powershell
+# 检查是否已安装，没装才装
+$pkg = "Git.Git"
+$installed = winget list --id $pkg -e
+
+if ($installed -match $pkg) {
+  Write-Host "$pkg 已安装"
+} else {
+  Write-Host "正在安装 $pkg"
+  winget install --id $pkg -e --silent --accept-package-agreements
+}
+
+# 检查退出码
+winget install --id $pkg -e --silent
+if ($LASTEXITCODE -eq 0) {
+  Write-Host "安装成功"
+} else {
+  Write-Host "安装失败，退出码 $LASTEXITCODE"
+}
+```
+
+**升级全部 + 记录日志**：
+
+```powershell
+$log = "winget-upgrade-$(Get-Date -Format 'yyyyMMdd').log"
+winget upgrade --all --silent --accept-source-agreements --accept-package-agreements *>&1 |
+  Tee-Object -FilePath $log
+```
+
+`Tee-Object` 一边显示一边写文件，出问题能回头看。
+
+## 推荐软件包
+
+按类别，附 winget ID：
+
+### 开发
+
+| 软件 | ID |
+|---|---|
+| VS Code | `Microsoft.VisualStudioCode` |
+| Windows Terminal | `Microsoft.WindowsTerminal` |
+| Git | `Git.Git` |
+| Node.js LTS | `OpenJS.NodeJS.LTS` |
+| Python | `Python.Python.3.12` |
+| Docker Desktop | `Docker.DockerDesktop` |
+| Postman | `Postman.Postman` |
+| .NET SDK | `Microsoft.DotNet.SDK.8` |
+
+### 浏览器与通讯
+
+| 软件 | ID |
+|---|---|
+| Chrome | `Google.Chrome` |
+| Firefox | `Mozilla.Firefox` |
+| Edge（重装用） | `Microsoft.Edge` |
+| Telegram | `Telegram.TelegramDesktop` |
+| 微信 | `Tencent.WeChat` |
+
+### 效率工具
+
+| 软件 | ID |
+|---|---|
+| PowerToys | `Microsoft.PowerToys` |
+| 7-Zip | `7zip.7zip` |
+ Everything 搜索 | `voidtools.Everything` |
+| Snipaste 截图 | `Snipaste.Snipaste` |
+| Obsidian | `Obsidian.Obsidian` |
+| Notion | `Notion.Notion` |
+
+### 媒体与设计
+
+| 软件 | ID |
+|---|---|
+| VLC | `VideoLAN.VLC` |
+| Figma | `Figma.Figma` |
+| OBS Studio | `OBSProject.OBSStudio` |
+| 网易云音乐 | `NetEase.CloudMusic` |
+
+### 安全与系统
+
+| 软件 | ID |
+|---|---|
+| KeePassXC | `KeePassXC.KeePassXC` |
+| Bitwarden | `Bitwarden.Bitwarden` |
+| Geek Uninstaller | `GeekUninstaller.GeekUninstaller` |
+| HWiNFO | `REALiX.HWiNFO64` |
+
+**查找 ID 的方法**：`winget search <关键词>`，结果第一列就是。
+
+## winget vs Scoop
+
+这两个是最常被比较的 Windows 包管理器，定位不同：
+
+| 维度 | winget | Scoop |
+|---|---|---|
+| 软件源 | 微软官方仓库 | 社区维护 |
+| 安装位置 | `C:\Program Files` | 用户目录 `~/scoop` |
+| 权限 | 默认需要管理员 | **不需要管理员** |
+| 软件数量 | 数千 | 数千（偏开发工具） |
+| 速度 | 中等 | 快 |
+| 卸载残留 | 取决于各安装包 | **干净**（不写注册表） |
+| 自动更新 | 需手动 `upgrade` | `scoop update *` 或配计划任务 |
+| 便携软件 | 少 | **多**（绿色软件首选） |
+
+### 怎么选
+
+**用 winget 如果**：
+
+- 想要微软官方背书、软件源更"正规"
+- 主要装常规软件（IDE、浏览器、办公软件）
+- 需要 `export`/`import` 做换机迁移
+- 公司机器，能拿到管理员权限
+
+**用 Scoop 如果**：
+
+- **没有管理员权限**（公司 locked-down 机器）
+- 想要便携软件、不污染系统
+- 讨厌注册表和 `Program Files` 里堆积的残留
+- 主要装命令行开发工具
+
+**我的建议：两个都装，分工明确。**
+
+- **winget** 管常规软件（VS Code、Chrome、微信）
+- **Scoop** 管命令行工具和便携软件（`git`、`node`、`ripgrep`、`ffmpeg`）
+
+两者装到不同位置，互不冲突。真正冲突的是"同一个软件两边都装"——那就手动卸一个。
+
+### 两者共存的一个坑
+
+PATH 顺序。Scoop 装在用户目录，winget 装在 `Program Files`，如果同一个软件（比如 Git）两边都有，命令行用的是 PATH 靠前的那个。检查：
+
+```powershell
+Get-Command git | Select-Object -ExpandProperty Source
+```
+
+看输出的路径，就知道用的是哪个。
+
+## 小结
+
+winget 让 Windows 终于有了像样的包管理器。三个最值得养成的习惯：
+
+1. **装软件先 `winget search`**，别再开浏览器找官网——省下的时间和防住的捆绑安装，价值巨大
+2. **写一个 `setup-dev.ps1`** 存 Git 里，换机器一条命令
+3. **定期 `winget upgrade`**，或者配个计划任务每月自动跑
+
+如果你经常重装系统或在多台 Windows 机器间切换，`winget export` / `import` 这套迁移机制值得单独记一下——它比任何"软件清单文档"都可靠。
+
+---
+
+## NAS 折腾指南：从硬件选购到系统搭建，打造你的家庭数据中心
+URL: https://xiaozha.org/article/nas-diy-guide/
+
+网盘限速、相册要钱、电影没地方放——攒一台自己的 NAS，这些问题一次解决。数据在自己硬盘上，没有订阅费，没有容量焦虑。
+
+这篇从硬件选购讲到系统安装和常用应用，照着走能搭出一台可用的家庭数据中心。
+
+## 一、硬件选购
+
+NAS 的核心是**硬盘**，主机反而是次要的。两档配置覆盖绝大多数需求：
+
+### 入门级（2000 元内）
+
+适合：存照片、备份、轻量影音
+
+| 部件 | 推荐 |
+|---|---|
+| 主板 | J4125 / N100 集成板（低功耗，待机 10W 左右） |
+| 内存 | 8GB DDR4 |
+| 硬盘 | 2 × 4TB（组镜像，实际可用 4TB） |
+| 机箱 | 4 盘位 |
+| 电源 | 120W 足够 |
+
+**这一档的关键是省电。** N100 整机待机 10-15W，一年电费几十块，可以 24 小时开机。
+
+### 进阶级（5000 元）
+
+适合：影音库、多用户、虚拟机、跑 Docker 全家桶
+
+| 部件 | 推荐 |
+|---|---|
+| CPU | i3-12100 / i5-12400（带核显，硬件转码用得上） |
+| 主板 | B660 ITX / mATX |
+| 内存 | 16GB DDR4（跑虚拟机能上 32GB） |
+| 硬盘 | 1 × 500GB SSD（系统）+ 4 × 8TB（数据） |
+| 机箱 | 6-8 盘位 |
+| 电源 | 300-450W |
+
+### 几个容易忽略的点
+
+- **硬盘别省钱**：NAS 盘（西数红盘/酷狼、希捷酷狼）比桌面盘贵一点，但 firmware 针对 7×24 优化，值得
+- **ECC 内存看需求**：ZFS 建议上 ECC，但家用非必须，别为此多花一倍钱
+- **网口至少 1G**：有 2.5G 更好，内网传片子快一倍
+- **UPS 值得买**：几百块的入门 UPS，断电时自动关机，救过无数人的 ZFS
+- **机箱风道**：4 块以上硬盘发热可观，风道差的机箱硬盘寿命明显短
+
+## 二、系统选择
+
+四个主流方案，按需求选：
+
+| 系统 | 特点 | 难度 | 费用 |
+|---|---|---|---|
+| **TrueNAS Scale** | ZFS 文件系统，快照/校验强，Docker/K8s | 中 | 免费 |
+| **Unraid** | 硬盘灵活扩容， parity 保护，应用市场 | 中 | 付费（$59 起） |
+| **OpenMediaVault** | 轻量，基于 Debian，插件够用 | 低 | 免费 |
+| **群晖 DSM** | 易用，生态全，套件丰富 | 低 | 需买硬件 |
+
+### 怎么选
+
+- **要数据完整性优先、愿意学一点**：TrueNAS Scale。ZFS 的快照和校验是家庭数据最靠谱的保护
+- **要硬盘随时加、不想规划**：Unraid。一块一块加盘，不用重建阵列，这是它最大卖点
+- **只想简单存文件、当网盘用**：OpenMediaVault。装完配置 SMB 就能用
+- **完全不想折腾**：群晖。花钱买省心
+
+**我的建议：想认真玩选 TrueNAS Scale，想省心选群晖，别选 Unraid 除非你确定需要它那个扩容模式。**（Unraid 付费，而且单盘损坏时重建比 ZFS 慢得多。）
+
+这篇以 TrueNAS Scale 为主线。
+
+## 三、TrueNAS Scale 安装
+
+### 准备
+
+去官网下载 Scale 版 ISO，用 Rufus 或 balenaEtcher 写入 U 盘。
+
+**重要**：安装盘会被格式化，确认 U 盘里没东西。
+
+### 安装步骤
+
+1. U 盘启动，选 **Install/Upgrade**
+2. 选目标盘——**装系统的 SSD**，别选错成数据盘
+3. 设 root 密码（记住它）
+4. 装完重启，拔 U 盘，`TrueNAS` 会打印一个 IP 地址
+
+### 配置 ZFS 存储池
+
+浏览器访问那个 IP，用 root 登录。
+
+**Storage → Create Pool**：
+
+- **Name**：`tank`（ZFS 传统命名，随意）
+- **Layout**：家用选 `RAIDZ1`（4 块盘容忍坏 1 块）或 `Mirror`（2 块盘互相镜像）
+
+**RAIDZ1 和 Mirror 的选择**：
+
+| 盘数 | RAIDZ1 可用 | Mirror 可用 |
+|---|---|---|
+| 4 × 8TB | 24TB（坏 1 块不丢） | 16TB（坏 1 块不丢） |
+
+**要容量选 RAIDZ1，要速度和安全冗余选 Mirror。** 家庭影音库通常选 RAIDZ1。
+
+- **加密**：建议开。硬盘丢了数据不泄露
+- **去重/压缩**：默认即可，压缩开 LZ4（几乎免费的速度换容量）
+
+### 创建数据集
+
+Pool 建好后，**Storage → Create Dataset**：
+
+- `media` —— 影音文件
+- `photos` —— Immich 照片
+- `backups` —— 各服务备份
+- `documents` —— 文档
+
+分数据集的好处：可以给不同数据集设不同的快照策略和配额。
+
+### 启用共享
+
+**Shares → Windows (SMB) Share**：
+
+- Path 选刚建的数据集
+- 开 `Allow Guest Access` 或建本地用户
+- Name 起个 `media`
+
+Windows 上 `\\NAS的IP\media` 就能访问，Mac 上 Finder → 连接服务器 `smb://NAS的IP`。
+
+## 四、远程访问：Cloudflare Tunnel
+
+在外网访问家里的 NAS，**最不推荐的做法是端口映射**——等于把 NAS 挂到公网扫描器脸上。
+
+**Cloudflare Tunnel** 不开放任何入站端口，NAS 主动向外建立加密通道：
+
+```bash
+# TrueNAS Scale 里跑（或用 Docker）
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+chmod +x cloudflared && sudo mv cloudflared /usr/local/bin/
+
+cloudflared tunnel login
+cloudflared tunnel create nas
+cloudflared tunnel route dns nas nas.example.com
+```
+
+`config.yml`：
+
+```yaml
+tunnel: <tunnel-id>
+credentials-file: /root/.cloudflared/<tunnel-id>.json
+
+ingress:
+  - hostname: nas.example.com
+    service: http://localhost:80        # TrueNAS Web UI
+  - service: http_status:404
+```
+
+**配合 Cloudflare Access**，要求邮箱验证才能进管理界面——这是家用 NAS 该有的安全水位。
+
+需要更深的隔离（比如 NAS 和手机组成私有网络，不经过公网），用 **Tailscale**。两个方案的完整对比见《Tailscale vs Cloudflare Tunnel》。
+
+## 五、影音库与照片
+
+NAS 装 TrueNAS 只是开始，真正好用靠应用。
+
+### Jellyfin —— 媒体服务器
+
+把电影、剧集、音乐集中管理，全平台播放，硬件转码免费。配置见《Jellyfin 影音库搭建指南》。
+
+```yaml
+# TrueNAS Scale 的 Docker/Apps 里部署
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    ports: ["8096:8096"]
+    volumes:
+      - /mnt/tank/media:/media
+      - /mnt/tank/apps/jellyfin:/config
+    devices:
+      - /dev/dri:/dev/dri     # 核显硬解
+```
+
+### qBittorrent —— 下载
+
+Linux 下最好用的 BT 客户端，有 Web UI：
+
+```yaml
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    ports: ["8080:8080"]
+    volumes:
+      - /mnt/tank/downloads:/downloads
+      - /mnt/tank/apps/qbit:/config
+```
+
+### Immich —— 照片备份
+
+Google Photos 的开源替代，手机自动备份 + AI 人脸识别。**这是 NAS 最值得装的应用之一**，配置见《Immich 自建相册》。
+
+### Jellyseerr —— 追剧管理
+
+配合 Jellyfin，管理"想看"清单，自动请求下载。多人家庭用很合适。
+
+## 六、必备 Docker 应用
+
+TrueNAS Scale 自带 Kubernetes/Docker 能力，除了上面这些，还推荐：
+
+| 应用 | 用途 | 参考 |
+|---|---|---|
+| **Uptime Kuma** | 监控 NAS 和服务状态，挂了能知道 | 《Uptime Kuma 自建监控》 |
+| **Vaultwarden** | 自托管密码管理器 | 《Vaultwarden 自托管密码管理器》 |
+| **Pi-hole** | 全家广告拦截 | 《Pi-hole 全网广告拦截》 |
+| **Mealie** | 家庭菜谱 + 购物清单 | 《Mealie 自建菜谱应用》 |
+| **n8n** | 工作流自动化 | 《n8n 自托管工作流自动化》 |
+
+一台 N100 + 8GB 的小主机，跑完上面全部还有余量。
+
+### 用 Docker Compose 管理
+
+TrueNAS Scale 的 Apps 界面偏简陋，建议直接用 Compose：
+
+```bash
+mkdir -p /mnt/tank/apps && cd /mnt/tank/apps
+# 每个应用一个目录，各自 docker-compose.yml
+mkdir jellyfin qbittorrent immich
+cd jellyfin && nano docker-compose.yml && docker compose up -d
+```
+
+备份也简单——整个 `apps` 目录 tar 一份，配合 Restic 同步到 R2，方案见《自托管数据备份完全指南》。
+
+## 七、备份：NAS 不是备份
+
+最后说最容易被忽略的。
+
+**NAS 的 RAID/ZFS 保护的是"硬盘损坏"，不是"数据丢失"。** 误删、勒索软件、火灾水灾、熊孩子拔线——这些 RAID 一个都防不住。
+
+家庭 NAS 的备份策略：
+
+1. **ZFS 快照**：TrueNAS 里配自动快照任务，每小时/每天一份，保留 30 天。误删文件从快照恢复
+2. **关键数据异地**：照片、文档同步到 Cloudflare R2 或 Backblaze B2
+3. **3-2-1 原则**：3 份副本、2 种介质、1 份异地
+
+```bash
+# 用 Restic 备份 NAS 上的关键数据到 R2
+restic -r s3:https://<account-id>.r2.cloudflarestorage.com/nas-backup \
+  backup /mnt/tank/photos /mnt/tank/documents /mnt/tank/apps \
+  --tag nightly
+```
+
+完整方案包括加密、保留策略、恢复演练，见《自托管数据备份完全指南》。
+
+## 小结
+
+搭 NAS 的投入产出比很高：两千块的小主机，解决存储、备份、影音、照片四大需求，还没有订阅费。
+
+建议的推进顺序：
+
+1. 先装 TrueNAS + 硬盘，把 SMB 共享用起来（半小时）
+2. 配自动快照（十分钟，但最关键）
+3. 装 Immich，手机照片开始自动备份
+4. 装 Jellyfin，把散落的电影收进来
+5. 按需加其他 Docker 应用
+6. **最后配异地备份**——别跳这步
+
+硬件会过时，但你存在上面的照片和文档不会。数据安全这件事，装完系统第一天就该做，而不是等硬盘响了才想起来。
+
+---
+
+## Vercel vs Cloudflare Pages：静态网站部署终极对比，2026 谁更胜一筹？
+URL: https://xiaozha.org/article/vercel-vs-cloudflare/
+
+最近几年部署过静态站的人，多半都纠结过同一个问题：**Vercel** 还是 **Cloudflare Pages**。两者个人项目都免费，都接 Git 仓库、推送即部署，都承诺全球边缘分发和自动 HTTPS。
+
+2026 年到底该用哪个？老实说：**看项目**。Vercel 是 Next.js 和重 React 应用的天然归属；Cloudflare Pages 是带宽无限、由 Workers 驱动的劳力模范，内容型站点和流量突发的站点用它更香。
+
+这篇按功能逐项拆开——部署体验、性能、价格、函数、数据库、域名——最后给一个明确的决策框架。
+
+## 两者是什么
+
+**Vercel** 是 Next.js 框架背后的公司。它提供完整的 Web 应用构建部署平台：静态站点、Serverless 函数、边缘函数、预览部署，以及一套丰富的一方集成（KV、Postgres、Blob、Analytics）。Hobby 套餐永久免费，慷慨到跑一个小副业项目不用花一分钱。
+
+**Cloudflare Pages** 是 Cloudflare 的静态站点托管产品，构建在 Cloudflare Workers 运行时之上。它从"Cloudflare 版的 Netlify"起步，长成了完整的 JAMstack 平台：Pages Functions、直接打通整个 Workers 生态（D1、R2、KV、Durable Objects、Queues），以及一个近乎荒谬地友好的定价模式——**免费额度无限带宽**。
+
+两者核心工作流一样：
+
+1. 连接 Git 仓库（GitHub、GitLab 或 Bitbucket）
+2. 选框架预设和构建命令
+3. 推送 `main`，平台构建部署，给你一个 `*.vercel.app` 或 `*.pages.dev` 地址
+4. 开 PR，得到带独立 URL 的隔离**预览部署**
+
+## 部署体验
+
+### Git 集成
+
+两者都支持 GitHub / GitLab / Bitbucket，推送即触发生产部署，PR 触发预览部署。这一项打平。
+
+**一个差异**：Vercel 对 Bitbucket 支持更好；Cloudflare Pages 曾经不支持 Bitbucket，后来加了。如果你在 Bitbucket 上，优先验证一下当前状态。
+
+### 构建速度
+
+Cloudflare Pages 通常更快——它用的构建机分布在全球多地，而且静态资源构建完直接进 CDN，没有额外分发步骤。
+
+Vercel 的构建也不错，但对大型项目的冷启动有时偏慢。
+
+实际感知：个人项目两者都是几十秒到一两分钟，差异不重要。**真正影响体感的是预览部署的生成速度**，这一项 Cloudflare Pages 通常快一截。
+
+### 预览部署
+
+两者都为每个 PR 生成独立 URL，这是现代部署的标配。
+
+Vercel 的预览体验更完整：PR 评论里自动贴链接、可以和团队成员分享、支持用密码保护预览。
+
+Cloudflare Pages 也有预览 URL，但集成深度稍逊——没有自动评论机器人。
+
+## 性能：CDN 覆盖与 TTFB
+
+### 网络规模
+
+Cloudflare 的优势是**网络本身**。300+ 边缘节点，覆盖到很多小众地区。南美、非洲、中东的用户，Cloudflare 的延迟明显更低。
+
+Vercel 的节点集中在欧美和亚太发达地区。对主流地区用户，两者都快到感知不出差别。
+
+### TTFB（首字节时间）
+
+对纯静态内容，两者都是 CDN 直出，TTFB 都在几十毫秒量级。
+
+**差异在动态内容**：
+
+- Vercel 的 Edge Functions 部署在 Vercel 自己的边缘网络上，对 Next.js 的 SSR/ISR 优化更深
+- Cloudflare Workers 冷启动极快（接近 0ms，这是它架构优势），但和 Pages 的集成路径略长
+
+结论：**纯静态站两者都够快；重 SSR 的应用，Vercel 对 Next.js 的调优更好。**
+
+### 缓存与智能路由
+
+Cloudflare 的缓存策略更激进也更可配（Cache Rules、Tiered Cache）。Vercel 的缓存对框架内容更智能（自动按 ISR 配置处理）。
+
+这一项对普通用户无感，对高流量站点影响很大。
+
+## 价格与免费额度
+
+这是最多人关心的，也是差距最大的一项。
+
+| | Vercel Hobby | Cloudflare Pages Free |
+|---|---|---|
+| 站点数量 | 无限 | 无限 |
+| **带宽** | **100 GB/月** | **无限** |
+| 构建 | 6000 分钟/月 | 500 次/月 |
+| 并发构建 | 1 | 1 |
+| 函数调用 | 100 万次 + 4h CPU | 10 万次/天 |
+| 商业使用 | **禁止** | 允许 |
+| 自定义域名 | 无限 | 无限 |
+
+### 带宽这个故事
+
+Cloudflare Pages 免费档**带宽无限**，这不是促销。缓存静态文件从边缘送出，对 Cloudflare 来说成本近乎零。
+
+Vercel Hobby 有 100 GB/月 上限。个人博客通常够（一个月几十万 PV 也就几十 GB），但**流量一爆就超**——被 Hacker News 推到首页那天，可能就是你收到超额通知那天。
+
+### 免费档什么时候会花钱
+
+**Vercel 有两个隐性限制**：
+
+1. **Hobby 禁止商业使用**。跑着 Stripe 收款的落地页、给公司用的官网，都算违规。查得松，但被 suspended 是没有预警的
+2. 100 GB 带宽超了要升 Pro（$20/月）
+
+**Cloudflare Pages 的限制**：
+
+1. 每月 500 次构建。CI 每次 PR 都构建的话，活跃项目可能超
+2. 单文件 25 MB 上限——要传大视频或 wasm 二进制，先撞这个
+3. Workers 免费档 10ms CPU 时间，做不了重计算
+
+**结论**：个人非商业项目，Cloudflare Pages 免费档更宽松；要商用或跑 Next.js，Vercel 的 Pro 是绕不开的成本。
+
+## 函数与边缘计算
+
+### Vercel Functions
+
+Serverless Functions + Edge Functions 两套。Edge Functions 跑在 Vercel 边缘网络，基于 Next.js 的中间件模型，写起来顺手。
+
+### Cloudflare Workers + Pages Functions
+
+Pages Functions 就是 Workers 的简化封装，`functions/` 目录下的文件自动映射成路由。写法和 Workers 一致——`fetch(request, env, ctx)` 那个模型。
+
+**性能上 Workers 冷启动更快**（接近 0ms，V8 isolate 架构），这是它和 Lambda 类方案的本质区别。
+
+### 能力对比
+
+| 能力 | Vercel | Cloudflare |
+|---|---|---|
+| 冷启动 | 快 | **极快（~0ms）** |
+| 运行时 | Node.js / Edge | V8 isolate（JS/WASM/Rust） |
+| 重定向/重写 | 内置 | `_redirects` / `_headers` |
+| A/B 测试 | 内置 Edge Config | 需自己实现 |
+| 定时任务 | Cron Jobs | Cron Triggers |
+| WebSocket | 有限 | Durable Objects |
+
+**Workers 的 Durable Objects 是个杀手级能力**——有状态、强一致、能协调。用它做协同编辑、实时协作、房间管理，Vercel 那边没有对等物。
+
+## 数据库与存储生态
+
+### Vercel 生态
+
+一方产品齐全：Vercel KV（Redis 兼容）、Vercel Postgres（Neon 驱动）、Vercel Blob（文件存储）、Edge Config（配置分发）。
+
+特点：**开箱即用，和平台深度整合**，但都是 Vercel 封装的，迁移出去要想一想。
+
+### Cloudflare 生态
+
+更大也更底层：D1（SQLite）、R2（对象存储，无出口费）、KV（最终一致键值）、Durable Objects（有状态）、Queues（消息队列）、Hyperdrive（连接池）。
+
+特点：**选择更多、更接近原语**，且都能单独用（不绑定 Pages）。本站自己就跑在 Cloudflare Pages + R2 上，存储方案见《Cloudflare R2 对象存储完全指南》。
+
+**生态选择建议**：要快速验证想法用 Vercel 一套；要长期可控、可能迁移，用 Cloudflare 的原语更稳。
+
+## 域名与 HTTPS
+
+两者都支持无限自定义域名、自动签证书、自动续期。打平。
+
+**Cloudflare 的优势**：如果你的域名 DNS 本来就在 Cloudflare，Pages 绑定域名是一条龙的事，而且自动获得 Cloudflare 的 DDoS 防护和 WAF。这是"全家桶"的红利。
+
+**Vercel 的优势**：域名可以在任何注册商，用 Vercel DNS 或外部 DNS 都行，不受生态绑定。
+
+## 决策框架
+
+### 选 Vercel 如果
+
+- 主框架是 **Next.js**（官方最佳支持，没有第二家接近）
+- 需要 SSR / ISR / 流式渲染
+- 重视预览部署和团队协作体验
+- 主要用户在欧美发达地区
+- 不想碰底层配置，要平台包办
+
+### 选 Cloudflare Pages 如果
+
+- 追求**无限带宽**，担心流量突发
+- 已经用 Cloudflare 的域名/DNS（无缝整合）
+- 要用 Workers、R2、D1、Durable Objects
+- 内容型站点：博客、文档、落地页
+- **非商业项目想完全免费**（Vercel Hobby 禁止商用）
+- 需要 Workers 那种 ~0ms 冷启动的边缘计算
+
+### 两者都适合
+
+- 个人博客、文档站、作品集
+- 小型落地页
+- 静态内容为主的营销页
+
+## 并排对比总表
+
+| 维度 | Vercel | Cloudflare Pages |
+|---|---|---|
+| 背后公司 | Vercel（Next.js） | Cloudflare |
+| 免费带宽 | 100 GB/月 | **无限** |
+| 免费构建 | 6000 分钟/月 | 500 次/月 |
+| 商业使用 | Hobby 禁止 | 允许 |
+| 单文件上限 | 无明确限制 | 25 MB |
+| Git 平台 | GitHub/GitLab/Bitbucket | GitHub/GitLab/Bitbucket |
+| 框架优化 | **Next.js 最佳** | 通用，Astro/Hugo 都顺手 |
+| 边缘函数 | Edge Functions | Workers（冷启动更快） |
+| 函数免费额度 | 100 万次/月 | 10 万次/天 |
+| 数据库 | KV / Postgres / Blob | D1 / R2 / KV / DO / Queues |
+| 有状态原语 | 无 | **Durable Objects** |
+| CDN 覆盖 | 欧美亚太为主 | **300+ 节点，覆盖更广** |
+| 分析 | Vercel Analytics（详细） | Web Analytics（隐私友好） |
+| 域名要求 | 无 | 无（但 DNS 在 CF 更顺） |
+| 自托管替代 | 无 | 无（价值在边缘网络） |
+
+## 小结
+
+2026 年两者的差距在缩小，但**核心分野没变**：
+
+- **Vercel 赢在与 React/Next.js 的深度整合和开发体验**，代价是免费档的带宽和商用限制
+- **Cloudflare Pages 赢在全球 CDN 性能和免费额度**，代价是生态更底层、要自己多配一点
+
+个人博客和静态站，两者都是好选择。**如果已经用 Cloudflare 管域名，直接选 Pages**——一条龙整合的顺畅感值得那点配置成本。
+
+如果还在纠结，一个简单的判断：**你的站主要给人看内容，还是给人用功能？** 看内容选 Cloudflare Pages，用功能（尤其 Next.js）选 Vercel。
+
+本站用的就是 Cloudflare Pages，配合 R2 做存储。相关部署细节可以看《Cloudflare Workers 免费搭建个人博客》和《Cloudflare 数据层三件套》。
+
+---
+
+## 2026 年 VS Code 必备插件推荐：让开发效率翻倍的 20 个神器
+URL: https://xiaozha.org/article/vscode-extensions-2026/
+
+VS Code 的真正威力来自插件生态。装对 20 个，效率提升是实打实的；装错 50 个，启动慢一半还互相冲突。
+
+这篇按用途分类，每个插件说明**它解决什么问题、值不值得装**。文末给一条命令批量安装。
+
+## 一、AI 编程类
+
+### Codeium —— 免费 AI 补全首选
+
+个人用户**完全免费无限用**，支持 70+ 语言，补全速度快，还带 AI 聊天。
+
+```bash
+code --install-extension Codeium.codeium
+```
+
+适合不想为 Copilot 付费的人。功能上略逊于 Copilot，但对个人开发够用。详细的横向对比见《2026 免费 AI 编程助手横评》。
+
+### GitHub Copilot —— 业界标杆
+
+补全质量和上下文理解仍是第一梯队。免费版每月有一定额度，个人轻度使用够。
+
+```bash
+code --install-extension GitHub.copilot
+```
+
+**建议**：先用免费版试试，觉得值再订阅。Codeium 和 Copilot 可以共存，冲突时在设置里选默认补全提供者。
+
+### Tabnine —— 注重隐私
+
+基础补全用本地模型，代码不上传。公司项目不能连外网时的选择。
+
+```bash
+code --install-extension TabNine.tabnine-vscode
+```
+
+免费版只有基础补全，AI 聊天要付费。
+
+### CodeGeeX —— 国产开源
+
+智谱 AI 出品，完全开源可本地部署，中文理解好。
+
+```bash
+code --install-extension CodeGeeX.codegee-x
+```
+
+## 二、代码美化与质量
+
+### Prettier —— 格式化标准答案
+
+装完设成默认格式化器，团队代码风格自动统一。
+
+```bash
+code --install-extension esbenp.prettier-vscode
+```
+
+推荐配置（`settings.json`）：
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all"
+}
+```
+
+### ESLint —— JavaScript 质量守门员
+
+实时标出问题，配合 `--fix` 自动修。
+
+```bash
+code --install-extension dbaeumer.vscode-eslint
+```
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+}
+```
+
+保存时自动修复能修的问题——这个配置能省大量手动改的时间。
+
+### Stylelint —— CSS/Less/SCSS 检查
+
+前端项目的样式规范守门员。
+
+```bash
+code --install-extension stylelint.vscode-stylelint
+```
+
+### SonarLint —— 多语言代码质量
+
+不止风格问题，能查出潜在的 bug 和坏味道。支持 Java、JS、Python、Go 等。
+
+```bash
+code --install-extension SonarSource.sonarlint-vscode
+```
+
+## 三、效率工具
+
+### GitLens —— Git 增强（必装）
+
+行内显示每行代码的最后修改人和提交，鼠标悬停看详情。还有文件历史、分支对比。
+
+```bash
+code --install-extension eamodio.gitlens
+```
+
+**这是我认为最值得装的插件**，没有之一。读懂"这行为什么这么写"的效率提升巨大。
+
+想了解更多 Git 命令本身，见《Git 进阶技巧》。
+
+### Project Manager —— 多项目管理
+
+在多个项目间快速切换，支持标签分组。项目多于三个就该装。
+
+```bash
+code --install-extension alefragnani.project-manager
+```
+
+### Todo Tree —— 注释待办可视化
+
+把代码里的 `TODO`、`FIXME`、`BUG` 注释收集成侧边栏树，点击跳转。
+
+```bash
+code --install-extension Gruntfuggly.todo-tree
+```
+
+自定义标记：
+
+```json
+{
+  "todo-tree.general.tags": ["TODO", "FIXME", "BUG", "HACK", "XXX"],
+  "todo-tree.highlights.customHighlight": {
+    "TODO": { "icon": "check", "foreground": "#ffbd2a" },
+    "FIXME": { "icon": "flame", "foreground": "#ff4d4d" }
+  }
+}
+```
+
+### Bookmarks —— 代码书签
+
+给常用位置打标签，快速跳回。大文件里找自己的代码很有用。
+
+```bash
+code --install-extension alefragnani.bookmarks
+```
+
+快捷键：`Ctrl+Alt+K` 打标签，`Ctrl+Alt+L` 跳下一个。
+
+### Auto Rename Tag —— 自动重命名标签
+
+改 `<div>` 开头，结尾自动跟着变。前端必备。
+
+```bash
+code --install-extension formulahendry.auto-rename-tag
+```
+
+### Path Intellisense —— 路径补全
+
+输入路径时自动补全文件名。手写 `import` 时的刚需。
+
+```bash
+code --install-extension christian-kohler.path-intellisense
+```
+
+### Chinese Lorem —— 中文假数据
+
+生成中文占位文本，做中文界面原型时不用再打"测试测试测试"。
+
+```bash
+code --install-extension Chinamama.chinese-lorem
+```
+
+## 四、主题外观
+
+### One Dark Pro —— 经典主题
+
+Atom 那款经典暗色主题的 VS Code 移植，护眼且辨识度高。
+
+```bash
+code --install-extension zhuangtongfa.material-theme
+```
+
+（`One Dark Pro` 的 ID 是 `zhuangtongfa.onedark-pro`）
+
+### Material Icon Theme —— 文件图标
+
+给不同文件类型上图标，目录树里一眼找到目标。纯粹提升幸福感。
+
+```bash
+code --install-extension PKief.material-icon-theme
+```
+
+### 字体建议
+
+不是插件，但值得配。**编程字体用等宽 + 连字**，`JetBrains Mono`、`Fira Code`、`Maple Mono`（国产，中文注释显示好）都不错。
+
+`settings.json`：
+
+```json
+{
+  "editor.fontFamily": "'Maple Mono NF CN', 'JetBrains Mono', Consolas, monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14
+}
+```
+
+**Maple Mono 对中文支持好**——中英文混排时代码注释不会出现方框。
+
+## 五、远程开发
+
+### Remote - SSH —— 远程开发
+
+直接在 VS Code 里连服务器开发，文件、终端、调试全在远程。**自托管玩家必备。**
+
+```bash
+code --install-extension ms-vscode-remote.remote-ssh
+```
+
+配置 `~/.ssh/config` 后，`Ctrl+Shift+P` → `Remote-SSH: Connect to Host` 就能连。
+
+配合《Ubuntu Server 初始化配置》里的 SSH 加固，远程开发既方便又安全。
+
+### Dev Containers —— 容器内开发
+
+把开发环境打包成容器，团队环境完全一致，不用在本地装一堆依赖。
+
+```bash
+code --install-extension ms-vscode-remote.remote-containers
+```
+
+适合 Python/Node 多版本共存、或者"我这能跑你那不能跑"的玄学问题。
+
+### Live Server —— 本地静态服务器
+
+改 HTML/CSS 自动刷新，做静态页面时方便。
+
+```bash
+code --install-extension ritwickdey.LiveServer
+```
+
+## 一条命令批量安装
+
+把上面的整理成脚本，新机器一条命令装完：
+
+**PowerShell**（`install-vscode-ext.ps1`）：
+
+```powershell
+$extensions = @(
+  "Codeium.codeium",
+  "GitHub.copilot",
+  "esbenp.prettier-vscode",
+  "dbaeumer.vscode-eslint",
+  "eamodio.gitlens",
+  "alefragnani.project-manager",
+  "Gruntfuggly.todo-tree",
+  "formulahendry.auto-rename-tag",
+  "christian-kohler.path-intellisense",
+  "PKief.material-icon-theme",
+  "ms-vscode-remote.remote-ssh"
+)
+
+foreach ($ext in $extensions) {
+  Write-Host "==> $ext"
+  code --install-extension $ext --force
+}
+Write-Host "完成"
+```
+
+**bash**：
+
+```bash
+for ext in Codeium.codeium GitHub.copilot esbenp.prettier-vscode \
+  dbaeumer.vscode-eslint eamodio.gitlens alefragnani.project-manager; do
+  echo "==> $ext"
+  code --install-extension "$ext" --force
+done
+```
+
+建议把这个脚本存 Git 仓库，和你的 `settings.json` 一起版本管理。换机器五分钟恢复全套环境。
+
+**同步 settings.json**：VS Code 的 **Settings Sync** 功能（登录 GitHub/Microsoft 账号）能自动同步设置、快捷键、插件列表。开着它，上面这脚本就是备用。
+
+## 装插件的三条建议
+
+**1. 少而精，不要囤。** 每个插件都拖慢启动、占内存、可能互相冲突。20 个精心选的 > 100 个随手装的。
+
+**2. 按项目启停。** 有些插件只对特定项目有用（比如数据库客户端、框架专用）。用 **Profile** 功能（VS Code 1.75+）给不同项目配不同插件集，比全局全装更清爽。
+
+**3. 定期清理。** `Ctrl+Shift+X` → 搜 `@installed`，按安装时间排序，看着眼生的卸掉。我每季度清一次，每次都能卸掉几个忘了为什么装的。
+
+## 小结
+
+如果只装三个，我选：**GitLens**（读懂代码）、**Prettier + ESLint**（统一风格）、**Remote - SSH**（远程开发）。
+
+这三个覆盖了日常最高频的痛点。AI 补全按预算在 Codeium 和 Copilot 之间选一个，剩下的按需加。
+
+工具是杠杆，但杠杆撬不动不想动的人。装完插件，重点还是回到代码本身。
+
+---

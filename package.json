@@ -10,7 +10,8 @@
     "astro": "node scripts/astro.mjs",
     "typecheck": "node scripts/astro.mjs check",
     "migrate": "node scripts/migrate-notion.mjs",
-    "new-post": "node scripts/new-post.mjs"
+    "new-post": "node scripts/new-post.mjs",
+    "gen:llms": "node scripts/gen-llms-full.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",
