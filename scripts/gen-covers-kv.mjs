@@ -75,64 +75,48 @@ function orb(x, y, w, color, a) {
   return e("div", { style: { position: "absolute", left: x, top: y, width: w, height: w, borderRadius: 999, background: `radial-gradient(circle at 50% 50%, ${hexA(color, a)} 0%, ${hexA(color, 0)} 70%)` } });
 }
 
-function motif(kind, accent) {
-  const wrap = (...kids) => e("div", { style: { position: "absolute", left: 770, top: 64, width: 400, height: 560, display: "flex", alignItems: "center", justifyContent: "center" } }, ...kids);
+function emblem(kind, accent) {
+  // 居中的霓虹主题徽标（标题背后的发光底纹），box 300x300，内容居中
+  const ring = (d, w, op) => e("div", { style: { position: "absolute", left: 150 - d / 2, top: 150 - d / 2, width: d, height: d, borderRadius: 999, border: `${w}px solid ${hexA(accent, op)}` } });
   if (kind === "ai" || kind === "default") {
-    return wrap(
-      orb(20, 100, 360, accent, 0.55),
-      e("div", { style: { position: "absolute", width: 244, height: 244, borderRadius: 999, border: `3px solid ${hexA(accent, 0.85)}` } }),
-      e("div", { style: { position: "absolute", width: 100, height: 100, borderRadius: 999, background: `radial-gradient(circle at 50% 50%, ${accent} 0%, ${hexA(accent, 0.2)} 100%)` } }),
-      led(18, "#fff").props.style && e("div", { style: { position: "absolute", left: 120, top: 64, width: 18, height: 18, borderRadius: 999, background: "rgba(255,255,255,0.9)" } }),
-      e("div", { style: { position: "absolute", left: 300, top: 150, width: 14, height: 14, borderRadius: 999, background: hexA(YELLOW, 0.95) } }),
-      e("div", { style: { position: "absolute", left: 180, top: 330, width: 16, height: 16, borderRadius: 999, background: hexA(accent, 0.9) } })
-    );
+    return e("div", { style: { position: "relative", width: 300, height: 300 } },
+      ring(260, 3, 0.7), ring(180, 2, 0.5),
+      e("div", { style: { position: "absolute", left: 110, top: 110, width: 80, height: 80, borderRadius: 999, background: `radial-gradient(circle at 50% 50%, ${accent} 0%, ${hexA(accent, 0.15)} 100%)` } }),
+      e("div", { style: { position: "absolute", left: 44, top: 44, width: 16, height: 16, borderRadius: 999, background: "#fff" } }),
+      e("div", { style: { position: "absolute", left: 240, top: 120, width: 12, height: 12, borderRadius: 999, background: YELLOW } }));
   }
   if (kind === "cloud") {
-    return wrap(
-      e("div", { style: { position: "absolute", top: 120, left: 50, width: 150, height: 150, borderRadius: 999, background: `radial-gradient(circle, ${hexA("#bfe9ff", 0.9)} 0%, ${hexA(accent, 0.25)} 100%)` } }),
-      e("div", { style: { position: "absolute", top: 86, left: 150, width: 184, height: 184, borderRadius: 999, background: `radial-gradient(circle, ${hexA("#ffffff", 0.95)} 0%, ${hexA(accent, 0.2)} 100%)` } }),
-      e("div", { style: { position: "absolute", top: 150, left: 250, width: 130, height: 130, borderRadius: 999, background: `radial-gradient(circle, ${hexA("#bfe9ff", 0.9)} 0%, ${hexA(accent, 0.2)} 100%)` } }),
-      e("div", { style: { position: "absolute", top: 256, left: 120, width: 260, height: 72, borderRadius: 40, background: hexA(accent, 0.18), border: `2px solid ${hexA(accent, 0.7)}` } })
-    );
+    return e("div", { style: { position: "relative", width: 300, height: 300 } },
+      ring(240, 3, 0.6),
+      e("div", { style: { position: "absolute", left: 95, top: 95, width: 110, height: 110, borderRadius: 999, background: `radial-gradient(circle, ${hexA("#ffffff", 0.85)} 0%, ${hexA(accent, 0.25)} 100%)` } }),
+      e("div", { style: { position: "absolute", left: 60, top: 60, width: 70, height: 70, borderRadius: 999, background: hexA("#bfe9ff", 0.7) } }),
+      e("div", { style: { position: "absolute", left: 178, top: 178, width: 58, height: 58, borderRadius: 999, background: hexA(accent, 0.5) } }));
   }
   if (kind === "server") {
-    const rack = (t) => e("div", { style: { position: "absolute", left: 78, top: t, width: 252, height: 76, borderRadius: 16, background: hexA("#ffffff", 0.05), border: `2px solid ${hexA(accent, 0.6)}`, display: "flex", alignItems: "center", padding: "0 22px", gap: 14 } },
-      led(16, accent), led(16, hexA(accent, 0.5)),
-      e("div", { style: { flex: "1 1 auto", height: 9, borderRadius: 5, background: hexA("#ffffff", 0.26) } }),
-      e("div", { style: { width: 58, height: 9, borderRadius: 5, background: hexA(accent, 0.6), flex: "0 0 auto" } }));
-    return wrap(
-      e("div", { style: { position: "absolute", left: 138, top: 218, width: 144, height: 144, borderRadius: 999, background: `radial-gradient(circle, ${hexA(accent, 0.85)} 0%, ${hexA(accent, 0.12)} 100%)` } }),
-      rack(150), rack(246), rack(342));
+    const bar = (t) => e("div", { style: { position: "absolute", left: 30, top: t, width: 240, height: 40, borderRadius: 10, background: hexA("#ffffff", 0.06), border: `2px solid ${hexA(accent, 0.6)}`, display: "flex", alignItems: "center", padding: "0 14px", gap: 10 } },
+      led(14, accent), e("div", { style: { flex: "1 1 auto", height: 8, borderRadius: 4, background: hexA("#ffffff", 0.28) } }));
+    return e("div", { style: { position: "relative", width: 300, height: 300 } }, ring(280, 2, 0.4), bar(110), bar(165), bar(220));
   }
   if (kind === "security") {
-    return wrap(
-      e("div", { style: { position: "absolute", top: 44, left: 155, width: 92, height: 92, borderRadius: 999, border: `16px solid ${hexA(accent, 0.9)}` } }),
-      e("div", { style: { position: "absolute", top: 112, left: 110, width: 182, height: 172, borderRadius: 26, background: hexA(accent, 0.14), border: `3px solid ${hexA(accent, 0.9)}` } }),
-      e("div", { style: { position: "absolute", top: 184, left: 186, width: 30, height: 30, borderRadius: 999, background: "rgba(255,255,255,0.9)" } }),
-      e("div", { style: { position: "absolute", top: 210, left: 196, width: 10, height: 48, borderRadius: 6, background: "rgba(255,255,255,0.9)" } })
-    );
+    return e("div", { style: { position: "relative", width: 300, height: 300 } },
+      ring(250, 3, 0.6),
+      e("div", { style: { position: "absolute", left: 110, top: 70, width: 80, height: 80, borderRadius: 999, border: `14px solid ${hexA(accent, 0.9)}` } }),
+      e("div", { style: { position: "absolute", left: 135, top: 140, width: 30, height: 30, borderRadius: 999, background: "rgba(255,255,255,0.9)" } }));
   }
   if (kind === "code") {
-    return wrap(
-      e("div", { style: { position: "absolute", top: 150, left: 56, width: 300, height: 214, borderRadius: 18, background: "#0b1020", border: `2px solid ${hexA(accent, 0.7)}`, display: "flex", flexDirection: "column", padding: "18px 20px", gap: 14 } },
-        e("div", { style: { display: "flex", gap: 10 } }, led(14, "#ff5f57"), led(14, "#febc2e"), led(14, "#28c840")),
-        e("div", { style: { marginTop: 6, height: 10, width: "80%", borderRadius: 5, background: hexA(accent, 0.7) } }),
-        e("div", { style: { height: 10, width: "92%", borderRadius: 5, background: hexA("#ffffff", 0.28) } }),
-        e("div", { style: { height: 10, width: "70%", borderRadius: 5, background: hexA("#ffffff", 0.22) } }),
-        e("div", { style: { height: 10, width: "85%", borderRadius: 5, background: hexA(accent, 0.5) } })
-      )
-    );
+    return e("div", { style: { position: "relative", width: 300, height: 300 } }, ring(280, 2, 0.4),
+      e("div", { style: { position: "absolute", left: 40, top: 80, width: 220, height: 150, borderRadius: 16, background: "#0b1020", border: `2px solid ${hexA(accent, 0.7)}`, display: "flex", flexDirection: "column", padding: "16px 18px", gap: 12 } },
+        e("div", { style: { display: "flex", gap: 8 } }, led(12, "#ff5f57"), led(12, "#febc2e"), led(12, "#28c840")),
+        e("div", { style: { marginTop: 4, height: 9, width: "80%", borderRadius: 5, background: hexA(accent, 0.7) } }),
+        e("div", { style: { height: 9, width: "92%", borderRadius: 5, background: hexA("#ffffff", 0.28) } }),
+        e("div", { style: { height: 9, width: "70%", borderRadius: 5, background: hexA("#ffffff", 0.22) } })));
   }
   if (kind === "image") {
-    return wrap(
-      e("div", { style: { position: "absolute", top: 156, left: 80, width: 260, height: 196, borderRadius: 18, border: `3px solid ${hexA(accent, 0.85)}`, background: hexA("#ffffff", 0.04), display: "flex", alignItems: "flex-end", padding: 18 } },
-        e("div", { style: { position: "absolute", top: 178, left: 230, width: 62, height: 62, borderRadius: 999, background: `radial-gradient(circle, ${YELLOW} 0%, ${hexA(accent, 0.3)} 100%)` } }),
-        e("div", { style: { width: "100%", height: 10, borderRadius: 5, background: hexA("#ffffff", 0.3) } }),
-        e("div", { style: { position: "absolute", bottom: 32, left: 32, width: 90, height: 10, borderRadius: 5, background: hexA(accent, 0.6) } })
-      )
-    );
+    return e("div", { style: { position: "relative", width: 300, height: 300 } }, ring(250, 3, 0.6),
+      e("div", { style: { position: "absolute", left: 80, top: 90, width: 140, height: 110, borderRadius: 16, border: `3px solid ${hexA(accent, 0.85)}`, background: hexA("#ffffff", 0.04) } }),
+      e("div", { style: { position: "absolute", left: 180, top: 60, width: 50, height: 50, borderRadius: 999, background: `radial-gradient(circle, ${YELLOW} 0%, ${hexA(accent, 0.3)} 100%)` } }));
   }
-  return wrap();
+  return e("div", { style: { position: "relative", width: 300, height: 300 } }, ring(240, 3, 0.6));
 }
 
 function buildKV(fm, accent, kind, text) {
@@ -140,27 +124,30 @@ function buildKV(fm, accent, kind, text) {
   const sub = text.subhead || "";
   const cat = fm.category || (fm.tags && fm.tags[0]) || "技术";
   const chips = fm.tags && fm.tags.length ? fm.tags.slice(0, 3) : [cat];
-  const size = title.length <= 10 ? 72 : title.length <= 16 ? 60 : title.length <= 22 ? 50 : title.length <= 30 ? 42 : 34;
+  const size = title.length <= 10 ? 68 : title.length <= 16 ? 56 : title.length <= 22 ? 46 : title.length <= 30 ? 38 : 31;
 
   return e("div", { style: { display: "flex", width: 1200, height: 675, position: "relative", fontFamily: "Noto Sans SC", color: "#fff", overflow: "hidden", background: "linear-gradient(135deg, #070b16 0%, #0c1228 55%, #070b16 100%)" } },
-    orb(-90, -140, 470, accent, 0.62),
-    orb(-120, -180, 540, "#22d3ee", 0.48),
-    orb(120, 300, 380, "#a855f7", 0.36),
-    e("div", { style: { position: "absolute", left: 858, top: 148, width: 384, height: 384, borderRadius: 999, background: `radial-gradient(circle at 50% 50%, ${hexA(accent, 0.42)} 0%, ${hexA(accent, 0)} 70%)` } }),
-    e("div", { style: { position: "absolute", top: 0, left: 0, width: 780, height: 675, background: "linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.28) 50%, rgba(0,0,0,0) 100%)" } }),
+    orb(-120, -160, 520, accent, 0.6),
+    orb(700, 440, 560, "#a855f7", 0.34),
+    orb(-160, 380, 460, "#22d3ee", 0.4),
+    // 居中徽标（标题背后发光底纹）
+    e("div", { style: { position: "absolute", left: 450, top: 52, width: 300, height: 300, opacity: 0.38 } }, emblem(kind, accent)),
+    // 顶部居中分类胶囊
+    e("div", { style: { position: "absolute", top: 58, left: 450, width: 300, display: "flex", justifyContent: "center" } },
+      e("div", { style: { fontSize: 22, fontWeight: 700, padding: "9px 22px", borderRadius: 999, background: accent, color: "#0b1020" } }, cat)),
+    // 居中标题列（左右留出安全边距，避开卡片横向裁切）
+    e("div", { style: { position: "absolute", top: 268, left: 0, width: 1200, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "0 130px" } },
+      e("div", { style: { width: 56, height: 6, borderRadius: 3, background: YELLOW, marginBottom: 20 } }),
+      e("div", { style: { width: "100%", fontSize: size, fontWeight: 700, lineHeight: 1.18, color: "#fff", textShadow: "0 2px 26px rgba(0,0,0,0.55)" } }, title),
+      sub ? e("div", { style: { marginTop: 18, fontSize: 26, fontWeight: 700, color: YELLOW, textShadow: "0 2px 18px rgba(0,0,0,0.45)" } }, sub) : null),
+    // 底部居中标签
+    e("div", { style: { position: "absolute", top: 556, left: 0, width: 1200, display: "flex", justifyContent: "center", gap: 12 } },
+      ...chips.map((t, i) => e("div", { style: { display: "flex", alignItems: "center", gap: 9, fontSize: 20, fontWeight: 700, padding: "8px 18px", borderRadius: 999, background: hexA(accent, 0.14), border: `1.5px solid ${hexA(accent, 0.55)}`, color: i === 0 ? YELLOW : accent } },
+        e("div", { style: { width: 10, height: 10, borderRadius: 999, background: i === 0 ? YELLOW : accent } }), t))),
     e("div", { style: { position: "absolute", top: 52, left: 72, display: "flex", alignItems: "center", gap: 14 } },
       e("div", { style: { width: 14, height: 14, borderRadius: 999, background: YELLOW } }),
       e("div", { style: { fontSize: 24, fontWeight: 700, letterSpacing: 1, color: "#fff" } }, SITE_NAME)),
-    e("div", { style: { position: "absolute", top: 46, left: 884, fontSize: 22, fontWeight: 700, padding: "9px 22px", borderRadius: 999, background: accent, color: "#0b1020" } }, cat),
-    e("div", { style: { position: "absolute", top: 186, left: 72, width: 720, display: "flex", flexDirection: "column" } },
-      e("div", { style: { width: 56, height: 6, borderRadius: 3, background: YELLOW, marginBottom: 20 } }),
-      e("div", { style: { width: "100%", fontSize: size, fontWeight: 700, lineHeight: 1.16, color: "#fff", textShadow: "0 2px 24px rgba(0,0,0,0.5)" } }, title),
-      sub ? e("div", { style: { marginTop: 18, fontSize: 26, fontWeight: 700, color: YELLOW, textShadow: "0 2px 18px rgba(0,0,0,0.45)" } }, sub) : null),
-    e("div", { style: { position: "absolute", top: 540, left: 72, display: "flex", gap: 12 } },
-      ...chips.map((t, i) => e("div", { style: { display: "flex", alignItems: "center", gap: 9, fontSize: 20, fontWeight: 700, padding: "8px 18px", borderRadius: 999, background: hexA(accent, 0.14), border: `1.5px solid ${hexA(accent, 0.55)}`, color: i === 0 ? YELLOW : accent } },
-        e("div", { style: { width: 10, height: 10, borderRadius: 999, background: i === 0 ? YELLOW : accent } }), t))),
-    e("div", { style: { position: "absolute", top: 612, left: 1004, fontSize: 19, fontWeight: 700, color: "rgba(255,255,255,0.8)" } }, SITE_URL),
-    motif(kind, accent)
+    e("div", { style: { position: "absolute", top: 612, left: 1004, fontSize: 19, fontWeight: 700, color: "rgba(255,255,255,0.8)" } }, SITE_URL)
   );
 }
 
