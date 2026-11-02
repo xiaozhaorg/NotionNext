@@ -29,5 +29,8 @@ Thumbs.db
 # cloudflare
 .wrangler/
 
+# AI 生成封面的中间源图（成品 webp 在 public/images/*-real.webp）
+public/images/_ai/
+
 # agent workspace (platform-internal memory, not project content)
 .workbuddy/
