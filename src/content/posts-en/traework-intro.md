@@ -5,7 +5,7 @@ description: "TraeWork is ByteDance's AI office platform in the TRAE ecosystem, 
 author: "Xiaozha"
 tags: ["AI", "Tutorial"]
 draft: false
-ogImage: "/images/traework-intro-real.jpg"
+ogImage: "/images/traework-intro-en-real.jpg"
 coverAlt: "A blue tech-styled AI neural network concept image symbolizing TraeWork's cloud-based AI task processing"
 zhSlug: "traework-intro"
 ---

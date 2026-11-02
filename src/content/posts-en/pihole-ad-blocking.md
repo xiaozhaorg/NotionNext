@@ -5,7 +5,7 @@ description: "Pi-hole blocks ads at the DNS level for your entire network with n
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/pihole-ad-blocking-real.jpg"
+ogImage: "/images/pihole-ad-blocking-en-real.jpg"
 coverAlt: "Dense network cabling and blinking lights in a data center rack"
 zhSlug: "pihole-ad-blocking"
 ---

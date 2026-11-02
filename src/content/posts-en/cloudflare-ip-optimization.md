@@ -5,7 +5,7 @@ description: "Made for website administrators! Speed up your whole site with opt
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial"]
 draft: false
-ogImage: "/images/cloudflare-ip-optimization-real.jpg"
+ogImage: "/images/cloudflare-ip-optimization-en-real.jpg"
 coverAlt: "Blinking network indicator lights on a data center server rack"
 zhSlug: "cloudflare-ip-optimization"
 ---

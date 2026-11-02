@@ -5,7 +5,7 @@ description: "Moonshot AI releases the open-source Kimi K3 with 2.8 trillion par
 author: "Xiaozha"
 tags: ["AI", "LLM", "Open Source"]
 draft: false
-ogImage: "/images/kimi-k3-open-source-real.jpg"
+ogImage: "/images/kimi-k3-open-source-en-real.jpg"
 coverAlt: "Conceptual illustration of an artificial neural network bathed in a blue glow"
 zhSlug: "kimi-k3-open-source"
 ---

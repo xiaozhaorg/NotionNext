@@ -5,7 +5,7 @@ description: "Five SEO pitfalls I hit after migrating this blog from NotionNext 
 author: "Xiaozha"
 tags: ["Tutorial", "Blogging", "Development Tools"]
 draft: false
-ogImage: "/images/astro-seo-pitfalls-real.jpg"
+ogImage: "/images/astro-seo-pitfalls-en-real.jpg"
 coverAlt: "A MacBook screen filled with dense syntax-highlighted code"
 zhSlug: "astro-seo-pitfalls"
 ---

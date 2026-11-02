@@ -5,7 +5,7 @@ description: "codebase-memory-mcp is a high-performance code intelligence MCP se
 author: "Xiaozha"
 tags: ["MCP", "AI", "Development Tools", "Productivity"]
 draft: false
-ogImage: "/images/codebase-memory-mcp-real.jpg"
+ogImage: "/images/codebase-memory-mcp-en-real.jpg"
 coverAlt: "MacBook screen showing a programming editor with code"
 zhSlug: "codebase-memory-mcp"
 ---

@@ -5,7 +5,7 @@ description: "Step-by-step guide to building a personal blog on Cloudflare Worke
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools", "Blogging"]
 draft: false
-ogImage: "/images/cloudflare-workers-blog-real.jpg"
+ogImage: "/images/cloudflare-workers-blog-en-real.jpg"
 coverAlt: "Blue storage array lights in cloud server room"
 zhSlug: "cloudflare-workers-blog"
 ---

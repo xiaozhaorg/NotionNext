@@ -5,7 +5,7 @@ description: "Use promo code COMPROS to register a .COM top-level domain for jus
 author: "Xiaozha"
 tags: ["Domains", "Tutorial"]
 draft: false
-ogImage: "/images/com-domain-deal-real.jpg"
+ogImage: "/images/com-domain-deal-en-real.jpg"
 coverAlt: "Conceptual illustration of domain name resolution and global internet connectivity"
 zhSlug: "com-domain-deal"
 ---

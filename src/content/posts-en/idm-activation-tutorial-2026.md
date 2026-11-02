@@ -5,7 +5,7 @@ description: "Internet Download Manager (IDM) is a powerful download accelerator
 author: "Xiaozha"
 tags: ["Tutorial", "Development Tools"]
 draft: false
-ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
+ogImage: "/images/idm-activation-tutorial-2026-en-real.jpg"
 coverAlt: "Racks of neatly arranged server cabinets and network cables in a data center"
 zhSlug: "idm-activation-tutorial-2026"
 ---

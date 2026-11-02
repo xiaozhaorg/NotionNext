@@ -5,7 +5,7 @@ description: "Complete guide to applying for the GitHub Student Developer Pack, 
 author: "Xiaozha"
 tags: ["Free Tools", "Tutorial"]
 draft: false
-ogImage: "/images/github-student-pack-real.jpg"
+ogImage: "/images/github-student-pack-en-real.jpg"
 coverAlt: "Close-up of chips and data cables densely packed on a green circuit board"
 zhSlug: "github-student-pack"
 ---

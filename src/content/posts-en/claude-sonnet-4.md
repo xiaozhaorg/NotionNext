@@ -5,7 +5,7 @@ description: "Anthropic's Claude Sonnet 4 delivers a major leap in coding abilit
 author: "Xiaozha"
 tags: ["AI", "LLM"]
 draft: false
-ogImage: "/images/claude-sonnet-4-real.jpg"
+ogImage: "/images/claude-sonnet-4-en-real.jpg"
 coverAlt: "Close-up of a glowing AI chip on a circuit board, symbolizing the computing power of large models"
 zhSlug: "claude-sonnet-4"
 ---

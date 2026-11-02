@@ -5,7 +5,7 @@ description: "Gemma 4 is Google's newest open-source LLM family, released in 202
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/gemma-4-local-deploy-real.jpg"
+ogImage: "/images/gemma-4-local-deploy-en-real.jpg"
 coverAlt: "AI neural network concept art in a blue glow"
 zhSlug: "gemma-4-local-deploy"
 ---

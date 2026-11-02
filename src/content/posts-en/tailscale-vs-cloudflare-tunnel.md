@@ -5,7 +5,7 @@ description: "Tailscale and Cloudflare Tunnel solve two different problems: one 
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/tailscale-vs-cloudflare-tunnel-real.jpg"
+ogImage: "/images/tailscale-vs-cloudflare-tunnel-en-real.jpg"
 coverAlt: "Numbered ports and dense blue and gray cables on a network patch panel"
 zhSlug: "tailscale-vs-cloudflare-tunnel"
 ---

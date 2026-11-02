@@ -5,7 +5,7 @@ description: "Step-by-step guide to using Cloudflare Tunnel for free. Expose loc
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/cloudflare-tunnel-tutorial-real.jpg"
+ogImage: "/images/cloudflare-tunnel-tutorial-en-real.jpg"
 coverAlt: "Data center server rack with blinking network LEDs"
 zhSlug: "cloudflare-tunnel-tutorial"
 ---

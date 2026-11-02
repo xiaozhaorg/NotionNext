@@ -5,7 +5,7 @@ description: "Vaultwarden is the lightweight, self-hosted version of Bitwarden. 
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/bitwarden-self-host-real.jpg"
+ogImage: "/images/bitwarden-self-host-en-real.jpg"
 coverAlt: "Blue tech lighting over cloud computing and server room racks"
 zhSlug: "bitwarden-self-host"
 ---

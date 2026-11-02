@@ -5,7 +5,7 @@ description: "Cursor is an AI-native IDE built on VS Code. This hands-on review 
 author: "Xiaozha"
 tags: ["AI", "Development Tools"]
 draft: false
-ogImage: "/images/cursor-vs-vscode-real.jpg"
+ogImage: "/images/cursor-vs-vscode-en-real.jpg"
 coverAlt: "Artificial intelligence neural network concept with a blue glow"
 zhSlug: "cursor-vs-vscode"
 ---

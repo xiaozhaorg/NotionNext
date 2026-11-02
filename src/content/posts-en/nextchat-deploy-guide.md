@@ -5,7 +5,7 @@ description: "Deploy your own private AI chat assistant with NextChat. Supports 
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/nextchat-deploy-guide-real.jpg"
+ogImage: "/images/nextchat-deploy-guide-en-real.jpg"
 coverAlt: "Glowing AI chat interface on screen"
 zhSlug: "nextchat-deploy-guide"
 ---

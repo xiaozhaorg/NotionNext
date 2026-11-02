@@ -5,7 +5,7 @@ description: "Complete Ollama tutorial. Install, download models, use the API, i
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/ollama-local-llm-real.jpg"
+ogImage: "/images/ollama-local-llm-en-real.jpg"
 coverAlt: "Glowing AI chip on circuit board close-up, symbolizing LLM computing power"
 zhSlug: "ollama-local-llm"
 ---

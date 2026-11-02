@@ -5,7 +5,7 @@ description: "How to fix a 404 error when logging into BT Panel, including troub
 author: "Xiaozha"
 tags: ["Tutorial", "Self-Hosting"]
 draft: false
-ogImage: "/images/bt-panel-404-real.jpg"
+ogImage: "/images/bt-panel-404-en-real.jpg"
 coverAlt: "Racks of neatly arranged server cabinets and network equipment in a data center"
 zhSlug: "bt-panel-404"
 ---

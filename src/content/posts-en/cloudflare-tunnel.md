@@ -5,7 +5,7 @@ description: "Use Cloudflare Tunnel to expose your local services to the public 
 author: "Xiaozha"
 tags: ["Cloudflare", "Self-Hosting", "Tutorial"]
 draft: false
-ogImage: "/images/cloudflare-tunnel-real.jpg"
+ogImage: "/images/cloudflare-tunnel-en-real.jpg"
 coverAlt: "Data center server rack with blinking network LEDs"
 zhSlug: "cloudflare-tunnel"
 ---

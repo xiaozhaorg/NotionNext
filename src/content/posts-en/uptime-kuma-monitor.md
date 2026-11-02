@@ -5,7 +5,7 @@ description: "Complete Uptime Kuma tutorial. Self-hosted uptime monitoring with 
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/uptime-kuma-monitor-real.jpg"
+ogImage: "/images/uptime-kuma-monitor-en-real.jpg"
 coverAlt: "Clean office desk with laptop and work notes"
 zhSlug: "uptime-kuma-monitor"
 ---

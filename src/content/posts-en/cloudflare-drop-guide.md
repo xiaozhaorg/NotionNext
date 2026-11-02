@@ -5,7 +5,7 @@ description: "Cloudflare Drop is now live: drag a folder onto the page and deplo
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools", "Blogging"]
 draft: false
-ogImage: "/images/cloudflare-drop-guide-real.jpg"
+ogImage: "/images/cloudflare-drop-guide-en-real.jpg"
 coverAlt: "Blue storage array lights in cloud server room"
 zhSlug: "cloudflare-drop-guide"
 ---

@@ -5,7 +5,7 @@ description: "Deploy a free image compression tool on Cloudflare Pages. Supports
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
 draft: false
-ogImage: "/images/cloudflare-image-compressor-real.webp"
+ogImage: "/images/cloudflare-image-compressor-en-real.jpg"
 coverAlt: "Before and after image compression comparison"
 zhSlug: "cloudflare-image-compressor"
 ---

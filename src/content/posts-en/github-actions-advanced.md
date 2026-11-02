@@ -6,7 +6,7 @@ description: "Advanced GitHub Actions in practice: cache the package manager sto
 author: "Xiaozha"
 tags: ["DevOps", "Tutorial"]
 draft: false
-ogImage: "/images/github-actions-advanced-real.jpg"
+ogImage: "/images/github-actions-advanced-en-real.jpg"
 coverAlt: "A warm team collaboration scene at a work desk"
 zhSlug: "github-actions-advanced"
 ---

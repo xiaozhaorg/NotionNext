@@ -5,7 +5,7 @@ description: "Zed is a code editor written in Rust that promises GPU-accelerated
 author: "Xiaozha"
 tags: ["Development Tools", "Tutorial"]
 draft: false
-ogImage: "/images/zed-vs-vscode-real.jpg"
+ogImage: "/images/zed-vs-vscode-en-real.jpg"
 coverAlt: "Color-highlighted program source code in a dark-themed code editor"
 zhSlug: "zed-vs-vscode"
 ---

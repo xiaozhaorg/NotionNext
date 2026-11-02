@@ -5,7 +5,7 @@ description: "A tutorial on installing software from the command line with winge
 author: "Xiaozha"
 tags: ["Development Tools", "Tutorial"]
 draft: false
-ogImage: "/images/winget-windows-tools-real.jpg"
+ogImage: "/images/winget-windows-tools-en-real.jpg"
 coverAlt: "Close-up of densely packed chips and data cables on a green circuit board"
 zhSlug: "winget-windows-tools"
 ---

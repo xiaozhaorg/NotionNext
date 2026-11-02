@@ -5,7 +5,7 @@ description: "Set up a custom email system using your domain name. Supports cust
 author: "Xiaozha"
 tags: ["Domains", "Tutorial"]
 draft: false
-ogImage: "/images/domain-email-system-real.webp"
+ogImage: "/images/domain-email-system-en-real.jpg"
 coverAlt: "Email settings interface showing custom domain configuration"
 zhSlug: "domain-email-system"
 ---

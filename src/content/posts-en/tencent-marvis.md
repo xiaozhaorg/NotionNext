@@ -5,7 +5,7 @@ description: Marvis by Tencent is an OS-level AI assistant. After installation, 
 author: "Xiaozha"
 tags: ["AI", "Tutorial"]
 draft: false
-ogImage: "/images/tencent-marvis-real.jpg"
+ogImage: "/images/tencent-marvis-en-real.jpg"
 coverAlt: "A laptop and work notes on a tidy office desk"
 zhSlug: "tencent-marvis"
 ---

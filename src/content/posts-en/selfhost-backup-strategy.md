@@ -5,7 +5,7 @@ description: "The biggest risk in self-hosting is not being hacked, it is a driv
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/selfhost-backup-strategy-real.jpg"
+ogImage: "/images/selfhost-backup-strategy-en-real.jpg"
 coverAlt: "Hard drive platter and actuator arm, precision mechanics in low light"
 zhSlug: "selfhost-backup-strategy"
 ---

@@ -5,7 +5,7 @@ description: "Step-by-step guide to building a DIY NAS: hardware shopping list, 
 author: "Xiaozha"
 tags: ["Self-Hosting", "Tutorial"]
 draft: false
-ogImage: "/images/nas-diy-guide-real.jpg"
+ogImage: "/images/nas-diy-guide-en-real.jpg"
 coverAlt: "Warm scene of team members collaborating around a desk"
 zhSlug: "nas-diy-guide"
 ---

@@ -5,7 +5,7 @@ description: "Complete Jellyfin setup guide. Docker deployment, metadata scrapin
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/jellyfin-media-server-real.jpg"
+ogImage: "/images/jellyfin-media-server-en-real.jpg"
 coverAlt: "Clean office desk with laptop and work notes"
 zhSlug: "jellyfin-media-server"
 ---

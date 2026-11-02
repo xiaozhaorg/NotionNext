@@ -5,7 +5,7 @@ description: "Complete guide to Cloudflare R2 object storage. Learn S3-compatibl
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/cloudflare-r2-storage-real.jpg"
+ogImage: "/images/cloudflare-r2-storage-en-real.jpg"
 coverAlt: "Blue storage array lights in a cloud server room"
 zhSlug: "cloudflare-r2-storage"
 ---

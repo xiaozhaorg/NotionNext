@@ -6,7 +6,7 @@ author: "Xiaozha"
 tags: ["AI", "AI Coding", "Tutorial", "Open Source"]
 draft: false
 zhSlug: "cline-tutorial"
-ogImage: "/images/cline-tutorial-real.jpg"
+ogImage: "/images/cline-tutorial-en-real.jpg"
 coverAlt: "Two developers at a laptop, one pointing at the screen"
 ---
 

@@ -6,7 +6,7 @@ author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Database", "Free Tools"]
 draft: false
 zhSlug: "cloudflare-data-layer"
-ogImage: "/images/cloudflare-data-layer-real.jpg"
+ogImage: "/images/cloudflare-data-layer-en-real.jpg"
 coverAlt: "Data center server racks with dense cabling and blinking lights"
 ---
 

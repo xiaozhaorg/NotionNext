@@ -5,7 +5,7 @@ description: "An in-depth look at SiliconFlow, the AI-era infrastructure that le
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial"]
 draft: false
-ogImage: "/images/siliconflow-intro-real.jpg"
+ogImage: "/images/siliconflow-intro-en-real.jpg"
 coverAlt: "A laptop with data charts on a desk in a work setting"
 zhSlug: "siliconflow-intro"
 ---
