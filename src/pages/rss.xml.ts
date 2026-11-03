@@ -30,11 +30,12 @@ export async function GET(context: APIContext) {
       .sort((a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime())
       .map((post) => {
         const url = `${siteUrl}/${SITE.post.urlPrefix}/${post.id}/`;
-        const cover = post.data.ogImage
+        const rawCover = post.data.ogImage
           ? /^https?:\/\//.test(post.data.ogImage)
             ? post.data.ogImage
             : `${siteUrl}${post.data.ogImage.startsWith("/") ? "" : "/"}${post.data.ogImage}`
           : "";
+        const cover = rawCover ? rawCover.replace(/\.(jpe?g|png)$/i, ".webp") : "";
         return {
           title: post.data.title,
           description: post.data.description,

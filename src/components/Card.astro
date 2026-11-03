@@ -68,7 +68,7 @@ const fallbackId = `thumb-fallback-${id}`;
       <picture>
         {hasWebp && <source srcset={thumbWebp} type="image/webp" />}
         <img
-          src={data.ogImage}
+          src={thumbWebp}
           alt={coverAlt}
           class="post-thumb-img"
           width="220"

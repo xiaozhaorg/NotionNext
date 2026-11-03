@@ -29,7 +29,7 @@ const hasWebp = webpSrc !== post.data.ogImage;
   locale="en"
   title={post.data.title.includes(SITE.titleEn) ? post.data.title : `${post.data.title} | ${SITE.titleEn}`}
   description={post.data.description}
-  image={post.data.ogImage}
+  image={webpSrc}
   type="article"
   publishedTime={post.data.pubDatetime}
   modifiedTime={post.data.modDatetime}
@@ -77,7 +77,7 @@ const hasWebp = webpSrc !== post.data.ogImage;
             <picture>
               {hasWebp && <source srcset={webpSrc} type="image/webp" />}
               <img
-                src={post.data.ogImage}
+                src={webpSrc}
                 alt={coverAlt}
                 class="post-cover"
                 width="800"
