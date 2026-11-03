@@ -147,10 +147,12 @@ function buildKV(fm, accent, kind, text, W, H) {
     e("div", { style: { position: "absolute", top: Math.round(H * 0.085), left: 0, width: W, display: "flex", justifyContent: "center" } },
       e("div", { style: { fontSize: catSize, fontWeight: 700, padding: `${Math.round(10 * S)}px ${Math.round(24 * S)}px`, borderRadius: 999, background: accent, color: "#0b1020" } }, cat)),
     // 中央文字安全带（占 16%~82% 高度，垂直居中），左右 13% 边距
-    e("div", { style: { position: "absolute", top: Math.round(H * 0.16), left: 0, width: W, height: Math.round(H * 0.64), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: `0 ${MX}px` } },
+    // 注意：satori 在 flex 容器上设 textAlign 会右移文字，故 textAlign 必须下放到每个文字元素；
+    // 且容器不能用 padding 缩窄内容区（satori 的 width:100% 会按父级全宽算），必须用 left+width 定位内容区
+    e("div", { style: { position: "absolute", top: Math.round(H * 0.16), left: MX, width: W - MX * 2, height: Math.round(H * 0.64), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" } },
       e("div", { style: { width: Math.round(64 * S), height: Math.round(7 * S), borderRadius: 3, background: YELLOW, marginBottom: Math.round(H * 0.035) } }),
-      e("div", { style: { width: "100%", fontSize: hSize, fontWeight: 700, lineHeight: 1.2, color: "#fff", textShadow: "0 2px 30px rgba(0,0,0,0.6)" } }, title),
-      sub ? e("div", { style: { marginTop: Math.round(H * 0.04), fontSize: subSize, fontWeight: 700, lineHeight: 1.25, color: YELLOW, textShadow: "0 2px 20px rgba(0,0,0,0.5)" } }, sub) : null),
+      e("div", { style: { width: "100%", textAlign: "center", fontSize: hSize, fontWeight: 700, lineHeight: 1.2, color: "#fff", textShadow: "0 2px 30px rgba(0,0,0,0.6)" } }, title),
+      sub ? e("div", { style: { width: "100%", textAlign: "center", marginTop: Math.round(H * 0.04), fontSize: subSize, fontWeight: 700, lineHeight: 1.25, color: YELLOW, textShadow: "0 2px 20px rgba(0,0,0,0.5)" } }, sub) : null),
     // 底部居中标签
     e("div", { style: { position: "absolute", top: Math.round(H * 0.86), left: 0, width: W, display: "flex", justifyContent: "center", gap: Math.round(14 * S) } },
       ...chips.map((t, i) => e("div", { style: { display: "flex", alignItems: "center", gap: Math.round(10 * S), fontSize: chipSize, fontWeight: 700, padding: `${Math.round(9 * S)}px ${Math.round(18 * S)}px`, borderRadius: 999, background: hexA(accent, 0.14), border: `1.5px solid ${hexA(accent, 0.55)}`, color: i === 0 ? YELLOW : accent } },
