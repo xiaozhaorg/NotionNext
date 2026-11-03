@@ -9,7 +9,7 @@ tags:
   - 大模型
 draft: false
 sourceUrl: "https://xiaozha.org/article/siliconflow-intro"
-ogImage: "/images/siliconflow-intro-real.jpg"
+ogImage: "/images/siliconflow-intro-real.webp"
 coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 enSlug: "siliconflow-intro"
 ---

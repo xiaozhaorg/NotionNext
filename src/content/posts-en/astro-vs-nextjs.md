@@ -5,7 +5,7 @@ description: "In-depth comparison of Astro and Next.js: developer experience, pe
 author: "Xiaozha"
 tags: ["Tutorial", "Blogging", "Development Tools"]
 draft: false
-ogImage: "/images/astro-vs-nextjs-en-real.jpg"
+ogImage: "/images/astro-vs-nextjs-en-real.webp"
 coverAlt: "A MacBook screen displaying a code editor interface"
 zhSlug: "astro-vs-nextjs"
 ---

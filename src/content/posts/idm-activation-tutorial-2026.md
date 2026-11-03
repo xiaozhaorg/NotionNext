@@ -7,7 +7,7 @@ tags:
   - 软件教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/idm-activation-tutorial-2026"
-ogImage: "/images/idm-activation-tutorial-2026-real.jpg"
+ogImage: "/images/idm-activation-tutorial-2026-real.webp"
 coverAlt: "服务器机房中排列整齐的机柜与网线"
 enSlug: "idm-activation-tutorial-2026"
 ---

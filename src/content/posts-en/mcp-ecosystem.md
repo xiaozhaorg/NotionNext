@@ -6,7 +6,7 @@ author: "Xiaozha"
 tags: ["AI", "MCP", "AI Coding", "Productivity"]
 draft: false
 zhSlug: "mcp-ecosystem"
-ogImage: "/images/mcp-ecosystem-en-real.jpg"
+ogImage: "/images/mcp-ecosystem-en-real.webp"
 coverAlt: "A humanoid robot sitting on a bench using a tablet"
 ---
 

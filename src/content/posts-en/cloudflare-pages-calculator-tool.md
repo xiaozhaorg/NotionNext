@@ -5,7 +5,7 @@ description: "Step-by-step guide to building a multi-function online calculator 
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
 draft: false
-ogImage: "/images/cloudflare-pages-calculator-tool-en-real.jpg"
+ogImage: "/images/cloudflare-pages-calculator-tool-en-real.webp"
 coverAlt: "Code editor showing calculator project code"
 zhSlug: "cloudflare-pages-calculator-tool"
 ---

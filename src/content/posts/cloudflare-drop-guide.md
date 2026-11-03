@@ -10,7 +10,7 @@ tags:
   - 建站
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-drop-guide"
-ogImage: "/images/cloudflare-drop-guide-real.jpg"
+ogImage: "/images/cloudflare-drop-guide-real.webp"
 coverAlt: "云端服务器机房的蓝色存储阵列灯光"
 enSlug: "cloudflare-drop-guide"
 ---

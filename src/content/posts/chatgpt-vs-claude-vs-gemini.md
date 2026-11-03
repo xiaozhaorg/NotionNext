@@ -9,7 +9,7 @@ tags:
   - 大模型
 draft: false
 sourceUrl: "https://xiaozha.org/article/chatgpt-vs-claude-vs-gemini"
-ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.jpg"
+ogImage: "/images/chatgpt-vs-claude-vs-gemini-real.webp"
 coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
 enSlug: "chatgpt-vs-claude-vs-gemini"
 ---

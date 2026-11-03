@@ -9,7 +9,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/monkeycode-intro"
-ogImage: "/images/monkeycode-intro-real.jpg"
+ogImage: "/images/monkeycode-intro-real.webp"
 coverAlt: "蓝紫渐变光效中的 AI 技术抽象概念图"
 enSlug: "monkeycode-intro"
 ---

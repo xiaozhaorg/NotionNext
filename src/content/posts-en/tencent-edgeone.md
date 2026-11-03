@@ -5,7 +5,7 @@ description: "Tencent Cloud EdgeOne offers free CDN acceleration within mainland
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/tencent-edgeone-en-real.jpg"
+ogImage: "/images/tencent-edgeone-en-real.webp"
 coverAlt: "Abstract illustration of a CDN content delivery network above the clouds"
 zhSlug: "tencent-edgeone"
 ---

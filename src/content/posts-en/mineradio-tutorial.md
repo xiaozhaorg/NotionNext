@@ -5,7 +5,7 @@ description: "Mineradio is a fully open-source, free music player that supports 
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/mineradio-tutorial-en-real.jpg"
+ogImage: "/images/mineradio-tutorial-en-real.webp"
 coverAlt: "Headphones and a music player interface resting beside a MacBook"
 zhSlug: "mineradio-tutorial"
 ---

@@ -5,7 +5,7 @@ description: "Comprehensive list of free domain resources still available in 202
 author: "Xiaozha"
 tags: ["Domains", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/free-domain-2026-en-real.jpg"
+ogImage: "/images/free-domain-2026-en-real.webp"
 coverAlt: "DNS settings interface showing domain configuration"
 zhSlug: "free-domain-2026"
 ---

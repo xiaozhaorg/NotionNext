@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/raycast-productivity"
-ogImage: "/images/raycast-productivity-real.jpg"
+ogImage: "/images/raycast-productivity-real.webp"
 coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
 enSlug: "raycast-productivity"
 ---

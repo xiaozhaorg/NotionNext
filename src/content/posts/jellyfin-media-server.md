@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/jellyfin-media-server"
-ogImage: "/images/jellyfin-media-server-real.jpg"
+ogImage: "/images/jellyfin-media-server-real.webp"
 coverAlt: "客厅电视屏幕上播放电影的温馨场景"
 enSlug: "jellyfin-media-server"
 ---

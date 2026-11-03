@@ -9,7 +9,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/nas-diy-guide"
-ogImage: "/images/nas-diy-guide-real.jpg"
+ogImage: "/images/nas-diy-guide-real.webp"
 coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 enSlug: "nas-diy-guide"
 ---

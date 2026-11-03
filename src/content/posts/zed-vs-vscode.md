@@ -8,7 +8,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/zed-vs-vscode"
-ogImage: "/images/zed-vs-vscode-real.jpg"
+ogImage: "/images/zed-vs-vscode-real.webp"
 coverAlt: "深色主题代码编辑器中色彩高亮的程序源码"
 enSlug: "zed-vs-vscode"
 ---

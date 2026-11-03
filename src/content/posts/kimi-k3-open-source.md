@@ -9,7 +9,7 @@ tags:
   - 开源
 draft: false
 sourceUrl: "https://xiaozha.org/article/kimi-k3-open-source"
-ogImage: "/images/kimi-k3-open-source-real.jpg"
+ogImage: "/images/kimi-k3-open-source-real.webp"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 enSlug: "kimi-k3-open-source"
 ---

@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/tailscale-vs-cloudflare-tunnel"
-ogImage: "/images/tailscale-vs-cloudflare-tunnel-real.jpg"
+ogImage: "/images/tailscale-vs-cloudflare-tunnel-real.webp"
 coverAlt: "配线架上编号的端口与密集的蓝灰色网线"
 enSlug: "tailscale-vs-cloudflare-tunnel"
 ---

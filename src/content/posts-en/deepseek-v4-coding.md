@@ -5,7 +5,7 @@ description: "We benchmarked DeepSeek V4's coding ability against GPT-5.6 and Cl
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial"]
 draft: false
-ogImage: "/images/deepseek-v4-coding-en-real.jpg"
+ogImage: "/images/deepseek-v4-coding-en-real.webp"
 coverAlt: "Close-up of a glowing AI chip and circuit board, symbolizing large-model compute power"
 zhSlug: "deepseek-v4-coding"
 ---

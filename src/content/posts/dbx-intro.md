@@ -8,7 +8,7 @@ tags:
   - 开源
 draft: false
 sourceUrl: "https://xiaozha.org/article/dbx-intro"
-ogImage: "/images/dbx-intro-real.jpg"
+ogImage: "/images/dbx-intro-real.webp"
 coverAlt: "绿色电路板上密布的芯片与数据线特写"
 enSlug: "dbx-intro"
 ---

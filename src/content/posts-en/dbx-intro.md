@@ -5,7 +5,7 @@ description: "Is Navicat too expensive and DBeaver too bloated? DBX is a free, l
 author: "Xiaozha"
 tags: ["Database", "Open Source"]
 draft: false
-ogImage: "/images/dbx-intro-en-real.jpg"
+ogImage: "/images/dbx-intro-en-real.webp"
 coverAlt: "Close-up of chips and data cables densely packed on a green circuit board"
 zhSlug: "dbx-intro"
 ---

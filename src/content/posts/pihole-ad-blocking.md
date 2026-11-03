@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/pihole-ad-blocking"
-ogImage: "/images/pihole-ad-blocking-real.jpg"
+ogImage: "/images/pihole-ad-blocking-real.webp"
 coverAlt: "数据中心机架中密集的网络线缆与闪烁的指示灯"
 enSlug: "pihole-ad-blocking"
 ---

@@ -8,7 +8,7 @@ tags:
   - 开源
 draft: false
 sourceUrl: "https://xiaozha.org/article/mineradio-tutorial"
-ogImage: "/images/mineradio-tutorial-real.jpg"
+ogImage: "/images/mineradio-tutorial-real.webp"
 coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
 enSlug: "mineradio-tutorial"
 ---

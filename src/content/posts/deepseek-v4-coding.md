@@ -8,7 +8,7 @@ tags:
   - 大模型
 draft: false
 sourceUrl: "https://xiaozha.org/article/deepseek-v4-coding"
-ogImage: "/images/deepseek-v4-coding-real.jpg"
+ogImage: "/images/deepseek-v4-coding-real.webp"
 coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
 enSlug: "deepseek-v4-coding"
 ---

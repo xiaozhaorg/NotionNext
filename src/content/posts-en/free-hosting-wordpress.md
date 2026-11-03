@@ -5,7 +5,7 @@ description: "Set up a WordPress blog on TinkerHost for free. No server purchase
 author: "Xiaozha"
 tags: ["Blogging", "Free Tools", "Tutorial"]
 draft: false
-ogImage: "/images/free-hosting-wordpress-en-real.jpg"
+ogImage: "/images/free-hosting-wordpress-en-real.webp"
 coverAlt: "WordPress admin dashboard interface"
 zhSlug: "free-hosting-wordpress"
 ---

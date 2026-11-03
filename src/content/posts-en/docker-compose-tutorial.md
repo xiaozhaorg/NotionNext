@@ -5,7 +5,7 @@ description: "Complete Docker Compose tutorial covering installation, YAML confi
 author: "Xiaozha"
 tags: ["Tutorial", "DevOps", "Development Tools"]
 draft: false
-ogImage: "/images/docker-compose-tutorial-en-real.jpg"
+ogImage: "/images/docker-compose-tutorial-en-real.webp"
 coverAlt: "Close-up of developer hands on laptop keyboard writing code"
 zhSlug: "docker-compose-tutorial"
 ---

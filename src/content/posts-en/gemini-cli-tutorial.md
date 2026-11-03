@@ -8,7 +8,7 @@ tags:
   - AI Coding
   - Free Tools
 draft: false
-ogImage: "/images/gemini-cli-tutorial-en-real.jpg"
+ogImage: "/images/gemini-cli-tutorial-en-real.webp"
 coverAlt: "Close-up of an Ubuntu terminal screen showing a green command prompt and a white sudo command on a black background"
 zhSlug: "gemini-cli-tutorial"
 ---

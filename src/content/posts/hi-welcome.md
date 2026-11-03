@@ -7,7 +7,7 @@ tags:
   - 日常记录
 draft: false
 sourceUrl: "https://xiaozha.org/article/hi-welcome"
-ogImage: "/images/hi-welcome-real.jpg"
+ogImage: "/images/hi-welcome-real.webp"
 coverAlt: "团队成员在桌前协作交流的温馨工作场景"
 ---
 

@@ -5,7 +5,7 @@ description: "Gname is running a free eu.cc domain promotion — regular users c
 author: "Xiaozha"
 tags: ["Domains", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/gname-eucc-free-en-real.jpg"
+ogImage: "/images/gname-eucc-free-en-real.webp"
 coverAlt: "Conceptual illustration of domain name resolution and global internet connectivity"
 zhSlug: "gname-eucc-free"
 ---

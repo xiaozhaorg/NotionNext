@@ -11,7 +11,7 @@ tags:
   - 效率工具
 draft: false
 enSlug: "mcp-ecosystem"
-ogImage: "/images/mcp-ecosystem-real.jpg"
+ogImage: "/images/mcp-ecosystem-real.webp"
 coverAlt: "坐在长椅上操作平板电脑的人形机器人"
 ---
 

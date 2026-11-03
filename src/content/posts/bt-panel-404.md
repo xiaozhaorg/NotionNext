@@ -7,7 +7,7 @@ tags:
   - 日常记录
 draft: false
 sourceUrl: "https://xiaozha.org/article/bt-panel-404"
-ogImage: "/images/bt-panel-404-real.jpg"
+ogImage: "/images/bt-panel-404-real.webp"
 coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 enSlug: "bt-panel-404"
 ---

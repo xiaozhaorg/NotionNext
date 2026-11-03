@@ -5,7 +5,7 @@ description: "Raycast is the most powerful productivity tool on Mac. This guide 
 author: "Xiaozha"
 tags: ["Development Tools", "Productivity", "Tutorial"]
 draft: false
-ogImage: "/images/raycast-productivity-en-real.jpg"
+ogImage: "/images/raycast-productivity-en-real.webp"
 coverAlt: "Headphones and a music player interface sitting beside a MacBook"
 zhSlug: "raycast-productivity"
 ---

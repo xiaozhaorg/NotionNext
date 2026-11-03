@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/gpt56-release"
-ogImage: "/images/gpt56-release-real.jpg"
+ogImage: "/images/gpt56-release-real.webp"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 enSlug: "gpt56-release"
 ---

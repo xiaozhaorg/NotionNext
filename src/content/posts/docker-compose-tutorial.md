@@ -11,7 +11,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/docker-compose-tutorial"
-ogImage: "/images/docker-compose-tutorial-real.jpg"
+ogImage: "/images/docker-compose-tutorial-real.webp"
 coverAlt: "开发者双手放在笔记本键盘上编写代码的特写"
 enSlug: "docker-compose-tutorial"
 ---

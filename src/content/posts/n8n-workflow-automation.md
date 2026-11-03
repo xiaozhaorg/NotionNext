@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/n8n-workflow-automation"
-ogImage: "/images/n8n-workflow-automation-real.jpg"
+ogImage: "/images/n8n-workflow-automation-real.webp"
 coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 enSlug: "n8n-workflow-automation"
 ---

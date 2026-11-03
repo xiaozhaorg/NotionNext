@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/docker-mirror-2026"
-ogImage: "/images/docker-mirror-2026-real.jpg"
+ogImage: "/images/docker-mirror-2026-real.webp"
 coverAlt: "云层与服务器机房的云计算抽象图"
 enSlug: "docker-mirror-2026"
 ---

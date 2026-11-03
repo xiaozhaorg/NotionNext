@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-cloud-mail"
-ogImage: "/images/cloudflare-cloud-mail-real.jpg"
+ogImage: "/images/cloudflare-cloud-mail-real.webp"
 coverAlt: "云端服务器机房的蓝色存储阵列灯光"
 enSlug: "cloudflare-cloud-mail"
 ---

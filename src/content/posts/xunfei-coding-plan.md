@@ -10,7 +10,7 @@ tags:
   - AI
 draft: false
 sourceUrl: "https://xiaozha.org/article/xunfei-coding-plan"
-ogImage: "/images/xunfei-coding-plan-real.jpg"
+ogImage: "/images/xunfei-coding-plan-real.webp"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 enSlug: "xunfei-coding-plan"
 ---

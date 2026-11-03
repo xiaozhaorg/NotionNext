@@ -8,7 +8,7 @@ tags:
   - 建站
   - AI 编程
 draft: false
-ogImage: "/images/astro-seo-pitfalls-real.jpg"
+ogImage: "/images/astro-seo-pitfalls-real.webp"
 coverAlt: "MacBook 屏幕上显示着密密麻麻的代码与语法高亮"
 enSlug: "astro-seo-pitfalls"
 ---

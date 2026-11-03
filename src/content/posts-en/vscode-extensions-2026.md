@@ -5,7 +5,7 @@ description: "A curated list of the 20 most essential VS Code extensions to inst
 author: "Xiaozha"
 tags: ["Development Tools", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/vscode-extensions-2026-en-real.jpg"
+ogImage: "/images/vscode-extensions-2026-en-real.webp"
 coverAlt: "A MacBook with headphones and a music player interface beside it"
 zhSlug: "vscode-extensions-2026"
 ---

@@ -8,7 +8,7 @@ tags:
   - 效率工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-codex-integration"
-ogImage: "/images/vscode-codex-integration-real.jpg"
+ogImage: "/images/vscode-codex-integration-real.webp"
 coverAlt: "发光的 AI 芯片与电路板特写，象征大模型算力"
 enSlug: "vscode-codex-integration"
 ---

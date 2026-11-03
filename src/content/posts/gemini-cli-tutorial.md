@@ -8,7 +8,7 @@ tags:
   - AI 编程
   - 免费工具
 draft: false
-ogImage: "/images/gemini-cli-tutorial-real.jpg"
+ogImage: "/images/gemini-cli-tutorial-real.webp"
 coverAlt: "Ubuntu 终端屏幕特写，黑色背景上显示绿色命令行提示符与白色 sudo 命令"
 enSlug: "gemini-cli-tutorial"
 ---

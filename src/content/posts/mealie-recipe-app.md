@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/mealie-recipe-app"
-ogImage: "/images/mealie-recipe-app-real.jpg"
+ogImage: "/images/mealie-recipe-app-real.webp"
 coverAlt: "厨房台面上摆放的新鲜食材与手写菜谱笔记"
 enSlug: "mealie-recipe-app"
 ---

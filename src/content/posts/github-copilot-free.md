@@ -9,7 +9,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-copilot-free"
-ogImage: "/images/github-copilot-free-real.jpg"
+ogImage: "/images/github-copilot-free-real.webp"
 coverAlt: "程序员在双显示器上编写代码的俯拍工作台"
 enSlug: "github-copilot-free"
 ---

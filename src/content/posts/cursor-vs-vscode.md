@@ -8,7 +8,7 @@ tags:
   - 开发工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/cursor-vs-vscode"
-ogImage: "/images/cursor-vs-vscode-real.jpg"
+ogImage: "/images/cursor-vs-vscode-real.webp"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 enSlug: "cursor-vs-vscode"
 ---

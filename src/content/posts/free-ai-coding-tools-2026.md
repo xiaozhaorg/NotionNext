@@ -10,7 +10,7 @@ tags:
   - 开源
 draft: false
 sourceUrl: "https://xiaozha.org/article/free-ai-coding-tools-2026"
-ogImage: "/images/free-ai-coding-tools-2026-real.jpg"
+ogImage: "/images/free-ai-coding-tools-2026-real.webp"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 enSlug: "free-ai-coding-tools-2026"
 ---

@@ -5,7 +5,7 @@ description: "Deploy an online address generator on Cloudflare Pages. Generates 
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
 draft: false
-ogImage: "/images/cloudflare-address-generator-en-real.jpg"
+ogImage: "/images/cloudflare-address-generator-en-real.webp"
 coverAlt: "Form test data auto-generation interface"
 zhSlug: "cloudflare-address-generator"
 ---

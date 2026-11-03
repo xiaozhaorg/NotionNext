@@ -5,7 +5,7 @@ description: "Mealie is an open-source, self-hosted recipe manager that scrapes 
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/mealie-recipe-app-en-real.jpg"
+ogImage: "/images/mealie-recipe-app-en-real.webp"
 coverAlt: "Blue tech lighting of cloud computing and a server room"
 zhSlug: "mealie-recipe-app"
 ---

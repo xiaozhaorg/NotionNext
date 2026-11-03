@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/bitwarden-self-host"
-ogImage: "/images/bitwarden-self-host-real.jpg"
+ogImage: "/images/bitwarden-self-host-real.webp"
 coverAlt: "云计算与服务器机房的蓝色科技灯光"
 enSlug: "bitwarden-self-host"
 ---

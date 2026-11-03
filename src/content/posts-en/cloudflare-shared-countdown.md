@@ -5,7 +5,7 @@ description: "Deploy a shared countdown timer on Cloudflare Pages. Multiple peop
 author: "Xiaozha"
 tags: ["Cloudflare", "Free Tools", "Project"]
 draft: false
-ogImage: "/images/cloudflare-shared-countdown-en-real.jpg"
+ogImage: "/images/cloudflare-shared-countdown-en-real.webp"
 coverAlt: "Countdown timer interface showing remaining time"
 zhSlug: "cloudflare-shared-countdown"
 ---

@@ -5,7 +5,7 @@ description: "10 essential steps for Ubuntu Server initial setup: SSH security, 
 author: "Xiaozha"
 tags: ["Tutorial", "DevOps", "Self-Hosting"]
 draft: false
-ogImage: "/images/ubuntu-server-setup-en-real.jpg"
+ogImage: "/images/ubuntu-server-setup-en-real.webp"
 coverAlt: "Server room with neatly arranged racks and network equipment"
 zhSlug: "ubuntu-server-setup"
 ---

@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/rust-vs-go"
-ogImage: "/images/rust-vs-go-real.jpg"
+ogImage: "/images/rust-vs-go-real.webp"
 coverAlt: "数据中心服务器机房内排列整齐的机柜"
 enSlug: "rust-vs-go"
 ---

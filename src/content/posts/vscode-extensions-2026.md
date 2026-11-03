@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/vscode-extensions-2026"
-ogImage: "/images/vscode-extensions-2026-real.jpg"
+ogImage: "/images/vscode-extensions-2026-real.webp"
 coverAlt: "MacBook 旁摆放着耳机与音乐播放器界面"
 enSlug: "vscode-extensions-2026"
 ---

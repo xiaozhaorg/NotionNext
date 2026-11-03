@@ -9,7 +9,7 @@ tags:
   - Cloudflare
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-edgeone"
-ogImage: "/images/tencent-edgeone-real.jpg"
+ogImage: "/images/tencent-edgeone-real.webp"
 coverAlt: "云层之上的 CDN 内容分发网络抽象图"
 enSlug: "tencent-edgeone"
 ---

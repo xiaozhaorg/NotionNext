@@ -5,7 +5,7 @@ description: "A complete walkthrough of deeply integrating OpenAI Codex into VS 
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Development Tools", "Tutorial"]
 draft: false
-ogImage: "/images/vscode-codex-integration-en-real.jpg"
+ogImage: "/images/vscode-codex-integration-en-real.webp"
 coverAlt: "Close-up of a glowing AI chip and circuit board, symbolizing the computing power behind large language models"
 zhSlug: "vscode-codex-integration"
 ---

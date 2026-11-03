@@ -8,7 +8,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/gname-eucc-free"
-ogImage: "/images/gname-eucc-free-real.jpg"
+ogImage: "/images/gname-eucc-free-real.webp"
 coverAlt: "网络域名解析与全球互联网连接的概念图"
 enSlug: "gname-eucc-free"
 ---

@@ -9,7 +9,7 @@ tags:
   - 开发工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-actions-advanced"
-ogImage: "/images/github-actions-advanced-real.jpg"
+ogImage: "/images/github-actions-advanced-real.webp"
 coverAlt: "团队成员在桌前协作交流的温馨工作场景"
 enSlug: "github-actions-advanced"
 ---

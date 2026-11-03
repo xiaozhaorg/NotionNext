@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/uptime-kuma-monitor"
-ogImage: "/images/uptime-kuma-monitor-real.jpg"
+ogImage: "/images/uptime-kuma-monitor-real.webp"
 coverAlt: "整洁办公桌面上的笔记本电脑与工作笔记"
 enSlug: "uptime-kuma-monitor"
 ---

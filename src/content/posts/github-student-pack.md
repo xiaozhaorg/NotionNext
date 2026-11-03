@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/github-student-pack"
-ogImage: "/images/github-student-pack-real.jpg"
+ogImage: "/images/github-student-pack-real.webp"
 coverAlt: "绿色电路板上密布的芯片与数据线特写"
 enSlug: "github-student-pack"
 ---

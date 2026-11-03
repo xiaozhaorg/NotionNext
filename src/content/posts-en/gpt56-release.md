@@ -5,7 +5,7 @@ description: "OpenAI released the GPT-5.6 family of models in July 2026. This in
 author: "Xiaozha"
 tags: ["AI", "LLM"]
 draft: false
-ogImage: "/images/gpt56-release-en-real.jpg"
+ogImage: "/images/gpt56-release-en-real.webp"
 coverAlt: "Conceptual image of an AI neural network glowing in blue light"
 zhSlug: "gpt56-release"
 ---

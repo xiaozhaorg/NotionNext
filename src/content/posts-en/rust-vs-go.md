@@ -5,7 +5,7 @@ description: "Rust and Go are both modern system-level languages. This article c
 author: "Xiaozha"
 tags: ["Development Tools", "Tutorial"]
 draft: false
-ogImage: "/images/rust-vs-go-en-real.jpg"
+ogImage: "/images/rust-vs-go-en-real.webp"
 coverAlt: "Rows of neatly arranged server racks in a data center computer room"
 zhSlug: "rust-vs-go"
 ---

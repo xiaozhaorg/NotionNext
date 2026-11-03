@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/immich-photo-backup"
-ogImage: "/images/immich-photo-backup-real.jpg"
+ogImage: "/images/immich-photo-backup-real.webp"
 coverAlt: "绿色电路板上密布的芯片与数据线特写"
 enSlug: "immich-photo-backup"
 ---

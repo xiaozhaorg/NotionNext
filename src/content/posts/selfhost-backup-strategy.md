@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/selfhost-backup-strategy"
-ogImage: "/images/selfhost-backup-strategy-real.jpg"
+ogImage: "/images/selfhost-backup-strategy-real.webp"
 coverAlt: "硬盘内部的盘片与磁头臂，暗调光线下的精密机械结构"
 enSlug: "selfhost-backup-strategy"
 ---

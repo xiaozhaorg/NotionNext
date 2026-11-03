@@ -10,7 +10,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-workers-blog"
-ogImage: "/images/cloudflare-workers-blog-real.jpg"
+ogImage: "/images/cloudflare-workers-blog-real.webp"
 coverAlt: "云端服务器机房的蓝色存储阵列灯光"
 enSlug: "cloudflare-workers-blog"
 ---

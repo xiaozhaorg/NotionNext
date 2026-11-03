@@ -10,7 +10,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-r2-storage"
-ogImage: "/images/cloudflare-r2-storage-real.jpg"
+ogImage: "/images/cloudflare-r2-storage-real.webp"
 coverAlt: "云端服务器机房的蓝色存储阵列灯光"
 enSlug: "cloudflare-r2-storage"
 ---

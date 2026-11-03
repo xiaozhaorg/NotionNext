@@ -5,7 +5,7 @@ description: "Deploy a WebStack open-source navigation site on Cloudflare Pages 
 author: "Xiaozha"
 tags: ["Cloudflare", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/cloudflare-navigation-site-en-real.jpg"
+ogImage: "/images/cloudflare-navigation-site-en-real.webp"
 coverAlt: "Browser navigation page showing categorized website links"
 zhSlug: "cloudflare-navigation-site"
 ---

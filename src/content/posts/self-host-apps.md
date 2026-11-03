@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/self-host-apps"
-ogImage: "/images/self-host-apps-real.jpg"
+ogImage: "/images/self-host-apps-real.webp"
 coverAlt: "办公桌上笔记本电脑与数据图表的工作场景"
 enSlug: "self-host-apps"
 ---

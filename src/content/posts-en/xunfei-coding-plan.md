@@ -5,7 +5,7 @@ description: "The iFlytek Xingchen Coding Plan is fully upgraded — unlimited r
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/xunfei-coding-plan-en-real.jpg"
+ogImage: "/images/xunfei-coding-plan-en-real.webp"
 coverAlt: "Concept image of an artificial intelligence neural network glowing in blue light"
 zhSlug: "xunfei-coding-plan"
 ---

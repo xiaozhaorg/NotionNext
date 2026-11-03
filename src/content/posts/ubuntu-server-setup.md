@@ -10,7 +10,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/ubuntu-server-setup"
-ogImage: "/images/ubuntu-server-setup-real.jpg"
+ogImage: "/images/ubuntu-server-setup-real.webp"
 coverAlt: "服务器机房中排列整齐的机柜与网络设备"
 enSlug: "ubuntu-server-setup"
 ---

@@ -5,7 +5,7 @@ description: "Deep comparison of Vercel and Cloudflare Pages: deployment experie
 author: "Xiaozha"
 tags: ["Tutorial", "Free Tools", "Cloudflare", "Blogging"]
 draft: false
-ogImage: "/images/vercel-vs-cloudflare-en-real.jpg"
+ogImage: "/images/vercel-vs-cloudflare-en-real.webp"
 coverAlt: "Cloud computing deployment concept with clouds and server room"
 zhSlug: "vercel-vs-cloudflare"
 ---

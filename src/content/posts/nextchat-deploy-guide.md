@@ -10,7 +10,7 @@ tags:
   - 大模型
 draft: false
 sourceUrl: "https://xiaozha.org/article/nextchat-deploy-guide"
-ogImage: "/images/nextchat-deploy-guide-real.jpg"
+ogImage: "/images/nextchat-deploy-guide-real.webp"
 coverAlt: "屏幕上发光的 AI 对话聊天界面"
 enSlug: "nextchat-deploy-guide"
 ---

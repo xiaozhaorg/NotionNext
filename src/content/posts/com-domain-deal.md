@@ -7,7 +7,7 @@ tags:
   - 资源分享
 draft: false
 sourceUrl: "https://xiaozha.org/article/com-domain-deal"
-ogImage: "/images/com-domain-deal-real.jpg"
+ogImage: "/images/com-domain-deal-real.webp"
 coverAlt: "网络域名解析与全球互联网连接的概念图"
 enSlug: "com-domain-deal"
 ---

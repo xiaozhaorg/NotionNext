@@ -5,7 +5,7 @@ description: "Trae is ByteDance's AI-native IDE. This in-depth hands-on review p
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Development Tools"]
 draft: false
-ogImage: "/images/trae-ide-review-en-real.jpg"
+ogImage: "/images/trae-ide-review-en-real.webp"
 coverAlt: "Color-highlighted program source code in a dark-themed code editor"
 zhSlug: "trae-ide-review"
 ---

@@ -10,7 +10,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/atomcode-intro"
-ogImage: "/images/atomcode-intro-real.jpg"
+ogImage: "/images/atomcode-intro-real.webp"
 coverAlt: "深色主题代码编辑器中色彩高亮的程序源码"
 enSlug: "atomcode-intro"
 ---

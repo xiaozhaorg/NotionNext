@@ -10,7 +10,7 @@ tags:
   - 免费工具
 draft: false
 enSlug: "cloudflare-data-layer"
-ogImage: "/images/cloudflare-data-layer-real.jpg"
+ogImage: "/images/cloudflare-data-layer-real.webp"
 coverAlt: "数据中心服务器机架中密集的线缆与闪烁的指示灯"
 ---
 

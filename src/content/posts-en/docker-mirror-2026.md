@@ -5,7 +5,7 @@ description: "2026 latest Docker registry mirror configuration guide. Covers Doc
 author: "Xiaozha"
 tags: ["DevOps", "Tutorial", "Development Tools"]
 draft: false
-ogImage: "/images/docker-mirror-2026-en-real.jpg"
+ogImage: "/images/docker-mirror-2026-en-real.webp"
 coverAlt: "Cloud computing abstract image with clouds and server room"
 zhSlug: "docker-mirror-2026"
 ---

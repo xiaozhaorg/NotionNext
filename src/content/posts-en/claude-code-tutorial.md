@@ -5,7 +5,7 @@ description: "Claude Code is Anthropic's terminal-native AI coding agent. From i
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Tutorial", "Development Tools"]
 draft: false
-ogImage: "/images/claude-code-tutorial-en-real.jpg"
+ogImage: "/images/claude-code-tutorial-en-real.webp"
 coverAlt: "Close-up of a developer's hands typing code on a laptop keyboard"
 zhSlug: "claude-code-tutorial"
 ---

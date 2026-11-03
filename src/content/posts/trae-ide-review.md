@@ -9,7 +9,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/trae-ide-review"
-ogImage: "/images/trae-ide-review-real.jpg"
+ogImage: "/images/trae-ide-review-real.webp"
 coverAlt: "深色主题代码编辑器中色彩高亮的程序源码"
 enSlug: "trae-ide-review"
 ---

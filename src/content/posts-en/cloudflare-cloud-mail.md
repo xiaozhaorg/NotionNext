@@ -5,7 +5,7 @@ description: "Build a professional domain email for free with Cloud Mail. Suppor
 author: "Xiaozha"
 tags: ["Cloudflare", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/cloudflare-cloud-mail-en-real.jpg"
+ogImage: "/images/cloudflare-cloud-mail-en-real.webp"
 coverAlt: "Blue storage array lights in a cloud server room"
 zhSlug: "cloudflare-cloud-mail"
 ---

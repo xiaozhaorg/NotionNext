@@ -5,7 +5,7 @@ description: "A 2026 head-to-head comparison of ChatGPT, Claude, and Gemini acro
 author: "Xiaozha"
 tags: ["AI", "LLM"]
 draft: false
-ogImage: "/images/chatgpt-vs-claude-vs-gemini-en-real.jpg"
+ogImage: "/images/chatgpt-vs-claude-vs-gemini-en-real.webp"
 coverAlt: "A close-up of a glowing AI chip on a circuit board, symbolizing the computing power behind large language models"
 zhSlug: "chatgpt-vs-claude-vs-gemini"
 ---

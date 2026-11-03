@@ -10,7 +10,7 @@ tags:
   - Cloudflare
 draft: false
 sourceUrl: "https://xiaozha.org/article/vercel-vs-cloudflare"
-ogImage: "/images/vercel-vs-cloudflare-real.jpg"
+ogImage: "/images/vercel-vs-cloudflare-real.webp"
 coverAlt: "云朵与服务器机房的云计算部署概念图"
 enSlug: "vercel-vs-cloudflare"
 ---

@@ -5,7 +5,7 @@ description: "The 20 best open-source apps worth self-hosting to replace paid cl
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/self-host-apps-en-real.jpg"
+ogImage: "/images/self-host-apps-en-real.webp"
 coverAlt: "Laptop with data charts on office desk"
 zhSlug: "self-host-apps"
 ---

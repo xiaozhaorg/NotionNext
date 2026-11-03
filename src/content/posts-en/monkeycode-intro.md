@@ -5,7 +5,7 @@ description: "Code right in your browser and let AI build the entire project —
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Development Tools"]
 draft: false
-ogImage: "/images/monkeycode-intro-en-real.jpg"
+ogImage: "/images/monkeycode-intro-en-real.webp"
 coverAlt: "Abstract AI concept art in blue-purple gradient lighting"
 zhSlug: "monkeycode-intro"
 ---

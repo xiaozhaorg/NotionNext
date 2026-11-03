@@ -11,7 +11,7 @@ tags:
   - 效率工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/codebase-memory-mcp"
-ogImage: "/images/codebase-memory-mcp-real.jpg"
+ogImage: "/images/codebase-memory-mcp-real.webp"
 coverAlt: "MacBook 屏幕上显示着编程代码的编辑器界面"
 enSlug: "codebase-memory-mcp"
 ---

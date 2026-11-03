@@ -9,7 +9,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/git-advanced-tips"
-ogImage: "/images/git-advanced-tips-real.jpg"
+ogImage: "/images/git-advanced-tips-real.webp"
 coverAlt: "程序员在双显示器上编写代码的俯拍工作台"
 enSlug: "git-advanced-tips"
 ---

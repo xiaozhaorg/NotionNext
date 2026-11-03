@@ -8,7 +8,7 @@ tags:
   - Blogging
   - Free Tools
 draft: false
-ogImage: "/images/geo-llms-txt-en-real.jpg"
+ogImage: "/images/geo-llms-txt-en-real.webp"
 coverAlt: "A humanoid robot sitting on a wooden bench by a window, reading a tablet in its hands"
 zhSlug: "geo-llms-txt"
 ---

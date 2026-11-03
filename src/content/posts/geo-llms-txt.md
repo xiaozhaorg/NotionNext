@@ -8,7 +8,7 @@ tags:
   - 建站
   - 免费工具
 draft: false
-ogImage: "/images/geo-llms-txt-real.jpg"
+ogImage: "/images/geo-llms-txt-real.webp"
 coverAlt: "一个人形机器人坐在窗边的木质长椅上低头阅读手中的平板设备"
 enSlug: "geo-llms-txt"
 ---

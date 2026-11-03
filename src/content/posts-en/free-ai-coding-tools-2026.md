@@ -5,7 +5,7 @@ description: "A roundup of the best free AI coding assistants worth using in 202
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Development Tools", "Free Tools"]
 draft: false
-ogImage: "/images/free-ai-coding-tools-2026-en-real.jpg"
+ogImage: "/images/free-ai-coding-tools-2026-en-real.webp"
 coverAlt: "Concept art of an AI neural network in a blue glow"
 zhSlug: "free-ai-coding-tools-2026"
 ---

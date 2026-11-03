@@ -9,7 +9,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/cloudflare-tunnel-tutorial"
-ogImage: "/images/cloudflare-tunnel-tutorial-real.jpg"
+ogImage: "/images/cloudflare-tunnel-tutorial-real.webp"
 coverAlt: "数据中心服务器机架上闪烁的网络指示灯"
 enSlug: "cloudflare-tunnel-tutorial"
 ---

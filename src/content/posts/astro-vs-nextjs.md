@@ -8,7 +8,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/astro-vs-nextjs"
-ogImage: "/images/astro-vs-nextjs-real.jpg"
+ogImage: "/images/astro-vs-nextjs-real.webp"
 coverAlt: "MacBook 屏幕上显示着编程代码的编辑器界面"
 enSlug: "astro-vs-nextjs"
 ---

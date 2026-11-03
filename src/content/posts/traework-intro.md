@@ -8,7 +8,7 @@ tags:
   - 免费工具
   - 效率工具
 draft: false
-ogImage: "/images/traework-intro-real.jpg"
+ogImage: "/images/traework-intro-real.webp"
 coverAlt: "蓝色科技感的 AI 神经网络概念图，象征 TraeWork 云端 AI 任务处理"
 enSlug: "traework-intro"
 ---

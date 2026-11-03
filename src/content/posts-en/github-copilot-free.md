@@ -5,7 +5,7 @@ description: "GitHub Copilot now has a free tier. This hands-on review tests its
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Development Tools", "Free Tools"]
 draft: false
-ogImage: "/images/github-copilot-free-en-real.jpg"
+ogImage: "/images/github-copilot-free-en-real.webp"
 coverAlt: "Overhead view of a programmer writing code at a dual-monitor desk"
 zhSlug: "github-copilot-free"
 ---

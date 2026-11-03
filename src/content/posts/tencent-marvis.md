@@ -10,7 +10,7 @@ tags:
   - 免费工具
 draft: false
 sourceUrl: "https://xiaozha.org/article/tencent-marvis"
-ogImage: "/images/tencent-marvis-real.jpg"
+ogImage: "/images/tencent-marvis-real.webp"
 coverAlt: "整洁办公桌面上的笔记本电脑与工作笔记"
 enSlug: "tencent-marvis"
 ---

@@ -5,7 +5,7 @@ description: "An AI coding agent that runs right in your terminal, supports any 
 author: "Xiaozha"
 tags: ["AI", "AI Coding", "Development Tools", "Open Source"]
 draft: false
-ogImage: "/images/atomcode-intro-en-real.jpg"
+ogImage: "/images/atomcode-intro-en-real.webp"
 coverAlt: "Color-highlighted program source code in a dark-themed code editor"
 zhSlug: "atomcode-intro"
 ---

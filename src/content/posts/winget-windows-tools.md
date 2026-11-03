@@ -10,7 +10,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/winget-windows-tools"
-ogImage: "/images/winget-windows-tools-real.jpg"
+ogImage: "/images/winget-windows-tools-real.webp"
 coverAlt: "绿色电路板上密布的芯片与数据线特写"
 enSlug: "winget-windows-tools"
 ---

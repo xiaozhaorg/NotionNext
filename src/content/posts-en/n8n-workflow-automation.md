@@ -5,7 +5,7 @@ description: "Complete n8n tutorial. The open-source workflow automation tool wi
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/n8n-workflow-automation-en-real.jpg"
+ogImage: "/images/n8n-workflow-automation-en-real.webp"
 coverAlt: "Laptop with data charts on office desk"
 zhSlug: "n8n-workflow-automation"
 ---

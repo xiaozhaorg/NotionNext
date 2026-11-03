@@ -5,7 +5,7 @@ description: "Immich is the best open-source self-hosted photo backup app with A
 author: "Xiaozha"
 tags: ["Self-Hosting", "Open Source", "Tutorial"]
 draft: false
-ogImage: "/images/immich-photo-backup-en-real.jpg"
+ogImage: "/images/immich-photo-backup-en-real.webp"
 coverAlt: "Green circuit board with chips and data lines close-up"
 zhSlug: "immich-photo-backup"
 ---

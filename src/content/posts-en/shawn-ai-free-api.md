@@ -5,7 +5,7 @@ description: "Shawn AI is a free large model API relay platform that aggregates 
 author: "Xiaozha"
 tags: ["AI", "LLM", "Tutorial", "Free Tools"]
 draft: false
-ogImage: "/images/shawn-ai-free-api-en-real.jpg"
+ogImage: "/images/shawn-ai-free-api-en-real.webp"
 coverAlt: "A conceptual neural network image of artificial intelligence bathed in a blue glow"
 zhSlug: "shawn-ai-free-api"
 ---

@@ -11,7 +11,7 @@ tags:
   - 教程
 draft: false
 sourceUrl: "https://xiaozha.org/article/shawn-ai-free-api"
-ogImage: "/images/shawn-ai-free-api-real.jpg"
+ogImage: "/images/shawn-ai-free-api-real.webp"
 coverAlt: "蓝色光晕中的人工智能神经网络概念图"
 enSlug: "shawn-ai-free-api"
 ---
