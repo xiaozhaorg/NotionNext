@@ -3,9 +3,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { SITE_URL as SITE } from "./site-meta.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITE = "https://xiaozha.org";
 const POSTS_DIR = path.join(root, "src/content/posts");
 const OUT = path.join(root, "public/llms-full.txt");
 const MAX_POSTS = 20;

@@ -4,6 +4,7 @@ import { createElement as e } from "react";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
+import { SITE_HOST, SITE_TITLE } from "./site-meta.mjs";
 
 const ROOT = process.cwd();
 const FONTDIR = path.join(process.env.SystemRoot || "C:/Windows", "Fonts");
@@ -13,8 +14,8 @@ const SRC = path.join(ROOT, "src", "content");
 const OUT = path.join(ROOT, "public", "images");
 fs.mkdirSync(OUT, { recursive: true });
 
-const SITE_NAME = "小吒博客";
-const SITE_URL = "xiaozha.org";
+const SITE_NAME = SITE_TITLE;
+const SITE_URL = SITE_HOST;
 
 const fontRegular = fs.readFileSync(REG);
 const fontBold = fs.readFileSync(BOLD);

@@ -10,12 +10,13 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { SITE_URL } from "./site-meta.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const POSTS_DIR = path.join(ROOT, "src/content/posts");
 
-const SITE = "https://xiaozha.org";
+const SITE = SITE_URL;
 
 // ===== 工具函数 =====
 
@@ -127,7 +128,10 @@ async function migrate() {
   const sitemapXml = await sitemapRes.text();
 
   // 解析 sitemap，提取 /article/* 的 URL
-  const urlRegex = /<loc>(https:\/\/xiaozha\.org\/article\/[^<]+)<\/loc>/g;
+  const urlRegex = new RegExp(
+    `<loc>(${SITE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/article/[^<]+)</loc>`,
+    "g"
+  );
   const urls = [];
   let match;
   while ((match = urlRegex.exec(sitemapXml)) !== null) {

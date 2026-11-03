@@ -3,6 +3,7 @@ import path from "node:path";
 import { createElement as e } from "react";
 import satori from "satori";
 import sharp from "sharp";
+import { SITE_HOST, SITE_TITLE } from "./site-meta.mjs";
 
 const ROOT = process.cwd();
 const FONTDIR = path.join(process.env.SystemRoot || "C:/Windows", "Fonts");
@@ -12,8 +13,8 @@ const SRC = path.join(ROOT, "src", "content");
 const OUT = path.join(ROOT, "public", "images");
 fs.mkdirSync(OUT, { recursive: true });
 
-const SITE_NAME = "小吒博客";
-const SITE_URL = "xiaozha.org";
+const SITE_NAME = SITE_TITLE;
+const SITE_URL = SITE_HOST;
 const YELLOW = "#ffd54a";
 
 // AI 提炼的大小标题：{ [outSlug]: { headline, subhead } }

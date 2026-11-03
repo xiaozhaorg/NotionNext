@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import RightSidebar from "@/components/RightSidebar.astro";
 import Footer from "@/components/Footer.astro";
 import Card from "@/components/Card.astro";
+import { SITE } from "@/config";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
@@ -31,7 +32,7 @@ const filtered = tag
   ? posts.filter((p) => p.data.tags.includes(tag as string))
   : posts;
 
-const title = tag ? `标签：${tag} | 小吒博客` : "所有标签 | 小吒博客";
+const title = tag ? `标签：${tag} | ${SITE.title}` : `所有标签 | ${SITE.title}`;
 const desc = tag
   ? `标签「${tag}」下的所有文章，共 ${filtered.length} 篇`
   : `浏览所有文章标签，共 ${allTags.length} 个标签，${posts.length} 篇文章`;
