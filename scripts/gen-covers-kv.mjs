@@ -76,7 +76,6 @@ function orb(x, y, w, color, a) {
 }
 
 function emblem(kind, accent) {
-  // 居中的霓虹主题徽标（标题背后的发光底纹），box 300x300，内容居中
   const ring = (d, w, op) => e("div", { style: { position: "absolute", left: 150 - d / 2, top: 150 - d / 2, width: d, height: d, borderRadius: 999, border: `${w}px solid ${hexA(accent, op)}` } });
   if (kind === "ai" || kind === "default") {
     return e("div", { style: { position: "relative", width: 300, height: 300 } },
@@ -119,46 +118,53 @@ function emblem(kind, accent) {
   return e("div", { style: { position: "relative", width: 300, height: 300 } }, ring(240, 3, 0.6));
 }
 
-function buildKV(fm, accent, kind, text) {
+// 比例化布局：所有位置按 W/H 折算，字号按宽度 S 缩放 —— 不再写死像素
+function buildKV(fm, accent, kind, text, W, H) {
   const title = text.headline || fm.title || "技术文章";
   const sub = text.subhead || "";
   const cat = fm.category || (fm.tags && fm.tags[0]) || "技术";
   const chips = fm.tags && fm.tags.length ? fm.tags.slice(0, 3) : [cat];
-  // 放大字号：短标题更大，长标题自动换行后居中，离边更远
-  const size = title.length <= 7 ? 96 : title.length <= 11 ? 84 : title.length <= 16 ? 70 : title.length <= 22 ? 58 : title.length <= 30 ? 48 : 40;
+  const S = W / 1200; // 字号缩放因子
+  const MX = Math.round(W * 0.13); // 左右安全边距 13%
+  // 字号按标题长度分档（已按宽度缩放，缩略图缩小后同步变小）
+  const base = title.length <= 7 ? 88 : title.length <= 11 ? 76 : title.length <= 16 ? 64 : title.length <= 22 ? 54 : title.length <= 30 ? 44 : 38;
+  const hSize = Math.round(base * S);
+  const subSize = Math.round(30 * S);
+  const catSize = Math.round(24 * S);
+  const chipSize = Math.round(21 * S);
 
-  return e("div", { style: { display: "flex", width: 1200, height: 675, position: "relative", fontFamily: "Noto Sans SC", color: "#fff", overflow: "hidden", background: "linear-gradient(135deg, #070b16 0%, #0c1228 55%, #070b16 100%)" } },
+  return e("div", { style: { display: "flex", width: W, height: H, position: "relative", fontFamily: "Noto Sans SC", color: "#fff", overflow: "hidden", background: "linear-gradient(135deg, #070b16 0%, #0c1228 55%, #070b16 100%)" } },
     orb(-120, -160, 520, accent, 0.6),
-    orb(700, 440, 560, "#a855f7", 0.34),
-    orb(-160, 380, 460, "#22d3ee", 0.4),
-    // 居中徽标（标题背后发光底纹，上移避免压字）
-    e("div", { style: { position: "absolute", left: 450, top: 30, width: 300, height: 300, opacity: 0.34 } }, emblem(kind, accent)),
-    // 顶部居中分类胶囊（内移）
-    e("div", { style: { position: "absolute", top: 56, left: 420, width: 360, display: "flex", justifyContent: "center" } },
-      e("div", { style: { fontSize: 25, fontWeight: 700, padding: "10px 26px", borderRadius: 999, background: accent, color: "#0b1020" } }, cat)),
-    // 居中标题列：左右安全边距加大到 200，缩略图裁切(约5%/边)后文字仍离边很远
-    e("div", { style: { position: "absolute", top: 250, left: 0, width: 1200, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "0 200px" } },
-      e("div", { style: { width: 64, height: 7, borderRadius: 3, background: YELLOW, marginBottom: 24 } }),
-      e("div", { style: { width: "100%", fontSize: size, fontWeight: 700, lineHeight: 1.2, color: "#fff", textShadow: "0 2px 30px rgba(0,0,0,0.6)" } }, title),
-      sub ? e("div", { style: { marginTop: 22, fontSize: 34, fontWeight: 700, lineHeight: 1.25, color: YELLOW, textShadow: "0 2px 20px rgba(0,0,0,0.5)" } }, sub) : null),
-    // 底部居中标签（内移）
-    e("div", { style: { position: "absolute", top: 552, left: 0, width: 1200, display: "flex", justifyContent: "center", gap: 14 } },
-      ...chips.map((t, i) => e("div", { style: { display: "flex", alignItems: "center", gap: 10, fontSize: 22, fontWeight: 700, padding: "9px 20px", borderRadius: 999, background: hexA(accent, 0.14), border: `1.5px solid ${hexA(accent, 0.55)}`, color: i === 0 ? YELLOW : accent } },
-        e("div", { style: { width: 11, height: 11, borderRadius: 999, background: i === 0 ? YELLOW : accent } }), t))),
-    // 左上站点名（内移，离左边更远）
-    e("div", { style: { position: "absolute", top: 52, left: 130, display: "flex", alignItems: "center", gap: 14 } },
+    orb(W * 0.58, H * 0.65, 560, "#a855f7", 0.34),
+    orb(-160, H * 0.56, 460, "#22d3ee", 0.4),
+    // 居中徽标（标题背后发光底纹），按画布比例居中
+    e("div", { style: { position: "absolute", left: W / 2 - 150, top: H * 0.5 - 200, width: 300, height: 300, opacity: 0.32 } }, emblem(kind, accent)),
+    // 左上站点名（内移 10%）
+    e("div", { style: { position: "absolute", top: Math.round(H * 0.075), left: Math.round(W * 0.1), display: "flex", alignItems: "center", gap: 14 } },
       e("div", { style: { width: 14, height: 14, borderRadius: 999, background: YELLOW } }),
-      e("div", { style: { fontSize: 24, fontWeight: 700, letterSpacing: 1, color: "#fff" } }, SITE_NAME)),
-    // 右下水印（右对齐，离右边更远）
-    e("div", { style: { position: "absolute", top: 614, left: 0, width: 1200, display: "flex", justifyContent: "flex-end", paddingRight: 130 } },
-      e("div", { style: { fontSize: 19, fontWeight: 700, color: "rgba(255,255,255,0.8)" } }, SITE_URL))
+      e("div", { style: { fontSize: Math.round(24 * S), fontWeight: 700, letterSpacing: 1, color: "#fff" } }, SITE_NAME)),
+    // 顶部居中分类胶囊
+    e("div", { style: { position: "absolute", top: Math.round(H * 0.085), left: 0, width: W, display: "flex", justifyContent: "center" } },
+      e("div", { style: { fontSize: catSize, fontWeight: 700, padding: `${Math.round(10 * S)}px ${Math.round(24 * S)}px`, borderRadius: 999, background: accent, color: "#0b1020" } }, cat)),
+    // 中央文字安全带（占 16%~82% 高度，垂直居中），左右 13% 边距
+    e("div", { style: { position: "absolute", top: Math.round(H * 0.16), left: 0, width: W, height: Math.round(H * 0.64), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: `0 ${MX}px` } },
+      e("div", { style: { width: Math.round(64 * S), height: Math.round(7 * S), borderRadius: 3, background: YELLOW, marginBottom: Math.round(H * 0.035) } }),
+      e("div", { style: { width: "100%", fontSize: hSize, fontWeight: 700, lineHeight: 1.2, color: "#fff", textShadow: "0 2px 30px rgba(0,0,0,0.6)" } }, title),
+      sub ? e("div", { style: { marginTop: Math.round(H * 0.04), fontSize: subSize, fontWeight: 700, lineHeight: 1.25, color: YELLOW, textShadow: "0 2px 20px rgba(0,0,0,0.5)" } }, sub) : null),
+    // 底部居中标签
+    e("div", { style: { position: "absolute", top: Math.round(H * 0.86), left: 0, width: W, display: "flex", justifyContent: "center", gap: Math.round(14 * S) } },
+      ...chips.map((t, i) => e("div", { style: { display: "flex", alignItems: "center", gap: Math.round(10 * S), fontSize: chipSize, fontWeight: 700, padding: `${Math.round(9 * S)}px ${Math.round(18 * S)}px`, borderRadius: 999, background: hexA(accent, 0.14), border: `1.5px solid ${hexA(accent, 0.55)}`, color: i === 0 ? YELLOW : accent } },
+        e("div", { style: { width: Math.round(11 * S), height: Math.round(11 * S), borderRadius: 999, background: i === 0 ? YELLOW : accent } }), t))),
+    // 右下水印（右对齐，离右边 10%）
+    e("div", { style: { position: "absolute", top: Math.round(H * 0.9), left: 0, width: W, display: "flex", justifyContent: "flex-end", paddingRight: Math.round(W * 0.1) } },
+      e("div", { style: { fontSize: Math.round(19 * S), fontWeight: 700, color: "rgba(255,255,255,0.8)" } }, SITE_URL))
   );
 }
 
-async function renderCover(fm, accent, kind, text) {
-  const svg = await satori(buildKV(fm, accent, kind, text || {}), { width: 1200, height: 675, fonts: FONTS });
+async function renderCover(fm, accent, kind, text, W, H) {
+  const svg = await satori(buildKV(fm, accent, kind, text || {}, W, H), { width: W, height: H, fonts: FONTS });
   return await new (await import("@resvg/resvg-js")).Resvg(svg, {
-    fitTo: { mode: "width", value: 1200 },
+    fitTo: { mode: "width", value: W },
     font: { fontFiles: [REG, BOLD], loadSystemFonts: false, defaultFontFamily: "Noto Sans SC" },
   }).render().asPng();
 }
@@ -167,10 +173,14 @@ async function genOne(slug, fm, outSlug) {
   if (!fm.title) return false;
   const kind = kindOf(fm.category, fm.tags);
   const accent = ACCENT[kind] || ACCENT.default;
-  const png = await renderCover(fm, accent, kind, TEXT[outSlug] || {});
-  const full = await sharp(png).webp({ quality: 84 }).toBuffer();
-  fs.writeFileSync(path.join(OUT, `${outSlug}-real.webp`), full);
-  fs.writeFileSync(path.join(OUT, `${outSlug}-real-thumb.webp`), await sharp(full).resize(640, 360).webp({ quality: 80 }).toBuffer());
+  const text = TEXT[outSlug] || {};
+  // hero：16:9（文章页真实比例），供 ogImage / -real.webp
+  const heroPng = await renderCover(fm, accent, kind, text, 1200, 675);
+  fs.writeFileSync(path.join(OUT, `${outSlug}-real.webp`), await sharp(heroPng).webp({ quality: 84 }).toBuffer());
+  // 缩略图：16:10（卡片真实比例），零裁切；再缩到 640×400 减小体积
+  const thumbPng = await renderCover(fm, accent, kind, text, 1200, 750);
+  const thumbBuf = await sharp(thumbPng).resize(640, 400, { fit: "fill" }).webp({ quality: 80 }).toBuffer();
+  fs.writeFileSync(path.join(OUT, `${outSlug}-real-thumb.webp`), thumbBuf);
   return true;
 }
 
