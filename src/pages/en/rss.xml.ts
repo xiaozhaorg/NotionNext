@@ -17,7 +17,7 @@ export async function GET(context: APIContext) {
 <managingEditor>no-reply@xiaozha.org (${SITE.author})</managingEditor>
 <webMaster>no-reply@xiaozha.org (${SITE.author})</webMaster>
 <copyright>© ${SITE.since}-${new Date().getFullYear()} ${SITE.titleEn}</copyright>
-<generator>NotionNext-Astro</generator>
+<generator>${SITE.titleEn} · Astro</generator>
 <atom:link href="${siteUrl}/en/rss.xml" rel="self" type="application/rss+xml" xmlns:atom="http://www.w3.org/2005/Atom"/>
 <image>
   <url>${siteUrl}/favicon.svg</url>

@@ -23,8 +23,6 @@
     "@astrojs/check": "^0.9.10",
     "@resvg/resvg-js": "^2.6.2",
     "astro-pagefind": "^2.0.1",
-    "notion-client": "^7.10.0",
-    "notion-utils": "^7.10.0",
     "pagefind": "^1.5.2",
     "react": "^19.3.1",
     "satori": "^0.63.2",
