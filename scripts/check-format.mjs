@@ -73,7 +73,7 @@ for (const base of BASES) {
       .filter(({ l }) => {
         // 形如 "前言Cloudflare" "为什么需要优选 IPCloudflare" 的行
         const trimmed = l.trim();
-        return /^(前言|方案|第一步|第二步|第三步|第四步|为什么|推荐|前提|效果|下载|运行|选择|配置|验证|监控|核心|总结|常见|避坑|检查|测试|关闭|设置|如何|使用|Q\d|A：|\**)/.test(trimmed) &&
+        return /^(前言|方案|第一步|第二步|第三步|第四步|为什么|推荐|前提|效果|下载|运行|选择|配置|验证|监控|核心|总结|常见|避坑|检查|测试|关闭|设置|如何|使用|Q\d|A：)/.test(trimmed) &&
           trimmed.length > 15 && !/^#{1,6}/.test(trimmed);
       });
     if (mergedHeading.length > 0) {
