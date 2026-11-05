@@ -181,6 +181,8 @@ export default defineConfig({
   // 文章 URL 保持 /article/[slug]，与旧站一致以保 SEO
   build: {
     format: "directory",
+    // 全量内联 CSS：省掉一次阻塞往返（跨太平洋 1 个 RTT ≈ 300ms）
+    inlineStylesheets: "always",
   },
   prefetch: true,
 });
