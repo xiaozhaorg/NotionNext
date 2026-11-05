@@ -285,7 +285,8 @@ schemas.push({
 
     <!-- Pagefind UI 初始化：懒加载，首次触发（点击/Ctrl+K/#q=）时才注入 CSS+JS -->
     <script is:inline>
-      (function () {
+      document.addEventListener("DOMContentLoaded", function () {
+        // 挂载点在脚本之后，必须等 DOM 就绪再取，否则 wrap 为 null 导致搜索打不开
         const wrap = document.getElementById("pagefind-search-ui");
         let pagefindUI = null;
 
@@ -414,7 +415,7 @@ schemas.push({
         // 支持搜索引擎携带 #q= 直达
         window.addEventListener("hashchange", handleHash);
         handleHash();
-      })();
+      });
     </script>
 
     <!-- Pagefind UI 挂载点（相对定位在搜索框下方） -->
