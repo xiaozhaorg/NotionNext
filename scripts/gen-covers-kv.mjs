@@ -96,7 +96,8 @@ function emOf(s) {
 }
 function measure(s, size) { return emOf(s) * size * 1.02; } // 2% 安全余量，避免贴着站徽
 
-function tokenize(text) {
+/** 逐字切分（仅极端兜底用：单个词宽于整行时才允许拆字） */
+function tokenizeChars(text) {
   const tokens = [];
   let buf = "";
   for (const ch of text) {
@@ -110,9 +111,37 @@ function tokenize(text) {
   return tokens;
 }
 
+// 断行单位按 ICU 分词（Node 自带 Intl.Segmenter，中文词典切分，不新增依赖）：
+// 拉丁词、数字、中文词各自成块，只在词与词之间换行，避免「Ollama 本 / 地跑大模型」这类拆词。
+const SEG = typeof Intl !== "undefined" && Intl.Segmenter ? new Intl.Segmenter("zh", { granularity: "word" }) : null;
+const PUNCT_ONLY = /^[，,、；;：:｜|。！？!?]+$/;
+
+function tokenize(text) {
+  if (!SEG) return tokenizeChars(text);
+  const tokens = [];
+  const attach = (s) => {
+    // 标点粘到前一个词（跳过空格），避免行首出现标点
+    if (tokens.length && tokens[tokens.length - 1] === " " && tokens.length >= 2) {
+      tokens[tokens.length - 2] += s;
+      tokens.pop();
+    } else if (tokens.length) tokens[tokens.length - 1] += s;
+    else tokens.push(s);
+  };
+  for (const part of SEG.segment(text)) {
+    const s = part.segment;
+    if (!s) continue;
+    if (/^\s+$/.test(s)) { tokens.push(" "); continue; }
+    if (PUNCT_ONLY.test(s)) { attach(s); continue; }
+    // 「.COM」这类前导点：并入后面的拉丁词，保留点号
+    if (tokens.length && tokens[tokens.length - 1] === ".") { tokens[tokens.length - 1] += s; continue; }
+    tokens.push(s);
+  }
+  return tokens;
+}
+
 function partition(tokens, avail, size, N) {
   const n = tokens.length;
-  const w = (i, j) => measure(tokens.slice(i, j).join(""), size);
+  const w = (i, j) => measure(tokens.slice(i, j).join("").trim(), size);
   const cost = [], prev = [];
   for (let k = 0; k <= N; k++) { cost.push(new Array(n + 1).fill(Infinity)); prev.push(new Array(n + 1).fill(-1)); }
   cost[0][0] = 0;
@@ -134,7 +163,8 @@ function partition(tokens, avail, size, N) {
   return lines;
 }
 
-function stripEdge(l) { return l.replace(/^[，。、；：）】」』｜|,.!?]+/, "").replace(/[｜|]+$/, ""); }
+// 行首只去中文标点与逗号/感叹号，保留 ASCII 句点（如 「.COM 域名」）
+function stripEdge(l) { return l.replace(/^[，。、；：）】」』｜|,!?]+/, "").replace(/[｜|]+$/, ""); }
 
 function scanFit(tokens, avail, maxSize, minSize, N) {
   for (let size = maxSize; size >= minSize; size--) {
@@ -210,7 +240,13 @@ function bestFit(text, avail, maxSize, minSize) {
     const lines = partition(tokens, avail, size, 3);
     if (lines) return { size, lines: lines.map(stripEdge), N: 3 };
   }
-  return { size: 10, lines: partition(tokens, avail, 10, 3) || [text], N: 3, overflow: true };
+  // 最后兜底：单个词比整行还宽时，才退回逐字切分（正常 headline 不会走到这里）
+  const chars = tokenizeChars(text);
+  for (let size = minSize - 1; size >= 10; size--) {
+    const lines = partition(chars, avail, size, 3);
+    if (lines) return { size, lines: lines.map(stripEdge), N: 3, splitWord: true };
+  }
+  return { size: 10, lines: partition(chars, avail, 10, 3) || [text], N: 3, overflow: true };
 }
 
 /* ---------- 关键词跳色 ---------- */
@@ -379,7 +415,8 @@ function buildCover({ title, sub, cat, tags, kind, accent, W, H, variant }) {
   const maxLine = Math.max(...t.lines.map((l) => measure(l, t.size)));
   const metrics = {
     titleLen: title.length, font: t.size, lines: t.lines.length, maxLine: Math.round(maxLine),
-    avail: textW, rightGap: Math.round(ringLeft - (pad + maxLine)), overflow, chips: chips.map((c) => c.text), weight: WEIGHT,
+    avail: textW, rightGap: Math.round(ringLeft - (pad + maxLine)), overflow, splitWord: !!t.splitWord,
+    chips: chips.map((c) => c.text), weight: WEIGHT,
   };
 
   return {
@@ -440,9 +477,9 @@ async function genOne(dir, slug, fm, outSlug) {
   const kind = kindOf(fm.category, fm.tags);
   const accent = ACCENT[kind] || ACCENT.default;
   const ct = TEXT[outSlug] || {};
-  // 中文用正题（与已验收样张一致）；英文正题过长，用 AI headline
-  const isEn = outSlug.endsWith("-en");
-  const title = isEn ? (ct.headline || fm.title) : fm.title;
+  // 封面标题：优先用 _covers-text.json 的精简 headline（中英一致），缺失时回退 frontmatter 原标题。
+  // 仅影响生图；页面 <title>/h1/canonical/JSON-LD 仍读 frontmatter title，SEO 不受影响。
+  const title = ct.headline || fm.title;
   const sub = ct.subhead || "";
   const cat = fm.category || fm.tags[0] || "技术";
 
@@ -478,7 +515,7 @@ async function checkAll() {
     const wantW = r.variant === "hero" ? 1200 : 640;
     const wantH = r.variant === "hero" ? 675 : 400;
     if (meta.width !== wantW || meta.height !== wantH) fails.push(`${r.file}: ${meta.width}x${meta.height} != ${wantW}x${wantH}`);
-    if (r.overflow || r.lines > 3 || r.maxLine > r.avail + 1 || r.rightGap < 2) fails.push(`${r.file}: text overflow/font=${r.font}/lines=${r.lines}/max=${r.maxLine}/${r.avail}/gap=${r.rightGap}`);
+    if (r.overflow || r.splitWord || r.lines > 3 || r.maxLine > r.avail + 1 || r.rightGap < 2) fails.push(`${r.file}: text overflow/splitWord=${!!r.splitWord}/font=${r.font}/lines=${r.lines}/max=${r.maxLine}/${r.avail}/gap=${r.rightGap}`);
   }
   if (!ARGS.some((a) => !a.startsWith("--")) && records.length !== expected) fails.push(`generated=${records.length} expected=${expected}`);
   return fails;
@@ -522,7 +559,7 @@ async function main() {
   const font = hasBlack ? `Black(900) ${path.basename(BLACK)}` : `Bold(700) fallback (+stroke)`;
   console.log(`covers: made=${made} skipped=${skipped} failed=${checks.length} font=${font}`);
   const worst = records.slice().sort((a, b) => b.titleLen - a.titleLen).slice(0, 6);
-  for (const r of worst) console.log(`  long: ${r.file} len=${r.titleLen} font=${r.font} lines=${r.lines} ${r.maxLine}/${r.avail} gap=${r.rightGap}`);
+  for (const r of worst) console.log(`  long: ${r.file} len=${r.titleLen} font=${r.font} lines=${r.lines} ${r.maxLine}/${r.avail} gap=${r.rightGap} split=${r.splitWord ? "YES" : "no"}`);
   if (failed.length) { console.log("FAILED:", failed.slice(0, 20).join(", ")); process.exit(1); }
 }
 
