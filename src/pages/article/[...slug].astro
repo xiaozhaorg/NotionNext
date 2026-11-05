@@ -39,7 +39,7 @@ const hasWebp = webpSrc !== post.data.ogImage;
   <Header />
   <div class="layout">
     <main>
-      <article class="post" data-pagefind-body data-pagefind-meta="title:{post.data.title};tags:{post.data.tags.join(',')}">
+      <article class="post" data-pagefind-body data-pagefind-meta={`tags:${post.data.tags.join(",")}`}>
         <header class="post-header">
           <div class="breadcrumb">
             <a href="/">首页</a>
