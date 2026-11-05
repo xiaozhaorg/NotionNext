@@ -166,9 +166,7 @@ schemas.push({
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- 资源提示：同域 /_astro 不加 preconnect；仅对真实第三方与 EdgeOne 回源域做解析提示 -->
-    <link rel="dns-prefetch" href="https://blog-ac5.pages.dev" />
-    <link rel="preconnect" href="https://blog-ac5.pages.dev" crossorigin />
+    <!-- 资源提示：同域 /_astro 不加 preconnect；仅对真实访客会请求的第三方域做 DNS 预解析 -->
     <link rel="dns-prefetch" href="https://sdk.51.la" />
     <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
 
