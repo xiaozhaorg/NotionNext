@@ -41,7 +41,7 @@
   "github-student-pack": { "headline": "GitHub 学生开发礼包", "subhead": "免费撸 1000 美元+ 服务" },
   "gname-eucc-free": { "headline": "Gname 免费 eu.cc", "subhead": "免信用卡注册 3 个" },
   "gpt56-release": { "headline": "GPT-5.6 正式发布", "subhead": "OpenAI 新模型强在哪" },
-  "hi-welcome": { "headline": "小咤博客：本站与站长介绍", "subhead": "内容方向、更新节奏与联系方式" },
+  "hi-welcome": { "headline": "小吒博客：本站与站长介绍", "subhead": "内容方向、更新节奏与联系方式" },
   "idm-activation-tutorial-2026": { "headline": "IDM 激活教程 2026", "subhead": "开源脚本一键激活" },
   "immich-photo-backup": { "headline": "Immich 自建相册", "subhead": "Google Photos 免费替代" },
   "jellyfin-media-server": { "headline": "Jellyfin 影音库搭建", "subhead": "Plex 免费替代 4K 硬解" },
