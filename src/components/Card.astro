@@ -57,7 +57,7 @@ const webpSrc = data.ogImage
   ? data.ogImage.replace(/\.(jpe?g|png)$/i, ".webp")
   : "";
 const thumbWebp = data.ogImage
-  ? data.ogImage.replace(/\.(jpe?g|png)$/i, "-thumb.webp")
+  ? data.ogImage.replace(/\.webp$/i, "-thumb.webp").replace(/\.(jpe?g|png)$/i, "-thumb.webp")
   : "";
 const hasWebp = webpSrc !== data.ogImage;
 const fallbackId = `thumb-fallback-${id}`;
