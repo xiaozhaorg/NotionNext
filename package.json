@@ -14,7 +14,7 @@
     "migrate": "node scripts/migrate-notion.mjs",
     "new-post": "node scripts/new-post.mjs",
     "gen:llms": "node scripts/gen-llms-full.mjs",
-    "gen:covers": "node scripts/gen-covers.mjs"
+    "gen:covers": "node scripts/gen-covers-kv.mjs"
   },
   "engines": {
     "node": ">=22.23.4"
