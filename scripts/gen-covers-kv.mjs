@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import { createElement as e } from "react";
 import satori from "satori";
 import sharp from "sharp";
-import { SITE_HOST, SITE_TITLE } from "./site-meta.mjs";
+import { SITE_TITLE } from "./site-meta.mjs";
 
 const ROOT = process.cwd();
 const FONTDIR = path.join(process.env.SystemRoot || "C:/Windows", "Fonts");
@@ -16,12 +16,11 @@ const FONT_ARG = (ARGS.find((a) => a.startsWith("--font=")) || "").split("=")[1]
 const BLACK = FONT_ARG || process.env.COVER_FONT_BLACK || BLACK_DEFAULT;
 
 const SRC = path.join(ROOT, "src", "content");
-const OUT = path.join(ROOT, "public", "images");
-const REPORT = "F:/AppData/Temp/covers-sample/cover-report.json";
+const OUT = process.env.COVER_OUT ? path.resolve(process.env.COVER_OUT) : path.join(ROOT, "public", "images");
+const REPORT = process.env.COVER_REPORT || "F:/AppData/Temp/covers-sample/cover-report.json";
 fs.mkdirSync(OUT, { recursive: true });
 
 const SITE_NAME = SITE_TITLE;
-const SITE_URL = SITE_HOST;
 const YELLOW = "#ffd23f";
 const CYAN = "#35e0f0";
 const BASE = "#030917";
@@ -204,7 +203,7 @@ function tierMax(units, hero) {
   return hero ? t : Math.round(t * 0.65);
 }
 
-function bestFit(text, avail, maxSize, minSize) {
+function bestFit(text, avail, maxSize, minSize, maxLines = 3) {
   // 1) 按中文标点断句，避免把词劈开
   const phrases = text.split(/([，,：:；;｜|、])/).reduce((arr, s) => {
     if (!s) return arr;
@@ -214,39 +213,37 @@ function bestFit(text, avail, maxSize, minSize) {
   }, []).map((s) => s.trim()).filter(Boolean).map((p) => p.replace(/[｜|]+$/, ""));
 
   let phrase = null;
-  if (phrases.length >= 2 && phrases.length <= 3) {
+  if (phrases.length >= 2 && phrases.length <= maxLines) {
     for (let size = maxSize; size >= minSize; size--) {
       const ws = phrases.map((p) => measure(p, size));
       const wide = Math.max(...ws);
-      if (ws.every((w) => w <= avail) && ws.every((w) => w >= avail * 0.22 && w >= wide * 0.42)) {
+      if (ws.every((w) => w <= avail) && ws.every((w) => w >= avail * 0.18 && w >= wide * 0.38)) {
         phrase = { size, lines: phrases, N: phrases.length };
         break;
       }
     }
   }
 
-  // 2) 单行 / 两行 / 三行候选：取字号最大者（行数多但提升不足 12% 时不换）
+  // 2) 单行 / 多行候选：取字号最大者（行数多但提升不足 25% 时不换）
   const tokens = tokenize(text);
-  const dp = pickBest([
-    fitOne(text, avail, maxSize, minSize),
-    scanFit(tokens, avail, maxSize, minSize, 2),
-    scanFit(tokens, avail, maxSize, minSize, 3),
-  ]);
+  const cands = [fitOne(text, avail, maxSize, minSize)];
+  for (let n = 2; n <= maxLines; n++) cands.push(scanFit(tokens, avail, maxSize, minSize, n));
+  const dp = pickBest(cands);
   // 标点断句只有在字号不明显吃亏时才采用（保住自然断句）
   if (phrase && (!dp || phrase.size >= dp.size * 0.78)) return phrase;
   if (dp) return dp;
-  // 兜底：继续缩小直到能塞进 3 行（极端长标题）
+  // 兜底：继续缩小直到能塞进 maxLines 行（极端长标题）
   for (let size = minSize - 1; size >= 10; size--) {
-    const lines = partition(tokens, avail, size, 3);
-    if (lines) return { size, lines: lines.map(stripEdge), N: 3 };
+    const lines = partition(tokens, avail, size, maxLines);
+    if (lines) return { size, lines: lines.map(stripEdge), N: maxLines };
   }
   // 最后兜底：单个词比整行还宽时，才退回逐字切分（正常 headline 不会走到这里）
   const chars = tokenizeChars(text);
   for (let size = minSize - 1; size >= 10; size--) {
-    const lines = partition(chars, avail, size, 3);
-    if (lines) return { size, lines: lines.map(stripEdge), N: 3, splitWord: true };
+    const lines = partition(chars, avail, size, maxLines);
+    if (lines) return { size, lines: lines.map(stripEdge), N: maxLines, splitWord: true };
   }
-  return { size: 10, lines: partition(chars, avail, 10, 3) || [text], N: 3, overflow: true };
+  return { size: 10, lines: partition(chars, avail, 10, maxLines) || [text], N: maxLines, overflow: true };
 }
 
 /* ---------- 关键词跳色 ---------- */
@@ -278,10 +275,10 @@ function glow(size, color, a, top, left) {
 function grid(W, H) {
   const out = [];
   const step = Math.round(W / 26);
-  for (let x = W * 0.55; x < W; x += step) out.push(e("div", { style: { position: "absolute", left: Math.round(x), top: 0, width: 1, height: H, background: "rgba(88,166,255,0.13)" } }));
-  for (let y = 0; y < H; y += step) out.push(e("div", { style: { position: "absolute", left: Math.round(W * 0.52), top: y, width: Math.round(W * 0.48), height: 1, background: "rgba(88,166,255,0.10)" } }));
-  [[0.62, 0.18], [0.74, 0.34], [0.86, 0.62], [0.68, 0.82], [0.9, 0.24]].forEach(([x, y]) => {
-    out.push(e("div", { style: { position: "absolute", left: Math.round(W * x), top: Math.round(H * y), width: 5, height: 5, borderRadius: 999, background: "rgba(53,224,240,0.5)" } }));
+  for (let x = 0; x < W; x += step) out.push(e("div", { style: { position: "absolute", left: Math.round(x), top: 0, width: 1, height: H, background: "rgba(88,166,255,0.06)" } }));
+  for (let y = 0; y < H; y += step) out.push(e("div", { style: { position: "absolute", left: 0, top: y, width: W, height: 1, background: "rgba(88,166,255,0.05)" } }));
+  [[0.12, 0.22], [0.26, 0.78], [0.74, 0.16], [0.88, 0.62], [0.6, 0.88]].forEach(([x, y]) => {
+    out.push(e("div", { style: { position: "absolute", left: Math.round(W * x), top: Math.round(H * y), width: 4, height: 4, borderRadius: 999, background: "rgba(53,224,240,0.35)" } }));
   });
   return out;
 }
@@ -363,44 +360,66 @@ function layoutChips(labels, areaW, baseFs, padX, dot) {
 /* ---------- 版面 ---------- */
 function buildCover({ title, sub, cat, tags, kind, accent, W, H, variant }) {
   const hero = variant === "hero";
-  const scale = hero ? W / 1200 : W / 800;
-  const pad = Math.round(W * (hero ? 0.07 : 0.055));
-  const empSize = Math.round(W * (hero ? 0.3 : 0.28));
-  const empLeft = W - empSize - Math.round(W * 0.03);
-  // 文本区：与样张一致的 0.6W，同时不超过站徽方框左缘
-  const textW = Math.min(Math.round(W * 0.6), empLeft - pad);
-  const ringLeft = empLeft + Math.round(empSize * 0.07);
-  const empTop = Math.round(H * (hero ? 0.19 : 0.1));
-  const titleTop = Math.round(H * (hero ? 0.235 : 0.24));
-  const lineH = 1.12;
-  const subSize = Math.round((hero ? 27 : 21) * scale);
-  const siteSize = Math.round((hero ? 24 : 19) * scale);
-  const badgeSize = Math.round((hero ? 21 : 17) * scale);
+  // 参考图版式：全幅居中构图 —— 顶部左侧小站徽 + 顶部居中分类 pill，
+  // 中部竖排「黄色短横条 → 居中标题（最多 2 行）→ 金色副标题」，底部居中描边 chip。
+  const pad = Math.round(W * 0.055);
+  const textW = W - pad * 2;
+  const lineH = 1.14;
   const stroke = (hasBlack ? (hero ? 2 : 1.5) : (hero ? 3 : 2.2));
+
+  const siteFs = Math.max(12, Math.round(W * 0.022));
+  const siteTop = Math.round(H * 0.045);
+  const siteBot = siteTop + Math.round(siteFs * 1.35);
+
+  const pillFs = Math.max(14, Math.round(W * 0.025));
+  const pillPadX = Math.round(pillFs * 0.95);
+  const pillPadY = Math.round(pillFs * 0.42);
+  const pillH = Math.round(pillFs * 1.15) + pillPadY * 2;
+  const pillTop = Math.round(H * 0.05);
+  const pillBot = pillTop + pillH;
+
+  const chipFs = Math.max(13, Math.round(W * 0.022));
+  const chipPadX = Math.round(chipFs * 0.8);
+  const chipPadY = Math.round(chipFs * 0.45);
+  const chipH = Math.round(chipFs * 1.2) + chipPadY * 2;
+  const chipsBottom = H - Math.round(H * 0.085);
+  const chipsTop = chipsBottom - chipH;
+
+  const gap = Math.max(24, Math.round(H * 0.055));
+  const areaTop = Math.max(pillBot, siteBot) + gap;
+  const areaBot = chipsTop - gap;
 
   // 分档字号上限 + 宽度自适应（用“视觉宽度单位”而非字符数，中英一致）
   const units = Math.round(measure(title, 1));
   const maxSize = tierMax(units, hero);
   const minSize = Math.max(14, Math.round(maxSize * 0.38));
-  let t = bestFit(title, textW, maxSize, minSize);
-  // 纵向兜底：标题块 + 副标题不得顶到角标行
-  const badgeTop = H - (hero ? 96 : 62);
-  const subGap = hero ? 20 : 12;
-  for (let guard = 0; guard < 10; guard++) {
-    const blockH = t.lines.length * t.size * lineH + (sub ? subGap + subSize * 1.35 : 0);
-    if (titleTop + blockH <= badgeTop - 10) break;
-    const next = bestFit(title, textW, t.size - 1, minSize);
-    if (next.size >= t.size) break;
-    t = next;
+  let t = bestFit(title, textW, maxSize, minSize, 2);
+
+  const barW = Math.round(W * 0.062);
+  const barH = hero ? 6 : 5;
+  const barGap = Math.round(H * 0.035);
+  const subSizeBase = Math.max(13, Math.round(W * 0.0305));
+  const subGap = Math.round(W * 0.015);
+  const subSize = sub ? Math.max(12, Math.min(subSizeBase, Math.floor(textW / measure(sub, 1)))) : subSizeBase;
+  const blockH = (f) => barH + barGap + f.lines.length * f.size * lineH + (sub ? subGap + subSize * 1.4 : 0);
+
+  // 纵向兜底：整块既要避开顶部 pill/站徽，也要避开底部 chip
+  for (let guard = 0; guard < 20 && blockH(t) > areaBot - areaTop; guard++) {
+    const next = bestFit(title, textW, t.size - 1, 10, 2);
+    if (next.size < t.size) t = next; else break;
   }
-  const overflow = t.lines.length > 3 || t.lines.some((l) => measure(l, t.size) > textW + 1);
+  const bH = blockH(t);
+  const titleTop = Math.max(areaTop, Math.round(areaTop + (areaBot - areaTop - bH) / 2));
+  const blockCenter = titleTop + bH / 2;
+
+  const overflow = t.lines.length > 2 || t.lines.some((l) => measure(l, t.size) > textW + 1) || bH > areaBot - areaTop;
 
   const colorState = { kwUsed: false, latinUsed: false, numUsed: false };
   const titleNodes = t.lines.map((line) => {
     const segs = colorize(line, colorState);
     return e("div", {
       style: {
-        whiteSpace: "nowrap", fontSize: t.size, fontWeight: WEIGHT,
+        display: "flex", whiteSpace: "nowrap", fontSize: t.size, fontWeight: WEIGHT,
         lineHeight: lineH, color: "#ffffff", fontFamily: "Noto Sans SC",
         "-webkit-text-stroke": `${stroke}px #000000`,
         textShadow: "0 6px 30px rgba(0,0,0,0.55)",
@@ -408,14 +427,22 @@ function buildCover({ title, sub, cat, tags, kind, accent, W, H, variant }) {
     }, ...segs.map((s) => e("span", { style: { color: s.c } }, s.t)));
   });
 
-  const chipLabels = [cat, ...tags.filter((x) => x !== cat).slice(0, hero ? 2 : 1)];
-  const chipArea = empLeft - pad - 8;
-  const chips = layoutChips(chipLabels, chipArea, badgeSize, hero ? 20 : 14, true);
+  const chipLabels = [cat, ...tags.filter((x) => x !== cat).slice(0, 2)];
+  const chips = layoutChips(chipLabels, textW, chipFs, chipPadX, true);
+  const chipTotalW = chips.reduce((s, c) => s + c.w, 0) + 10 * (chips.length - 1);
+  const chipLeft = Math.round((W - chipTotalW) / 2);
+
+  const empSize = Math.round(W * (hero ? 0.42 : 0.46));
+  const empLeft = Math.round((W - empSize) / 2);
+  const empTop = Math.round(blockCenter - empSize / 2);
 
   const maxLine = Math.max(...t.lines.map((l) => measure(l, t.size)));
   const metrics = {
     titleLen: title.length, font: t.size, lines: t.lines.length, maxLine: Math.round(maxLine),
-    avail: textW, rightGap: Math.round(ringLeft - (pad + maxLine)), overflow, splitWord: !!t.splitWord,
+    avail: textW, edgeGap: Math.round((W - maxLine) / 2),
+    topGap: Math.round(titleTop - Math.max(pillBot, siteBot)),
+    badgeGap: Math.round(titleTop - siteBot),
+    blockH: Math.round(bH), overflow, splitWord: !!t.splitWord,
     chips: chips.map((c) => c.text), weight: WEIGHT,
   };
 
@@ -428,36 +455,43 @@ function buildCover({ title, sub, cat, tags, kind, accent, W, H, variant }) {
         background: `linear-gradient(135deg, ${BASE} 0%, #061226 58%, #040c1c 100%)`,
       },
     },
-      glow(Math.round(W * 0.55), accent, 0.3, -Math.round(H * 0.35), Math.round(W * 0.55)),
-      glow(Math.round(W * 0.42), "#22d3ee", 0.16, Math.round(H * 0.5), -Math.round(W * 0.12)),
-      glow(Math.round(W * 0.4), "#7c3aed", 0.2, Math.round(H * 0.2), Math.round(W * 0.45)),
+      glow(Math.round(W * 0.62), accent, 0.3, -Math.round(H * 0.38), -Math.round(W * 0.08)),
+      glow(Math.round(W * 0.46), "#22d3ee", 0.15, Math.round(H * 0.5), -Math.round(W * 0.16)),
+      glow(Math.round(W * 0.46), "#7c3aed", 0.22, Math.round(H * 0.16), Math.round(W * 0.42)),
       ...grid(W, H),
-      e("div", { style: { position: "absolute", left: empLeft, top: empTop, width: empSize, height: empSize, opacity: 0.55, zIndex: 1 } }, emblem(kind, accent, empSize)),
-      e("div", { style: { position: "absolute", left: pad, top: Math.round(H * 0.07), display: "flex", alignItems: "center", gap: 12 } },
-        e("div", { style: { width: 12, height: 12, borderRadius: 999, background: YELLOW } }),
-        e("div", { style: { fontSize: siteSize, fontWeight: 700, letterSpacing: 1 } }, SITE_NAME)),
-      e("div", { style: { position: "absolute", left: pad, top: Math.round(H * (hero ? 0.1 : 0.09)), width: textW } },
-        e("div", { style: { width: Math.round(W * 0.05), height: hero ? 6 : 5, borderRadius: 3, background: YELLOW, marginBottom: hero ? 26 : 18 } })),
-      e("div", { style: { position: "absolute", left: pad, top: titleTop, width: textW, display: "flex", flexDirection: "column" } },
+      e("div", { style: { position: "absolute", left: empLeft, top: empTop, width: empSize, height: empSize, opacity: 0.2, zIndex: 1 } }, emblem(kind, accent, empSize)),
+      e("div", { style: { position: "absolute", left: pad, top: siteTop, display: "flex", alignItems: "center", gap: Math.round(siteFs * 0.5), opacity: 0.55 } },
+        e("div", { style: { width: Math.round(siteFs * 0.42), height: Math.round(siteFs * 0.42), borderRadius: 999, background: YELLOW } }),
+        e("div", { style: { fontSize: siteFs, fontWeight: 700, letterSpacing: 1 } }, SITE_NAME)),
+      e("div", { style: { position: "absolute", left: 0, top: pillTop, width: W, display: "flex", justifyContent: "center" } },
+        e("div", {
+          style: {
+            display: "flex", alignItems: "center", fontSize: pillFs, fontWeight: 700, lineHeight: 1.15,
+            letterSpacing: 1, color: "#ffffff", background: accent,
+            padding: `${pillPadY}px ${pillPadX}px`, borderRadius: 999,
+            boxShadow: `0 8px 26px ${accent}55`,
+          },
+        }, cat)),
+      e("div", { style: { position: "absolute", left: pad, top: titleTop, width: textW, display: "flex", flexDirection: "column", alignItems: "center" } },
+        e("div", { style: { width: barW, height: barH, borderRadius: 3, background: YELLOW, marginBottom: barGap } }),
         ...titleNodes,
         sub ? e("div", {
           style: {
-            marginTop: hero ? 20 : 12, fontSize: subSize, fontWeight: 700, lineHeight: 1.35,
-            color: YELLOW, maxWidth: textW,
+            marginTop: subGap, fontSize: subSize, fontWeight: 700, lineHeight: 1.4,
+            color: YELLOW, maxWidth: textW, textAlign: "center",
             "-webkit-text-stroke": `${Math.max(1, stroke * 0.6)}px rgba(0,0,0,0.9)`,
             textShadow: "0 3px 18px rgba(0,0,0,0.5)",
           },
         }, sub) : null),
-      e("div", { style: { position: "absolute", left: pad, top: H - (hero ? 96 : 62), display: "flex", alignItems: "center", gap: 10 } },
+      e("div", { style: { position: "absolute", left: chipLeft, top: chipsTop, display: "flex", alignItems: "center", gap: 10 } },
         ...chips.map((c, i) => e("div", {
           style: {
-            display: "flex", alignItems: "center", gap: 8, fontSize: c.fs, fontWeight: 700,
-            padding: `${hero ? 9 : 7}px ${hero ? 20 : 14}px`, borderRadius: 999,
-            border: i === 0 ? `2px solid ${accent}` : "1px solid rgba(255,255,255,0.28)",
-            color: i === 0 ? "#fff" : "rgba(255,255,255,0.82)", background: i === 0 ? "rgba(3,9,23,0.55)" : "transparent",
+            display: "flex", alignItems: "center", gap: Math.round(chipFs * 0.42), fontSize: c.fs, fontWeight: 700,
+            padding: `${chipPadY}px ${chipPadX}px`, borderRadius: 999,
+            border: `1px solid ${i === 0 ? accent : "rgba(255,255,255,0.26)"}`,
+            color: "rgba(255,255,255,0.9)", background: i === 0 ? `${accent}1f` : "rgba(255,255,255,0.03)",
           },
-        }, i === 0 ? e("div", { style: { width: 9, height: 9, borderRadius: 999, background: accent } }) : null, c.text))),
-      e("div", { style: { position: "absolute", right: pad, top: H - (hero ? 58 : 40), fontSize: Math.round((hero ? 19 : 15) * scale), fontWeight: 700, color: "rgba(255,255,255,0.55)" } }, SITE_URL),
+        }, e("div", { style: { width: Math.round(chipFs * 0.38), height: Math.round(chipFs * 0.38), borderRadius: 999, background: [accent, CYAN, YELLOW][i] || CYAN } }), c.text))),
     ),
   };
 }
@@ -515,7 +549,7 @@ async function checkAll() {
     const wantW = r.variant === "hero" ? 1200 : 640;
     const wantH = r.variant === "hero" ? 675 : 400;
     if (meta.width !== wantW || meta.height !== wantH) fails.push(`${r.file}: ${meta.width}x${meta.height} != ${wantW}x${wantH}`);
-    if (r.overflow || r.splitWord || r.lines > 3 || r.maxLine > r.avail + 1 || r.rightGap < 2) fails.push(`${r.file}: text overflow/splitWord=${!!r.splitWord}/font=${r.font}/lines=${r.lines}/max=${r.maxLine}/${r.avail}/gap=${r.rightGap}`);
+    if (r.overflow || r.splitWord || r.lines > 2 || r.maxLine > r.avail + 1 || r.edgeGap < 24) fails.push(`${r.file}: text overflow/splitWord=${!!r.splitWord}/font=${r.font}/lines=${r.lines}/max=${r.maxLine}/${r.avail}/edge=${r.edgeGap}`);
   }
   if (!ARGS.some((a) => !a.startsWith("--")) && records.length !== expected) fails.push(`generated=${records.length} expected=${expected}`);
   return fails;
@@ -559,7 +593,7 @@ async function main() {
   const font = hasBlack ? `Black(900) ${path.basename(BLACK)}` : `Bold(700) fallback (+stroke)`;
   console.log(`covers: made=${made} skipped=${skipped} failed=${checks.length} font=${font}`);
   const worst = records.slice().sort((a, b) => b.titleLen - a.titleLen).slice(0, 6);
-  for (const r of worst) console.log(`  long: ${r.file} len=${r.titleLen} font=${r.font} lines=${r.lines} ${r.maxLine}/${r.avail} gap=${r.rightGap} split=${r.splitWord ? "YES" : "no"}`);
+  for (const r of worst) console.log(`  long: ${r.file} len=${r.titleLen} font=${r.font} lines=${r.lines} ${r.maxLine}/${r.avail} edge=${r.edgeGap} split=${r.splitWord ? "YES" : "no"}`);
   if (failed.length) { console.log("FAILED:", failed.slice(0, 20).join(", ")); process.exit(1); }
 }
 
