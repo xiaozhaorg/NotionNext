@@ -634,5 +634,13 @@
   "lightrag-rag-en": {
     "headline": "LightRAG: Read the Warnings",
     "subhead": "40k stars, but defaults can burn you"
+  },
+  "agent-skills": {
+    "headline": "Agent Skills 别抄错字段",
+    "subhead": "按官方规范写才触发得了"
+  },
+  "agent-skills-en": {
+    "headline": "Agent Skills, Written to Spec",
+    "subhead": "Your tutorial has invalid fields"
   }
 }
