@@ -626,5 +626,13 @@
   "fail2ban-reverse-proxy-en": {
     "headline": "Fail2ban & Reverse Proxy",
     "subhead": "You're banning the wrong IP"
+  },
+  "lightrag-rag": {
+    "headline": "LightRAG 别急着裸跑",
+    "subhead": "官方这几条警告先看懂"
+  },
+  "lightrag-rag-en": {
+    "headline": "LightRAG: Read the Warnings",
+    "subhead": "40k stars, but defaults can burn you"
   }
 }
