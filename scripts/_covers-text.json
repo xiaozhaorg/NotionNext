@@ -618,5 +618,13 @@
   "agent-browser-en": {
     "headline": "A Browser for AI Agents",
     "subhead": "4 gotchas nobody mentions"
+  },
+  "fail2ban-reverse-proxy": {
+    "headline": "反代后 Fail2ban 为何失效",
+    "subhead": "你封的是代理 IP，不是攻击者"
+  },
+  "fail2ban-reverse-proxy-en": {
+    "headline": "Fail2ban & Reverse Proxy",
+    "subhead": "You're banning the wrong IP"
   }
 }
