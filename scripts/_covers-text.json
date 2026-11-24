@@ -610,5 +610,13 @@
   "gstack-virtual-team-en": {
     "headline": "A Team for Claude Code",
     "subhead": "23 commands, one full sprint"
+  },
+  "agent-browser": {
+    "headline": "给 AI 装上浏览器",
+    "subhead": "4 个坑中文教程都不告诉你"
+  },
+  "agent-browser-en": {
+    "headline": "A Browser for AI Agents",
+    "subhead": "4 gotchas nobody mentions"
   }
 }
