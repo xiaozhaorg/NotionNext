@@ -642,5 +642,13 @@
   "agent-skills-en": {
     "headline": "Agent Skills, Written to Spec",
     "subhead": "Your tutorial has invalid fields"
+  },
+  "build-your-own-skill": {
+    "headline": "从零做一个自己的 Skill",
+    "subhead": "定义 · 规范 · 测试 全流程手把手"
+  },
+  "build-your-own-skill-en": {
+    "headline": "Build Your First Skill",
+    "subhead": "Definition, spec, testing — end to end"
   }
 }
