@@ -1,7 +1,7 @@
 ---
-title: "agent-browser Reviewed: Give AI a Browser It Can Actually Drive (and 4 Gotchas)"
+title: "Letting AI Learn to Click Web Pages Itself: agent-browser, From Install to Use"
 pubDatetime: "2026-11-25T00:00:00.000Z"
-description: "Vercel's agent-browser has 53k stars and a neat snapshot + @e1 ref loop. But Chinese tutorials all skip the same facts: refs are Chrome-only, they break on navigation, and blocked clicks really fail. Official commands and the honest boundary."
+description: "Ever ask AI to do something online for you, only to find it can't read the page? agent-browser compresses tens of thousands of lines of web code into a single 'what you can click right now' list, and the AI just clicks by number. Starting from a real task, this walks you through how to install it, how to run it, and the four things you're bound to run into once you actually start."
 author: "Xiaozha"
 tags: ["AI Coding", "Open Source", "Tool"]
 draft: false
@@ -10,118 +10,118 @@ coverAlt: "Shell commands driving a browser, page elements tagged with @e1 refs"
 zhSlug: "agent-browser"
 ---
 
-The usual way to make an AI use a web page is crude: dump the entire HTML into context, then have it write a CSS selector and click.
+Have you ever asked AI to handle something online for you — check an order status that's buried three clicks deep, or find the real button in a pile of pop-ups and "Accept Cookies" banners?
 
-An ordinary page is tens of thousands of lines of DOM. Feed all of it in and your token budget explodes. The selector it finally writes — `.RepoList-item .f3 a` — breaks the next time the site ships a redesign.
+Most of the time it gets stuck at step one: it knows words, but can't "see" a web page. Tell it to click "Submit" and it has no idea where that button is hiding.
 
-[agent-browser](https://github.com/vercel-labs/agent-browser) is Vercel Labs' answer: **don't read the DOM, read a snapshot; don't write selectors, use numbered refs.** It sits at **53.7k stars** today, a native Rust CLI under Apache-2.0.
+The old approach was to dump the whole page source into it at once. An ordinary page is tens of thousands of lines — expensive and messy. And even when it finally writes a precise selector like `.RepoList-item .f3 a`, the next site redesign breaks it completely.
 
-The idea is simple and the result is elegant. But almost every tutorial repeats the same four-step workflow and skips the limitations that actually decide whether this works for you. This one fills the gaps.
+[agent-browser](https://github.com/vercel-labs/agent-browser) takes a different approach. It's a lot like showing a new colleague the ropes:
 
-## The core loop: snapshot → act on a ref → snapshot again
+You wouldn't print out the whole site source for them. You'd say — "I've listed everything you can click on this page, five things in total. Number one is Log in, number two is Search. Just tell me the number of the one you want."
+
+That's exactly what it does: **it doesn't read the source, it reads a list of "what you can click right now"; it doesn't write fancy selectors, it works by number.**
+
+## Start by just running it
+
+Two commands to install it:
+
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+
+The second command is only needed the first time — it downloads a dedicated Chrome. (On macOS you can also use `brew install`; on Linux, adding `--with-deps` installs the missing system libraries too; if you just want to try it out, run `npx agent-browser open example.com` and you don't have to install anything.)
+
+Then you can give it instructions one at a time, like you would to a person:
 
 ```bash
 agent-browser open example.com
-agent-browser snapshot -i       # interactive elements only, each with a ref
-agent-browser click @e1         # act on a ref from that snapshot
-agent-browser get url           # check the result
+agent-browser snapshot -i       # 列出这页上所有能点的东西，每个带一个编号
+agent-browser click @e1         # 点清单里的第 1 个
+agent-browser get url           # 看看点完到哪了
 agent-browser close
 ```
 
-`snapshot` returns not the DOM but a compact accessibility tree:
+Here's what `snapshot -i` gives back:
 
 ```text
 - link "Learn more" [ref=e1]
 ```
 
-The agent sees "there's a link called Learn more, it's e1" — close to what a human sees. It clicks `@e1`, takes another snapshot to confirm, and repeats.
+In plain terms: "There's a link on this page that says Learn more, and it's number e1."
 
-**The browser stays open between commands.** A background daemon controls it over the Chrome DevTools Protocol, so each step is one short shell call. That is what makes step-by-step driving possible at all.
+The AI gets it, clicks `@e1`, takes a fresh list to see what changed, then clicks the next one. The browser stays open the whole time — a background process drives it for you, so it doesn't relaunch on every command.
 
-## Install
+That's the whole core. Everything else is detail.
 
-```bash
-npm install -g agent-browser
-agent-browser install           # download Chrome for Testing, first time only
-```
+## You don't have to teach it how to use the tool every time
 
-Also `brew install agent-browser` (still run `agent-browser install` once), `agent-browser install --with-deps` on Linux for system libraries, or no install at all with `npx agent-browser open example.com`.
-
-Native binaries ship for macOS (ARM64, x64), Linux (ARM64, x64, glibc and musl), and Windows (x64); the npm package picks the right one.
-
-## Refs aren't the only way
-
-`-i` gives you numbered refs, but CSS selectors, text, XPath, and semantic locators all work too — for example, by role:
+Here's the part that really saves you trouble: let it fetch its own instruction manual.
 
 ```bash
-agent-browser find role button click --name "Submit"
+agent-browser skills get core
 ```
 
-Take a fresh snapshot before reusing a ref: it describes the page **at snapshot time**. After navigation or a DOM change, old refs aren't reliable.
-
-## Four gotchas nobody mentions
-
-**1. Ref snapshots are Chrome-only.** The official changelog is explicit — when adding the Ladybird engine it says "Snapshots and refs stay Chrome-only, as with Safari." Switch to Safari or Ladybird and the numbered-ref system, the headline feature, is gone; you're back to selectors. Tutorials present refs as a universal capability. They aren't.
-
-**2. Refs go stale on navigation.** Older versions would take a stale ref after a full page load or iframe navigation and click whatever happened to be there — silently doing the wrong thing. Version 0.44.0 changed this to a "no longer loaded" error that forces a fresh snapshot. Old scripts copied from blog posts can click the wrong element for no obvious reason.
-
-**3. Blocked clicks genuinely fail.** If the target is hidden, disabled, outside the viewport, or covered by a consent banner, `click` fails rather than reporting success. That's the right behavior, but it means your agent must handle the failure: dismiss the overlay, take a new snapshot, retry. Fire-and-forget scripts will break often.
-
-**4. The daemon exits after an hour idle.** With no commands, the headless browser closes and the daemon exits (session persistence saves state first). Long-gap tasks need to wake it or manage sessions explicitly. Each `--session` gets its own daemon and browser.
-
-## Built for agents, not just humans
-
-It ships skills that match the installed CLI version — a neat trick: the installed skill is a thin stub that loads `skills get core` at runtime, so instructions can never drift from the binary.
-
-```bash
-agent-browser skills get core                 # core loop, refs, waiting, common workflows
-agent-browser skills get core --ref commands  # one reference, e.g. the full command list
-agent-browser skills get core --full          # adds full command reference and templates
-agent-browser skills list                     # specialized skills: electron, slack, dogfood
-```
-
-Install the discovery skill into an agent harness:
+This command spits out a usage guide that matches the version you have installed exactly — how to take a list, how to wait for things, how common flows go. Hand it to your AI framework and it knows how to use the tool:
 
 ```bash
 npx skills add vercel-labs/agent-browser
 ```
 
-Or drop this into `AGENTS.md`:
+Or put this in `AGENTS.md`:
 
 ```markdown
 Use `agent-browser` for browser automation. Before the first use, run
 `agent-browser skills get core` and follow it.
 ```
 
-MCP clients can start a stdio MCP server with `agent-browser mcp`. There's also `batch`, `record`, `diff`, `trace` / `profiler` / `vitals`, plus agent-facing commands like `webmcp`, `flow`, and `chat` — `agent-browser --help` lists nine groups.
+No need to copy out a huge prompt by hand, and no need to worry about the manual not matching the tool version — it fetches it at runtime, so it's always the right one.
 
-Engines go beyond Chrome for Testing: `--cdp` or `--auto-connect` attaches to a running Chrome, `--engine` selects Lightpanda or Obscura, Mobile Safari runs in the iOS Simulator, and cloud providers include Browserbase, Browserless, Browser Use, Kernel, and AgentCore. The trade-off: with alternate engines and cloud providers, the ref snapshot above may not be available.
+## Once you actually start using it, you'll run into these four things
 
-## About that "93% fewer tokens" claim
+Most online tutorials skip this part, but these are what decide whether it works smoothly for you.
 
-Chinese tutorials nearly all say "official data shows about 93% less context consumption." I checked the official README and docs home page — **that number appears nowhere.**
+**1. The numbered refs only work with Chrome.**
 
-It's probably an estimate or a retelling of the underlying idea: read an interactive-elements snapshot instead of the whole DOM. Fine as a sense of scale. Don't treat it as a vendor guarantee — measure it on your own pages.
+Switch to Safari or another engine and the list and numbers stop working — you fall back to the old way (CSS selectors). This is a stated fact in the official changelog, not a bug: for now it only works with the Chrome family.
+
+**2. The moment the page changes, the numbers you're holding are dead.**
+
+The numbers match the page at the moment you took the list. After a click takes you to a new page, you're still holding the old numbers, but they may no longer point at the same things. Older versions would silently click the wrong thing; since 0.44 it throws an error and tells you to take a fresh list. If you copy a really old script off the internet, it'll click the wrong place for no obvious reason.
+
+**3. If a button is covered, it really can't click it.**
+
+A Cookie banner covering the page, a button off-screen, or one that's simply grayed out — `click` fails honestly instead of pretending it worked. That's a good thing. But it means your AI has to handle failure: close the overlay, take a new list, click again. A script that assumes "one click and done" will break all the time.
+
+**4. The browser closes itself if it sits idle too long.**
+
+An hour with no commands and the background process quits, taking the browser with it. If your tasks are far apart, wake it up yourself or use `--session` to save state.
+
+Putting these four things into your error handling up front is more useful than memorizing the step-by-step flow ten times.
+
+## One more thing about a number
+
+You've probably seen the claim that it "saves 93% of tokens" — nearly every Chinese article says it. I went through the official README and docs and couldn't find where that number comes from.
+
+It's probably a rough sense of scale inferred from "read only a list of clickable things, not the whole page source." Fine as a gut feeling, but don't treat it as an official promise — the number you measure on your own pages is the one you can actually use.
 
 ## When not to use it
 
-**Fixed-flow scraping and regression tests: use Playwright.** agent-browser was never meant to replace Puppeteer/Playwright. It's a low-context interface for agents that must decide what to click next. If the flow is fixed and you'll run it thousands of times, a Playwright script is faster and more deterministic.
-
-**If you need ref snapshots but don't want to be tied to Chrome, run `agent-browser doctor` first.** Multi-engine support looks impressive, but snapshots and refs only work on Chrome. Check that your flow doesn't depend on them before switching.
-
-**Pure extraction, no clicking.** If you just want the article text, a lightweight HTML parser plus a readability extractor is far cheaper than starting a browser.
+- **Fixed-flow scraping or regression tests you'll run thousands of times**: use Playwright. This tool is for tasks where you need to decide what to click next, not for replacing a hardcoded script.
+- **You just want the page text and won't click anything**: parse the page directly. Starting a browser is overkill.
+- **You want the numbered refs but also want to switch browser engines**: run `agent-browser doctor` first so you don't waste your time.
 
 ## Bottom line
 
-agent-browser solves "how does an AI see a page and click things": it compresses tens of thousands of DOM lines into a short numbered snapshot and lets the agent advance one shell command at a time.
+It solves one thing: helping AI understand "what can be clicked on this page right now," then move forward step by step using the numbers.
 
-It works — but it isn't magic. Refs are Chrome-only, they break on navigation, blocked clicks fail, and the daemon times out. Building those four facts into your error handling is worth more than memorizing the four-step workflow one more time.
+It's useful, but it isn't magic. Refs tied to Chrome, dead on page change, blocked clicks fail, idle browser closes — build those four into your plan up front and it'll be solid.
 
 ---
 
 **References**
 
-- [vercel-labs/agent-browser on GitHub](https://github.com/vercel-labs/agent-browser)
-- [Official docs at agent-browser.dev](https://agent-browser.dev)
-- [Official CHANGELOG](https://github.com/vercel-labs/agent-browser/blob/main/CHANGELOG.md)
-- [Juejin: agent-browser lets AI browse like a human](https://juejin.cn/post/7594662879201460250)
+- [agent-browser official repo](https://github.com/vercel-labs/agent-browser)
+- [Official docs](https://agent-browser.dev)
+- [Official changelog](https://github.com/vercel-labs/agent-browser/blob/main/CHANGELOG.md)

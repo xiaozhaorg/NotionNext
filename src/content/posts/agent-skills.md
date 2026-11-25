@@ -1,7 +1,7 @@
 ---
-title: "Agent Skills 按官方规范写：你抄的那份教程，字段可能就是错的"
+title: "让 AI 按你的规矩办事：Agent Skills 从写到用"
 pubDatetime: "2026-11-28T00:00:00.000Z"
-description: "Anthropic 的 skills 仓库已到 20 万星，Agent Skills 也成了开放标准。但中文教程里 name 写成带空格的标题、description 只写功能不写何时用——按官方 spec 这些全是错的。这篇按 agentskills.io 规范和 Anthropic 工程博客逐条校准，附字段约束、渐进式披露和校验命令。"
+description: "同一件事做到第五遍，就该把它写成一个 Skill。Skill 是一份给 AI 看的岗位手册：告诉它这活怎么干、什么时候该上。这篇从那个重复的场景讲起，教你怎么写、写的时候留意什么，以及什么时候其实不用写。"
 author: 小吒
 tags:
   - AI
@@ -13,34 +13,28 @@ coverAlt: "一个 SKILL.md 文件夹展开为元数据、指令与脚本三层�
 enSlug: "agent-skills"
 ---
 
-如果你重复做过五次以上的同一件事——固定格式的周报、某类 API 的调试流程、某个文档的排版规则——大概已经听过一句话：**把它写成一个 Skill**。
+同一件事你做第五遍的时候，心里大概会冒出一句：怎么又是它。固定格式的周报、某类 API 的调试流程、某种文档一遍遍要调的排版——每次都得从头跟 AI 讲一遍规矩，讲完它还不一定照做。
 
-[Anthropic 的 skills 仓库](https://github.com/anthropics/skills)现在 **19.9 万 stars**，是 GitHub 上星数最高的项目之一。更重要的是它背后那套东西已经不专属 Claude 了：**Agent Skills 是开放标准**（[agentskills.io](https://agentskills.io)），Cursor、VS Code、GitHub Copilot、Gemini CLI、OpenCode、TRAE、Codex 等几十个客户端都在支持。写一次，到处能用。
+这时候有个省事的办法：把它写成一个 Skill（技能）。
 
-中文教程已经把"什么是 Skill""怎么写第一个 Skill"讲了个遍。这篇不重复那些，只做一件事：**按官方规范逐条校准**——因为我在几篇高赞教程里看到的写法，有好几处是明确违反 spec 的。
+Skill 就是一份给 AI 看的岗位手册。像带新同事一样想就明白了：你不会每次派活都把公司历史从头讲一遍，你会写份手册放他桌上——这活儿是干什么的、什么情况该接手、具体分几步、遇到特殊状况翻哪一页。AI 拿到 Skill 是同一个道理，不用把整本背下来，需要的时候翻到对应那页就行。
 
-## 先纠正三个高频错误
+## 你现在就能写一个
 
-**1. `name` 不是显示标题。** 有教程写 `name: "Product Bullet Extractor"`——大写、空格、引号，按官方 spec **全部非法**。规则是：1–64 字符，只能小写字母/数字/连字符，不能以连字符开头或结尾，不能有连续连字符，而且**必须和父目录名完全一致**。目录叫 `product-bullet-extractor`，name 就得是这个。
+一个 Skill 就是一个文件夹，里面放一个 `SKILL.md`：开头一段 YAML frontmatter 写清楚"这是干嘛的、什么时候用"，后面用 Markdown 写具体步骤。`scripts/`、`references/`、`assets/` 这些目录都可选，用到再建。
 
-**2. `description` 不只是介绍，它是触发开关。** 教程常写 `description: 帮我处理 PDF`——太糊。官方要求 1–1024 字符，并且**同时说明"做什么"和"什么时候用"**，还要带上能帮助 Agent 识别任务的关键词。正确写法是：`Extracts text and tables from PDFs, fills forms. Use when handling PDF documents or when the user mentions PDFs, forms, or document extraction.` 系统提示里只加载这个字段，Agent 靠它判断要不要触发——写不好，你的 Skill 就永远不会被调用。
+frontmatter 里的字段就这几个：
 
-**3. Skills 不是"更长的 Prompt"，也不替代 MCP。** Skill 是一个**文件夹**：`SKILL.md` 是入口，`scripts/`、`references/`、`assets/` 按需挂载。Anthropic 官方对 MCP 的措辞是 Skills 可以 **complement（补充）** MCP server，教 Agent 如何编排涉及外部工具的复杂工作流——不是取代关系。
-
-## 官方 spec 的字段，一次说清
-
-`SKILL.md` 必须有 YAML frontmatter + Markdown 正文。字段如下：
-
-| 字段 | 必需 | 约束 |
+| 字段 | 必需 | 说明 |
 | --- | --- | --- |
 | `name` | 是 | 1–64 字符，小写字母/数字/连字符，须匹配目录名 |
 | `description` | 是 | 1–1024 字符，非空，写清做什么 + 何时用 |
 | `license` | 否 | 许可证名或指向打包的许可证文件 |
 | `compatibility` | 否 | ≤500 字符，仅当有环境要求时才写 |
 | `metadata` | 否 | 任意字符串键值映射 |
-| `allowed-tools` | 否 | 空格分隔的预授权工具，**实验性**，各端支持不一 |
+| `allowed-tools` | 否 | 空格分隔的预授权工具，实验性，各端支持不一 |
 
-一个最小可用示例：
+一个最小可用的样子：
 
 ```markdown
 ---
@@ -62,7 +56,7 @@ description: Extracts text and tables from PDFs, fills PDF forms, merges files. 
 - 扫描件无文本层：先 OCR
 ```
 
-目录结构：
+目录长这样：
 
 ```text
 pdf-processing/
@@ -72,63 +66,48 @@ pdf-processing/
 └── assets/           # 可选：模板、图片、数据
 ```
 
-## 核心机制：渐进式披露（这才是重点）
+## 它真正省心的地方
 
-Skill 之所以能"随身带百科全书又不撑爆上下文"，靠的是三层加载：
+Skill 能"随身带一本百科全书，又不把上下文撑爆"，靠的是分三层加载。这点特别适合用书架来想：
 
-1. **元数据（约 100 tokens）**：启动时只把所有 Skill 的 `name` + `description` 塞进系统提示——够判断"什么时候用"，不加载全文。
-2. **指令（建议 < 5000 tokens）**：Agent 判断任务相关，才读完整 `SKILL.md`。官方建议主文件 **不超过 500 行**。
-3. **资源（按需）**：`scripts/`、`references/`、`assets/` 里的文件，用到才读、才执行。
+1. **元数据（约 100 tokens）**：启动时只把每个 Skill 的 `name` + `description` 报上来——就像在书架前只扫一眼书脊上的标题简介，够你判断"哪本可能用得上"，并不抽书。
+2. **指令（建议 < 5000 tokens）**：确认确实相关了，才把整本 `SKILL.md` 抽出来读。主文件官方建议**不超过 500 行**。
+3. **资源（按需）**：`scripts/`、`references/`、`assets/` 里的东西，用到才翻、才跑。
 
-Anthropic 工程博客里有句很关键的话：有文件系统和代码执行能力的 Agent，**不必把整个 Skill 读进上下文**——脚本可以直接执行，PDF 可以直接解析，两者都不进上下文。所以"能打包进 Skill 的上下文规模实际上是不受单个窗口限制的"。
+Anthropic 工程博客里有个点很关键：有文件系统、能跑代码的 AI，不必把整个 Skill 读进上下文——脚本直接执行、PDF 直接解析，两者都不占上下文。所以能塞进 Skill 的上下文规模，其实不被单个窗口卡死。
 
-还有一条最容易被忽略的 token 原则：**代码执行比用 token 生成结果便宜得多**。原文举例：用模型生成 token 去给列表排序，远比直接跑一个排序算法昂贵。Skill 里的脚本不只是"文档"，更是确定性工具——排序、解析、格式校验这类事，让代码做。
+还有一条容易被忽略的账：**跑代码比让模型吐 token 便宜得多**。原文举的例子是排序——用模型生成 token 去排一个列表，远比直接跑个排序算法贵。所以 Skill 里的脚本不只是"文档"，更是确定性的工具：排序、解析、格式校验这类活，老老实实交给代码做。
 
-**注意**：官方从未给出"Skills 节省 X% token"这类数字。网上任何百分比都别当官方数据——这一点和[上一篇 LightRAG 戳破"准确率飙升 30%"](/article/lightrag-rag)是一个道理。
+## 写的时候留意这几点
 
-## description 怎么写才能可靠触发
+**`name` 跟目录名对上，别当标题写。** 它只能是小写字母、数字和连字符，1–64 字符，不能以连字符开头或结尾，也不能有连续连字符。目录叫 `product-bullet-extractor`，`name` 就得老老实实写成 `product-bullet-extractor`，别写成 `Product Bullet Extractor` 那样带空格大写的样式。
 
-这是决定成败的一步，按官方建议：
+**`description` 要写"做什么"和"什么时候用"。** 它不只是介绍，更是触发开关——系统提示里只加载这个字段，AI 靠它判断要不要用你的 Skill。像"帮我处理 PDF"就太糊。翻成好用的一句话是 `Extracts text and tables from PDFs, fills forms. Use when handling PDF documents or when the user mentions PDFs, forms, or document extraction.` 把用户真会说的词（PDF、表单、提取、合并）放进去，但别堆太多，堆多了反而容易误触发。
 
-- **写全触发场景**：既说功能，也说"当用户提到 X、要求做 Y 时使用"。
-- **关键词要具体**：把用户真会说的词放进去（PDF、表单、提取、合并），别只写抽象描述。
-- **别贪多**：触发词堆一大堆会稀释语义匹配，反而误触发。
-- **测试时用手动触发**：输入 `/技能名` 绕过语义匹配，先验证正文流程对不对；再回到自然语言验证 description 是否命中。
+**它是补充 MCP，不是替代 MCP。** Skill 是一个文件夹，不是"更长的提示词"。官方的说法是 Skills 可以 complement（补充）MCP server——教 AI 怎么把用到外部工具的复杂流程串起来。两者是配合，不是谁取代谁。
 
-调试循环很简单：没触发 → 改 description；触发了但做错 → 改正文步骤。
+**正文别一股脑全塞进去。** 判断标准很简单：这段内容是不是每次激活都得用？是就留在 `SKILL.md`；只在特定场景才用、或者是一大段 API 参考、模板、检查清单，就拆到 `references/` 或 `scripts/`，正文留一句相对路径链接。文件引用从 Skill 根目录算起，而且只嵌一层——别搞 A 链 B 链 C，AI 不会顺着迷宫找。
 
-## 什么时候正文该拆出去
-
-判断标准：**这段内容是不是每次激活都必须用？**
-
-是 → 留在 `SKILL.md`。否（只在特定场景用、或是长 API 参考/模板/检查清单）→ 拆到 `references/` 或 `scripts/`，正文留一句相对路径链接。官方明确说：如果几块上下文互斥或很少同时用，**分开存能直接降低 token 消耗**。
-
-文件引用保持从 Skill 根目录起的相对路径，且**只嵌一层**——别搞 A 链 B 链 C 的深嵌套，Agent 不会顺着迷宫找。
-
-## 写完先校验
-
-官方提供了参考校验工具 `skills-ref`：
+**写完跑一遍校验。** 官方提供了参考工具 `skills-ref`：
 
 ```bash
 skills-ref validate ./my-skill
 ```
 
-它会检查 frontmatter 是否合法、命名是否符合约定。放进客户端前先跑一遍，能挡掉大部分"写完死活不触发"的低级问题。
-
-Anthropic 自带的 [`skills`](https://github.com/anthropics/skills) 仓库就是最好的样板库——从文档处理（docx/pdf/pptx/xlsx，Apache-2.0 开源）到网页测试、MCP server 生成，都是生产级参考。但要看清官方免责声明：这些是**演示和教育用途**，你实际从 Claude 得到的行为可能和示例不同，关键任务务必自己充分测试。
+它会检查 frontmatter 是否合法、命名是否符合约定。放进客户端前跑一下，能挡掉大部分"写完死活不触发"的情况。调试时还可以用 `/技能名` 手动触发，绕过语义匹配先验证正文流程对不对，再回到自然语言看 description 命不命中。没触发就改 description，触发了却做错就改正文。
 
 ## 什么时候别做 Skill
 
-- **只做一次的事**：写 Skill 的成本比直接做一遍高。
-- **纯靠一段提示词就能说清的**：别为了"看起来规范"建文件夹。
-- **需要实时数据或强状态的**：Skill 擅长打包程序性知识（流程、规则、模板），不擅长当数据库；这类需求该配 MCP 或真实后端。
-- **还没观察过 Agent 在哪卡住**：官方第一条建议就是"从评估开始"——先跑真实任务，看它在哪缺上下文，再写 Skill 补那个洞。别凭想象预先塞满知识。
+- **只做一次的事**：写 Skill 的成本比直接做一遍还高。
+- **一段提示词就能说清的**：别为了"看起来规范"专门建个文件夹。
+- **要实时数据或强状态的**：Skill 擅长打包流程、规则、模板这类程序性知识，不擅长当数据库；这类需求该配 MCP 或真后端。
+- **还没看过 AI 在哪卡住的**：官方第一条建议就是"从评估开始"——先跑真实任务，看它在哪缺上下文，再写 Skill 补那个洞，别凭想象预先塞满知识。
 
-## 小结
+## 说到底
 
-Skill 的本质不是"给它一段更长的提示词"，而是把一套可复用工作流，按**触发（description）→ 指令（SKILL.md）→ 资源（按需文件）**三层组织起来，让 Agent 在正确的时候用到正确的那一小块。
+Skill 不是"给 AI 一段更长的提示词"，而是把一套能复用的流程，按触发（description）→ 指令（SKILL.md）→ 资源（按需文件）三层装好，让它在对的时候用到对的小块。
 
-按官方 spec 写：`name` 匹配目录名、`description` 写清何时用、正文控制在 500 行内、细节拆到 references、写完用 `skills-ref` 校验。这几条比"20 行代码让 AI 质量翻倍"的标题有用得多。
+`name` 跟目录对上、`description` 写清何时用、正文守住 500 行、细节拆到 references、写完用 `skills-ref` 过一遍——这几条比任何"20 行代码让 AI 质量翻倍"的标题都实在。
 
 ---
 

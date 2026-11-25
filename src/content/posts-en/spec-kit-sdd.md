@@ -1,7 +1,7 @@
 ---
-title: "Spec Kit in Practice: Specify Before You Code, Stop Vibe Coding"
+title: "Get clear on what you want before AI writes code: Spec Kit from install to use"
 pubDatetime: "2026-11-24T00:00:00.000Z"
-description: "GitHub's official Spec Kit has passed 151k stars. It is no longer just the five-step SDD workflow most tutorials describe - bug fixing and idea assessment are now separate entry points. What it solves, how to use it, and when to skip it."
+description: "You describe a feature, the AI writes a pile of code, and it goes off track at step two. Spec Kit has you write the spec down first, so the AI builds against it and you can check the result for drift. This walks you through install, one full run, and when the whole ritual isn't worth it."
 author: "Xiaozha"
 tags: ["AI Coding", "Open Source", "Tutorial"]
 draft: false
@@ -10,23 +10,15 @@ coverAlt: "A terminal showing a specification document beside the generated code
 zhSlug: "spec-kit-sdd"
 ---
 
-The most frustrating thing about coding with AI is rarely that it cannot write code. It is that it writes the wrong code.
+You've probably had this happen: you describe a feature, the AI dutifully writes three thousand lines, and it went off the rails at step two. You rewrite the prompt, try again, and drift again. Before you know it, the afternoon is gone and all you've done is wonder why it keeps getting you wrong.
 
-You describe a feature, the agent faithfully produces three thousand lines, and it went off the rails at step two. You rewrite the prompt, regenerate, drift again. That is the real cost of vibe coding.
+In plain terms: ambiguous requirements in, faithfully wrong code out. The problem usually isn't that the AI can't write code — it's that it doesn't know what you actually want.
 
-**Garbage in, garbage out.** Feed it an ambiguous requirement and it will faithfully ship the garbage you asked for.
+[Spec Kit](https://github.com/github/spec-kit) is built for exactly that: before a single line of code, you and the AI write down, in black and white, what you're building and what "done" looks like.
 
-[Spec Kit](https://github.com/github/spec-kit) is GitHub's official open-source answer to that problem, now at **151k stars**. It is the spec-driven development (SDD) toolkit GitHub uses itself.
+It's a lot like renovating a house. You don't tell the crew "make it look nice" and walk away — you hand them a drawing first: how many rooms, where the outlets go, which materials, and how you'll sign off on the job. They work from the drawing, you check against the drawing. If you change your mind, you change the drawing, not knock down a wall after it's built. Spec Kit does that for AI: it gives it a drawing to work from. That drawing is called a spec.
 
-One correction first: **most tutorials still teach the old five-step SDD flow, and the tool has moved well past it.**
-
-## What it actually is
-
-In one line: a structured process, reusable templates, and **traceable outcomes** for your AI coding agent.
-
-Traceability is the point. A traditional PRD is a reference document written for humans — often read once and forgotten. A Spec Kit spec is the **source of truth** the agent executes against: numbered, with acceptance criteria, diffable, and traceable. Change the code without changing the spec and the consistency check keeps reporting a gap.
-
-It does three jobs through three **independent entry points**, not mandatory sequential phases:
+It handles three jobs, and the three entry points are independent — you don't have to run them in order:
 
 | What you need | Entry point | Outcome |
 | --- | --- | --- |
@@ -34,9 +26,9 @@ It does three jobs through three **independent entry points**, not mandatory seq
 | Diagnose and repair broken behavior | Bug fixing (extension) | An assessed cause, a scoped fix, and recorded verification |
 | Decide if an idea deserves investment | Idea assessment (extension) | An evidence-backed go, clarify, or stop decision |
 
-The last two are **extensions you install on demand** — you do not have to run SDD first. That design only landed after v1.4, which is why older tutorials rarely mention it.
+The last two are extensions you install on demand — you do not have to run SDD first. That design only landed after v1.4, which is why older tutorials rarely mention it.
 
-## Installation
+## Get started
 
 You need Python 3.11+ and [uv](https://docs.astral.sh/uv/), on Linux, macOS, or Windows.
 
@@ -46,15 +38,15 @@ specify init my-project --integration copilot
 cd my-project
 ```
 
-`--integration` selects your coding agent. The toolkit is agent-neutral — GitHub Copilot, Claude Code, Codex, Cursor, Gemini CLI, OpenCode and 20+ others work, with no subscription lock-in.
+`--integration` tells it which coding agent you use. It isn't picky — GitHub Copilot, Claude Code, Codex, Cursor, Gemini CLI, OpenCode and 20+ others work, with no subscription lock-in.
 
 For an **existing project**, run `specify init .` inside it instead of creating a new one.
 
-## The core flow: SDD
+## Run the core flow once
 
-Establish a constitution once per project, then repeat the rest for each feature.
+Set up a constitution once per project, then repeat the rest for each feature.
 
-**These slash commands run in your agent's chat, not your terminal.** The examples use GitHub Copilot's default syntax; see the [integration docs](https://github.github.io/spec-kit/integrations/cli.html#command-invocation) for other agents.
+**These slash commands run in your agent's chat, not your terminal.** The examples use GitHub Copilot's syntax; see the [integration docs](https://github.github.io/spec-kit/integrations/cli.html#command-invocation) for other agents.
 
 ```text
 /speckit-constitution Create principles focused on code quality, testing, and maintainability.
@@ -67,9 +59,9 @@ Establish a constitution once per project, then repeat the rest for each feature
 
 Each artifact feeds the next:
 
-- **Constitution** (once): written to `.specify/memory/constitution.md` — the non-negotiable technical principles: stack conventions, code style, testing standards, security boundaries. Every later plan must pass this gate.
+- **Constitution** (once per project): written to `.specify/memory/constitution.md` — the non-negotiable principles: stack conventions, code style, testing standards, security boundaries. Every later plan has to pass this gate.
 - **Specify**: what and why only, never how. Produces `specs/001-xxx/spec.md` with goals, scope, constraints, and acceptance criteria.
-- **Clarify** (strongly recommended): the agent asks about ambiguous points and writes the answers back into the spec. **This is the highest-value step** — it surfaces boundaries, permissions, and data formats you had not thought through.
+- **Clarify** (strongly recommended): the agent asks about the fuzzy bits and writes the answers back into the spec. This is the highest-value step — it surfaces boundaries, permissions, and data formats you hadn't thought through.
 - **Plan**: now the technical details arrive. Architecture, stack choices, component structure, interface contracts. You can hand it direct constraints: use Vite with vanilla JS, keep images local, store metadata in SQLite.
 - **Tasks**: an ordered, dependency-aware task list, each item small enough to hand to an agent and carrying verifiable acceptance criteria.
 - **Implement**: execute item by item, ticking each off in `tasks.md`. Review the diff at every checkpoint.
@@ -77,7 +69,11 @@ Each artifact feeds the next:
 
 A spec an agent can execute reliably has at least four parts: **goals and non-goals** (stating what you are *not* doing prevents drift better than listing features), **user journeys** (real usage steps rather than a feature inventory), **quantifiable acceptance criteria** (`P95 < 200ms`, not "fast"), and **edges and failures** (invalid input, unavailable dependency, missing data — what the agent most often forgets).
 
-## The other two entry points
+## Where it actually saves you trouble
+
+Two places. First, that Clarify step — it keeps asking until it drags out the things you hadn't figured out yourself, so you don't discover at the end that it built the wrong thing. Second, Converge — change the code without the spec and it keeps flagging the gap, so the spec never quietly goes stale. In other words, the spec isn't a reference doc you read once and forget; it's the source of truth the agent executes against: numbered, with acceptance criteria, diffable, and traceable.
+
+The other two entry points are on-demand too — you don't have to run the whole SDD flow just to fix a small bug.
 
 **Bug fixing** — install the extension first:
 
@@ -93,7 +89,7 @@ Then, in your agent:
 /speckit-bug-test slug=login-crash
 ```
 
-Reports land in `.specify/bugs/login-crash/`. The verdict is `verified`, `partial`, or `failed` — **only `verified` counts as a real fix**.
+Reports land in `.specify/bugs/login-crash/`. The verdict is `verified`, `partial`, or `failed` — only `verified` counts as a real fix.
 
 **Idea assessment** — same pattern:
 
@@ -111,9 +107,19 @@ specify extension add assess
 
 You get `go`, `needs-clarification`, or `kill`. Deciding not to build something, with the reasoning recorded, is a useful outcome too. If you get a `go`, pass the handoff summary from `decision.md` to `/speckit-specify`.
 
-## When not to use it
+## Things you'll run into
 
-This is the part that matters most and gets written about least. Spec Kit has a cost — a feature produces a dozen or so documentation files, and ceremony is not free.
+**Do I need GitHub Copilot?** No. It's agent-neutral — use whichever you like.
+
+**Is this the same as a PRD?** No. A PRD is for humans; an SDD spec is the source of truth the agent executes, diffable and traceable. You read a PRD once and set it down; a spec has to keep up with the code.
+
+**Does the spec need ongoing maintenance?** Yes. Change the code without the spec and converge keeps flagging gaps. Treat it like a test: change the requirement first, then the spec.
+
+**Can I install community extensions directly?** Spec Kit ships community catalogs, but the maintainers say it plainly: the listings are neither audits nor endorsements — review the source before installing or running anything.
+
+## When to skip it
+
+Spec Kit isn't free — a feature produces a dozen or so documentation files, and that ceremony has a cost. Here's how I draw the line:
 
 | Scenario | Recommendation |
 | --- | --- |
@@ -122,23 +128,13 @@ This is the part that matters most and gets written about least. Spec Kit has a 
 | Parallel agent work, production business logic | Worth it — focus on specify + tasks + converge |
 | Greenfield projects | Full flow, with the constitution written once |
 
-The rule: **use the minimum rigor needed to remove ambiguity**. Do not write a constitution for a throwaway script.
+The rule is simple: **use the minimum rigor needed to remove ambiguity**. Don't write a constitution for a throwaway script.
 
-## Common questions
+## Bottom line
 
-**Do I need GitHub Copilot?** No. It is agent-neutral.
+It can't tell you what you actually want. What it can do is make sure what the AI delivers matches exactly what you said.
 
-**How does this relate to a PRD?** A PRD is for humans; an SDD spec is the source of truth the agent executes, diffable and traceable.
-
-**Does the spec need ongoing maintenance?** Yes. Change the code without the spec and converge keeps flagging gaps. Treat it like a test: change the requirement first, then the spec.
-
-**Can I install community extensions directly?** Spec Kit ships community catalogs, but the maintainers explicitly warn that listings are neither audits nor endorsements — review the source before installing or running it.
-
-## Verdict
-
-Spec Kit cannot tell you what you actually want. What it can do is make sure what the agent delivers matches exactly what you said.
-
-If your pain has shifted from "it cannot write code" to "it writes the wrong code", this workflow is worth one full trial. If you only occasionally ask AI for a small tool, explaining it in plain words is still faster.
+If your pain has shifted from "it can't write code" to "it writes the wrong code", this workflow is worth one full trial. If you only occasionally ask AI for a small tool, explaining it in plain words is still faster.
 
 ---
 

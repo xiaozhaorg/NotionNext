@@ -1,7 +1,7 @@
 ---
-title: "Agent Skills, Written to Spec: That Tutorial You Copied Has Invalid Fields"
+title: "Get AI to Follow Your Rules: Agent Skills from Writing to Using"
 pubDatetime: "2026-11-28T00:00:00.000Z"
-description: "Anthropic's skills repo has 199k stars and Agent Skills is now an open standard. But Chinese tutorials use name fields with spaces and descriptions that only say what a skill does — both wrong per spec. Here's the official field constraints, progressive disclosure, and the validation command."
+description: "Once you've done the same thing five times, it's time to write it as a Skill. A Skill is a job manual for your AI: it says how the job is done and when to step in. This starts from that repetitive moment and walks you through writing one, what to watch out for, and when you don't need one at all."
 author: "Xiaozha"
 tags: ["AI", "Open Source", "Tutorial"]
 draft: false
@@ -10,32 +10,26 @@ coverAlt: "A SKILL.md folder expanding into metadata, instructions and scripts"
 zhSlug: "agent-skills"
 ---
 
-If you've done the same task five times or more — a weekly report in a fixed format, a debugging flow for a certain API, the layout rules for a doc type — you've probably heard this: **write it as a Skill**.
+When you're doing the same thing for the fifth time, you probably think: not this again. A weekly report in a fixed format, a debugging flow for a certain API, the layout of a doc type you keep tweaking — every time you have to explain the rules to your AI from scratch, and it still may not follow them.
 
-[Anthropic's skills repository](https://github.com/anthropics/skills) now has **199k stars**, one of the most-starred projects on GitHub. More importantly, what's behind it is no longer Claude-only: **Agent Skills is an open standard** ([agentskills.io](https://agentskills.io)), supported by dozens of clients including Cursor, VS Code, GitHub Copilot, Gemini CLI, OpenCode, TRAE and Codex. Write once, use everywhere.
+There's an easier way: write it as a Skill.
 
-Chinese tutorials have covered "what is a skill" and "your first skill" thoroughly. This one won't repeat that. It does one thing: **calibrates against the official spec** — because several high-upvote tutorials I read contain writing that plainly violates it.
+A Skill is a job manual for your AI. Think of it like onboarding a new colleague: you don't retell the whole company history every time you hand over a task. You write a manual and put it on their desk — what this job is, when to pick it up, the steps to take, and which page to flip to when something unusual comes up. A Skill works the same way for an AI: it doesn't memorise the whole manual, it just turns to the right page when needed.
 
-## Three high-frequency mistakes, corrected
+## Write one right now
 
-**1. `name` is not a display title.** One tutorial uses `name: "Product Bullet Extractor"` — capitals, spaces, quotes. Per spec, **all invalid**. Rules: 1–64 characters, lowercase letters/digits/hyphens only, no leading or trailing hyphen, no consecutive hyphens, and it **must match the parent directory name exactly**. If the folder is `product-bullet-extractor`, the name must be exactly that.
+A Skill is a folder with a `SKILL.md` inside: a YAML frontmatter at the top saying "what this is and when to use it," followed by Markdown steps. The `scripts/`, `references/` and `assets/` folders are all optional — add them when you need them.
 
-**2. `description` isn't just a summary — it's the trigger.** Tutorials often write `description: helps with PDFs` — too vague. The spec requires 1–1024 characters and says it should describe **both what the skill does and when to use it**, including keywords that help the agent identify the task. Better: `Extracts text and tables from PDFs, fills forms. Use when working with PDF documents or when the user mentions PDFs, forms, or extraction.` Only this field is preloaded into the system prompt; the agent uses it to decide whether to activate. Get it wrong and your skill never runs.
+The frontmatter fields are just these:
 
-**3. Skills aren't "longer prompts," and they don't replace MCP.** A skill is a **folder**: `SKILL.md` is the entry point, with `scripts/`, `references/` and `assets/` mounted on demand. Anthropic's own wording about MCP is that Skills can **complement** MCP servers — teaching agents complex workflows that involve external tools. Not a replacement.
-
-## Every field in the official spec
-
-`SKILL.md` must have YAML frontmatter followed by Markdown. The fields:
-
-| Field | Required | Constraints |
+| Field | Required | Notes |
 | --- | --- | --- |
 | `name` | Yes | 1–64 chars, lowercase letters/digits/hyphens, must match directory name |
 | `description` | Yes | 1–1024 chars, non-empty, states what + when |
 | `license` | No | License name or reference to a bundled license file |
 | `compatibility` | No | ≤500 chars; include only if there are environment requirements |
 | `metadata` | No | Arbitrary string-to-string mapping |
-| `allowed-tools` | No | Space-separated pre-approved tools; **experimental**, support varies |
+| `allowed-tools` | No | Space-separated pre-approved tools; experimental, support varies |
 
 A minimal working example:
 
@@ -59,7 +53,7 @@ description: Extracts text and tables from PDFs, fills PDF forms, merges files. 
 - Scanned PDF with no text layer: run OCR first
 ```
 
-Directory structure:
+The directory looks like this:
 
 ```text
 pdf-processing/
@@ -69,63 +63,48 @@ pdf-processing/
 └── assets/           # optional: templates, images, data
 ```
 
-## The core mechanism: progressive disclosure
+## Where it really saves you effort
 
-A skill can carry an encyclopedia without blowing up context because of three loading stages:
+A Skill can "carry an encyclopedia without blowing up the context window" because it loads in three layers. A bookshelf is a good way to picture it:
 
-1. **Metadata (~100 tokens)**: at startup only every skill's `name` + `description` enter the system prompt — enough to decide "when to use," without loading the body.
-2. **Instructions (< 5000 tokens recommended)**: the agent reads the full `SKILL.md` only when a task matches. The spec recommends keeping the main file **under 500 lines**.
-3. **Resources (as needed)**: files under `scripts/`, `references/`, `assets/` are read or executed only when required.
+1. **Metadata (~100 tokens)**: at startup only every skill's `name` + `description` come up — like glancing at the titles on the book spines, enough to judge "which one might be useful," without pulling any book off the shelf.
+2. **Instructions (< 5000 tokens recommended)**: only when a task looks relevant do you take the whole `SKILL.md` off the shelf and read it. The spec recommends keeping the main file **under 500 lines**.
+3. **Resources (as needed)**: files under `scripts/`, `references/` and `assets/` are opened or run only when required.
 
-Anthropic's engineering blog makes a key point: an agent with a filesystem and code execution **doesn't need to read a whole skill into context** — scripts can be executed and PDFs parsed directly, with neither entering the context window. So "the amount of context that can be bundled into a skill is effectively unbounded" by a single window.
+Anthropic's engineering blog makes a key point: an AI with a filesystem and code execution doesn't need to read a whole Skill into context — scripts can be executed and PDFs parsed directly, with neither taking up context. So the amount of context you can bundle into a Skill isn't capped by a single window.
 
-One easily missed token principle: **running code is far cheaper than generating tokens**. Their example: sorting a list via token generation is much more expensive than running a sorting algorithm. A script in a skill isn't just documentation — it's a deterministic tool. Sorting, parsing and format checks belong in code.
+One easily missed point: **running code is far cheaper than having the model generate tokens**. Their example is sorting — generating tokens to sort a list costs much more than just running a sorting algorithm. So a script in a Skill isn't just "documentation," it's a deterministic tool. Sorting, parsing and format checks — leave that work to code.
 
-**Note**: Anthropic never published a "skills save X% tokens" number. Treat any percentage you find online as unofficial — same logic as [the previous LightRAG piece debunking the "30% accuracy boost"](/en/article/lightrag-rag).
+## A few things to watch out for when you write
 
-## Writing a description that actually triggers
+**Match the `name` to the directory — don't treat it as a title.** It can only contain lowercase letters, digits and hyphens, 1–64 characters, with no leading or trailing hyphen and no consecutive hyphens. If the folder is `product-bullet-extractor`, the `name` should be written exactly as `product-bullet-extractor` — not something like `Product Bullet Extractor` with capitals and spaces.
 
-This is the make-or-break step. Per the official advice:
+**`description` should say both "what it does" and "when to use it."** It isn't just an intro — it's the trigger. Only this field is loaded into the system prompt, and the AI uses it to decide whether to activate. Something like "helps with PDFs" is too vague. A good, concrete version is `Extracts text and tables from PDFs, fills forms. Use when handling PDF documents or when the user mentions PDFs, forms, or document extraction.` Include the words users actually type (PDF, form, extract, merge), but don't stuff it — too many trigger words cause false activations.
 
-- **Cover the trigger scenarios**: say what it does *and* "use when the user mentions X or asks for Y."
-- **Be concrete with keywords**: include words users actually type (PDF, form, extract, merge), not abstract descriptions.
-- **Don't stuff it**: piling on trigger phrases dilutes semantic matching and causes false triggers.
-- **Test with manual triggering**: type `/skill-name` to bypass semantic matching and verify the body flow first; then check whether natural language hits the description.
+**It complements MCP, it doesn't replace it.** A Skill is a folder, not "a longer prompt." Anthropic's wording is that Skills can complement MCP servers — teaching the AI how to chain complex workflows that involve external tools. They work together; neither replaces the other.
 
-The debug loop is simple: not triggering → fix the description; triggering but doing it wrong → fix the body steps.
+**Don't cram everything into the body.** The test is simple: do you need this content on every activation? If yes, keep it in `SKILL.md`. If it's only relevant in specific cases, or it's a long API reference, template or checklist, move it to `references/` or `scripts/` and leave a relative-path link in the body. References use paths from the Skill root and go **only one level deep** — no A-links-B-links-C chains; the AI won't navigate a maze.
 
-## When to split the body out
-
-The test: **is this content needed on every activation?**
-
-Yes → keep it in `SKILL.md`. No (only relevant in specific cases, or it's a long API reference/template/checklist) → move it to `references/` or `scripts/` and leave a relative-path link. The docs say directly: if chunks of context are mutually exclusive or rarely used together, **separating them reduces token usage**.
-
-Use relative paths from the skill root and keep references **one level deep** — no A-links-B-links-C chains; agents won't navigate a maze.
-
-## Validate before shipping
-
-The official reference library provides `skills-ref`:
+**Run a validation before shipping.** The official reference library provides `skills-ref`:
 
 ```bash
 skills-ref validate ./my-skill
 ```
 
-It checks frontmatter validity and naming conventions. Run it before dropping a skill into a client — it catches most of the dumb "I wrote it but it never triggers" problems.
+It checks frontmatter validity and naming conventions. Run it before dropping a Skill into a client — it catches most of the "I wrote it but it never triggers" headaches. You can also trigger manually with `/skill-name` to skip semantic matching and check the body flow first, then go back to natural language to see whether the description hits. If it doesn't trigger, fix the description; if it triggers but does the wrong thing, fix the body steps.
 
-Anthropic's own [`skills`](https://github.com/anthropics/skills) repo is the best sample library — from document handling (docx/pdf/pptx/xlsx, Apache-2.0) to web app testing and MCP server generation. But read the disclaimer: these are for **demonstration and educational purposes**, your actual behavior from Claude may differ, and you should test thoroughly before relying on them for critical work.
+## When not to write a Skill
 
-## When not to write a skill
-
-- **One-off tasks**: writing the skill costs more than just doing it.
+- **One-off tasks**: writing the Skill costs more than just doing it once.
 - **Anything a single prompt explains cleanly**: don't build a folder just to look rigorous.
-- **Anything needing live data or heavy state**: skills package procedural knowledge — flows, rules, templates — not databases. Use MCP or a real backend.
-- **Before observing where your agent struggles**: the official first principle is "start with evaluation" — run real tasks, see where it lacks context, then write a skill to fill that gap. Don't pre-stuff knowledge on speculation.
+- **Anything needing live data or heavy state**: Skills are good at packaging procedural knowledge — flows, rules, templates — not databases. Use MCP or a real backend for those.
+- **Before you've seen where your AI struggles**: the official first principle is "start with evaluation" — run real tasks, see where it lacks context, then write a Skill to fill that gap. Don't pre-stuff knowledge on speculation.
 
 ## Bottom line
 
-A skill isn't "a longer prompt." It's a reusable workflow organized in three layers — **trigger (description) → instructions (SKILL.md) → resources (on-demand files)** — so the agent uses the right small piece at the right moment.
+A Skill isn't "a longer prompt for the AI." It's a reusable workflow packed into three layers — trigger (description) → instructions (SKILL.md) → resources (on-demand files) — so the right small piece shows up at the right moment.
 
-Write to spec: `name` matches the directory, `description` says when to use, body stays under 500 lines, details move to references, and validate with `skills-ref`. That's a lot more useful than a headline about "20 lines doubling code quality."
+Match `name` to the directory, say when to use it in `description`, keep the body under 500 lines, move details into references, and run `skills-ref` before shipping — these matter far more than any "20 lines that double your AI quality" headline.
 
 ---
 

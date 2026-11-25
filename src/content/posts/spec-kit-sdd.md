@@ -1,7 +1,7 @@
 ---
-title: "Spec Kit 实战：让 AI 先写规格再写代码，告别 Vibe Coding"
+title: "写代码前先跟 AI 把需求说清楚：Spec Kit 从装到用"
 pubDatetime: "2026-11-24T00:00:00.000Z"
-description: "GitHub 官方开源工具 Spec Kit 已到 15 万星。它不是老教程里那套五步 SDD——现在还有 Bug 修复和想法评估两个独立入口。这篇讲清它解决什么问题、完整怎么用、以及什么时候不该用。"
+description: "你描述一个功能，AI 写了很多代码，方向却从第二步就跑偏。Spec Kit 让你先把规格写清楚，AI 照着做，做完还能自动查有没有跑偏。这篇教你怎么装、怎么走一遍流程，以及什么时候其实不用这么麻烦。"
 author: 小吒
 tags:
   - AI 编程
@@ -13,23 +13,15 @@ coverAlt: "终端屏幕上显示规格文档与代码并排对照"
 enSlug: "spec-kit-sdd"
 ---
 
-用 AI 写代码最让人抓狂的从来不是"写不出来"，而是"写出来的不是我想要的"。
+你有没有遇到过这种事：你跟 AI 描述了一个功能，它老老实实写了三千行代码，方向却从第二步就跑偏了。你改提示词，再来一遍，又跑偏。回头一看，时间全花在"它怎么又理解错了"上。
 
-你描述了一个功能，Agent 忠实地生成了三千行代码，方向却从第二步就跑偏了。回头改提示词，再生成，再跑偏——这就是 Vibe Coding 的真实成本。
+说白了，含糊的需求进去，忠实的垃圾代码出来。问题往往不在 AI 写不出来，而在它不知道你到底想要什么。
 
-**garbage in, garbage out**。含糊的需求进去，忠实的垃圾代码出来。
+[Spec Kit](https://github.com/github/spec-kit) 就是冲着这个痛点来的：写一行代码之前，先让 AI 跟你把"要做什么、做到什么算好"白纸黑字写清楚。
 
-GitHub 官方开源的 [Spec Kit](https://github.com/github/spec-kit) 就是冲着这个痛点来的。它目前 **15.1 万 stars**，是 GitHub 自己在用的规格驱动开发（SDD）工具包。
+特别像装修房子。你不会跟装修队说"给我弄好看点"就走人——你得先出一张图纸：几室几厅、插座在哪、用什么材料、验收怎么算。工人照图纸干，你照图纸验。中间想改，也是改图纸，不是等墙砌好了再砸。Spec Kit 干的就是让 AI 照图纸干活这件事，只不过那张图纸叫规格（spec）。
 
-但要先纠正一个常见误解：**网上大多数中文教程还停留在"五步 SDD"阶段，而现在它已经不止五步了。**
-
-## 它到底是什么
-
-一句话：给 AI 编程 Agent 一套结构化的流程、可复用的模板，以及**可追溯的产物**。
-
-关键点是"可追溯"。传统 PRD 是写给人看的参考文档，写完可能就扔了；Spec Kit 的 spec 是给 Agent 执行的**事实来源**——带编号、带验收标准、可以 diff、可以追溯。代码改了 spec 不改，一致性检查会一直报差距。
-
-它做的三件事，对应三个**互相独立的入口**（不是必须按顺序走的阶段）：
+它管三件事，三个入口互相独立，不是必须按顺序走的阶段：
 
 | 你要做什么 | 入口 | 最终产物 |
 | --- | --- | --- |
@@ -37,9 +29,9 @@ GitHub 官方开源的 [Spec Kit](https://github.com/github/spec-kit) 就是冲�
 | 修一个诡异 bug | Bug 修复（扩展） | 诊断结论 + 限定范围的修复 + 验证记录 |
 | 判断一个想法值不值得做 | 想法评估（扩展） | 有证据支撑的 go / clarify / kill 决策 |
 
-后两个是**按需安装的扩展**，不用先跑一遍 SDD。这个设计在 v1.4 之后才成型，老教程基本没覆盖。
+后两个是按需安装的扩展，不用先跑一遍 SDD。这个设计是 v1.4 之后才成型的，老教程基本没赶上。
 
-## 安装
+## 现在就能上手
 
 需要 Python 3.11+ 和 [uv](https://docs.astral.sh/uv/)，Linux / macOS / Windows 都支持。
 
@@ -49,15 +41,15 @@ specify init my-project --integration copilot
 cd my-project
 ```
 
-`--integration` 指定你用的编程 Agent。它对这些工具是中立的——GitHub Copilot、Claude Code、Codex、Cursor、Gemini CLI、OpenCode 等 20 多种都支持，不绑定某一家的订阅。
+`--integration` 是告诉它你用哪个编程 Agent。它对工具不挑——GitHub Copilot、Claude Code、Codex、Cursor、Gemini CLI、OpenCode 等 20 多种都能用，不绑定哪一家的订阅。
 
-在**已有项目**里用，进入项目目录执行 `specify init .` 即可，不必新建项目。
+在**已有项目**里用，进项目目录执行 `specify init .` 就行，不用新建。
 
-## 核心流程：规格驱动开发
+## 先走一遍核心流程
 
-新建项目先立一次"宪法"，之后每个功能重复下面的流程。
+新建项目先立一次"宪法"，之后每做一个功能，重复下面这套。
 
-**注意：这些斜杠命令是在 Agent 的对话框里执行的，不是终端。** 下面用 Copilot 的语法，其他 Agent 的调用方式看[官方文档](https://github.github.io/spec-kit/integrations/cli.html#command-invocation)。
+**注意：这些斜杠命令是在 Agent 的对话框里敲的，不是在终端。** 下面用 Copilot 的写法，其他 Agent 怎么调用，看[官方文档](https://github.github.io/spec-kit/integrations/cli.html#command-invocation)。
 
 ```text
 /speckit-constitution Create principles focused on code quality, testing, and maintainability.
@@ -68,19 +60,23 @@ cd my-project
 /speckit-converge
 ```
 
-每步生成的文件都是下一步的输入：
+每一步生成的东西，就是下一步的输入：
 
-- **Constitution**（全项目一次）：写进 `.specify/memory/constitution.md`，定义不可妥协的技术原则——技术栈约定、代码风格、测试标准、安全红线。后续每份计划都要过这道门禁。
-- **Specify**：只谈 what / why，不谈 how。生成 `specs/001-xxx/spec.md`，包含目标、范围、约束和验收标准。
-- **Clarify**（强烈建议）：Agent 主动追问模糊点，把答案写回 spec。**这一步最值钱**——它会问出你自己都没想清楚的边界、权限、数据格式。
-- **Plan**：这时才谈技术。架构决策、技术选型、组件结构、接口契约。你可以直接给约束："用 Vite + 原生 JS，图片本地存储，元数据用 SQLite。"
-- **Tasks**：拆成有依赖关系的有序任务，每 tasks 粒度小到可以直接交给 Agent，且带可验证的验收条件。
-- **Implement**：逐条实现，每完成一项在 `tasks.md` 打勾。在每个检查点审查 diff。
-- **Converge**：扫描代码与规格的一致性。结果是 `Converged` 才收工，否则列出偏差，回到 implement 补，循环到收敛。
+- **Constitution**（全项目一次）：写进 `.specify/memory/constitution.md`，把不能妥协的原则定下来——技术栈、代码风格、测试标准、安全红线。之后每份计划都得过这一关。
+- **Specify**：只说做什么、为什么，不谈怎么做。生成 `specs/001-xxx/spec.md`，包含目标、范围、约束和验收标准。
+- **Clarify**（强烈建议）：Agent 主动追问含糊的地方，把答案写回 spec。这一步最值钱——它会问出你自己都没想清楚的边界、权限、数据格式。
+- **Plan**：到这里才谈技术。架构怎么定、用什么、组件怎么拆、接口怎么约。你可以直接给约束："用 Vite + 原生 JS，图片本地存储，元数据用 SQLite。"
+- **Tasks**：拆成有先后依赖的任务，每项小到可以直接丢给 Agent，还带能验证的验收条件。
+- **Implement**：一条条实现，完成一项就在 `tasks.md` 上打个勾，每个检查点看一眼 diff。
+- **Converge**：拿代码和规格对一遍。结果是 `Converged` 才收工，否则列出差在哪，回去补，直到对上。
 
-写一个合格的 spec，至少有四块：**目标与非目标**（写清"这次不做什么"比写"做什么"更能防止发散）、**用户旅程**（按真实使用步骤，而不是罗列功能点）、**可量化的验收标准**（"P95 < 200ms" 而不是"要快"）、**边界与异常**（非法输入、依赖不可用、数据缺失时怎么办）。
+一份合格的 spec 至少有四块：**目标和非目标**（写清"这次不做什么"比写"做什么"更能防止跑偏）、**用户旅程**（按真实使用步骤写，不是罗列功能点）、**能量化的验收标准**（写"P95 < 200ms"，别写"要快"）、**边界和异常**（非法输入、依赖挂了、数据缺了怎么办）。
 
-## 另外两个入口
+## 真正省心的地方
+
+省心在两件事上。一是 Clarify 那一步——它会追着你问，把你自己都没想明白的地方翻出来，省得写完才发现不是那个意思。二是 Converge——代码改了规格没改，它会一直报差距，规格不会悄悄过期。换句话说，spec 不是写完就扔的参考文档，而是 Agent 照着执行的事实来源：带编号、带验收标准、能 diff、能追溯。
+
+另外两个入口也是按需装的，不用为了修个小 bug 先把 SDD 从头走一遍。
 
 **修 bug**——先装扩展：
 
@@ -96,7 +92,7 @@ specify extension add bug
 /speckit-bug-test slug=login-crash
 ```
 
-报告在 `.specify/bugs/login-crash/`。最终结论有 `verified`、`partial`、`failed` 三种，**只有 `verified` 才算真修好了**。
+报告在 `.specify/bugs/login-crash/`。结论有 `verified`、`partial`、`failed` 三种，只有 `verified` 才算真修好了。
 
 **评估想法**——同样先装扩展：
 
@@ -112,13 +108,21 @@ specify extension add assess
 /speckit-assess-decide slug=offline-mode
 ```
 
-最后给出 `go`、`needs-clarification` 或 `kill`。决定不做一个想法，并且写清原因，也是有价值的产出。真要开工，把 `decision.md` 里的交接摘要丢给 `/speckit-specify` 就行。
+最后给出 `go`、`needs-clarification` 或 `kill`。想明白一个想法不该做、并且把原因写下来，也是有用的结果。真要开工，把 `decision.md` 里的交接摘要丢给 `/speckit-specify` 就行。
 
-## 什么时候别用它
+## 用起来会碰到的几件事
 
-这是最该说清楚、却最少人写的部分。Spec Kit 是有成本的——一个功能产出十来个文档文件，仪式感不是免费的。
+**一定要用 GitHub Copilot 吗？** 不用，它对 Agent 中立，换哪个都行。
 
-我的划分：
+**它和 PRD 是一回事吗？** 不是。PRD 写给人看，SDD 的 spec 是给 Agent 执行的事实来源，能 diff、能追溯。所以 PRD 看完常常就放下了，spec 得一直跟着代码走。
+
+**spec 写完还要维护吗？** 要。代码改了 spec 不改，converge 会一直报差距。把它当测试用例看：需求先变，spec 跟着变。
+
+**社区扩展能直接装吗？** Spec Kit 自带社区 catalog，但官方说得很明白：目录列表既不是审计也不是背书，安装运行前先看看源码。
+
+## 什么时候别用
+
+Spec Kit 不是免费的——一个功能会产出十来个文档文件，这套仪式有成本。我的划分：
 
 | 场景 | 建议 |
 | --- | --- |
@@ -127,23 +131,13 @@ specify extension add assess
 | 多 Agent 并行的功能块、要上线的业务逻辑 | 值得，重点用 specify + tasks + converge 三步 |
 | 从 0 到 1 的新项目 | 全流程走一遍，宪法一次管到底 |
 
-原则很简单：**用消除歧义所需的最小严格度**。别为了"规范"给一次性脚本写宪法。
+原则就一条：**用消除歧义所需的最小严格度**。别为了"规范"给一次性脚本写宪法。
 
-## 常见误区
+## 说到底
 
-**必须用 GitHub Copilot 吗？** 不用，它对 Agent 中立。
+它管不了"你到底想要什么"，但能管住"AI 交付的东西和你说的完全一致"。
 
-**和 PRD 什么关系？** PRD 写给人看，SDD 的 spec 是给 Agent 执行的事实来源，可 diff、可追溯。
-
-**spec 要不要一直维护？** 要。代码改了 spec 不改，converge 会一直报差距。把它当测试用例看待：改需求先改 spec。
-
-**社区扩展能直接装吗？** Spec Kit 自带社区 catalog，但官方明确提醒：目录列表不是审计也不是背书，安装运行前先看源码。
-
-## 小结
-
-Spec Kit 管不了"你到底想要什么"，但它能管住"AI 交付的东西和你说的完全一致"。
-
-如果你的痛点已经从"写不出来"变成"写出来的不是我想要的"，这套流程值一次完整试用。如果只是偶尔让 AI 写个小工具，口头说清楚反而更快。
+如果你的麻烦已经从"写不出来"变成"写出来的不是我想要的"，这套流程值得完整试一次。只是偶尔让 AI 写个小工具，口头说清楚反而更快。
 
 ---
 

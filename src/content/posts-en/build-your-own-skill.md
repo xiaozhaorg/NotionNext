@@ -1,7 +1,7 @@
 ---
-title: "Build Your Own Agent Skill: From Definition to Testing, Step by Step"
+title: "Write a Job Manual for AI: Build Your First Skill from Scratch"
 pubDatetime: "2026-11-29T00:00:00.000Z"
-description: "What exactly is an AI agent Skill, and how is it different from a prompt, MCP, or rules? This guide explains the concept with a plain-language analogy, then builds one real Skill — a commit message generator — from directory layout and SKILL.md authoring to progressive disclosure, test cases, baseline comparisons, trigger tuning, and packaging."
+description: "What exactly is an AI Skill, and how is it different from a prompt or MCP? This guide builds one real Skill — a \"generate my git commit message\" Skill — from scratch: how to lay out the folder, write SKILL.md, test it, and package it for someone else. Follow along and build your own first Skill."
 author: "Xiaozha"
 tags: ["AI", "Open Source", "Tutorial"]
 draft: false
@@ -10,11 +10,11 @@ coverAlt: "A SKILL.md folder going from definition and writing to testing and pa
 zhSlug: "build-your-own-skill"
 ---
 
-Ever had this happen: you taught the AI the same thing eight times, and the next conversation it forgot everything again? Or you keep pasting the same giant prompt block every single time?
+Ever had this happen: you taught the AI the same thing eight times, and the next time you open a new chat, it's forgotten all of it. Or you end up pasting the same giant prompt over and over — it gets old fast.
 
-That's exactly what Skills solve. No jargon here — this guide uses one example all the way through, **building a "generate my git commit message" Skill**, starting from what a Skill even is, all the way to testing it and packaging it for someone else. By the end you'll be able to build your own first Skill by following along.
+That's what Skills are for. No jargon here — this guide sticks with one example start to finish, **building a "generate my git commit message" Skill**: what a Skill is, how to test it, how to package it for someone else. Follow along and you'll have your own first Skill.
 
-If you've already read my piece on [writing Agent Skills to the official spec](./agent-skills/), that one is the "error-correction manual" and this one is the "from-zero hands-on course" — they pair nicely.
+If you've already read my piece on [getting Agent Skills fields right](./agent-skills/), that one covers "how to write the fields correctly," this one covers "how to build one from scratch" — they go well together.
 
 ## 1. What exactly is a Skill?
 
@@ -26,7 +26,7 @@ Here's the analogy. Picture the AI as a new intern:
 - **A Skill** is a job manual you wrote for them, sitting on a bookshelf (the Skill directory). The spine has a title and a one-line summary (`name` and `description`). They glance at the shelf, and if the summary looks relevant to the task at hand, they pull the whole book out to read it.
 - **MCP** is the tools and systems you hook them up to — your Git system, a database. The manual (Skill) teaches them **how to use** those tools to finish a complex task. The two complement each other; neither replaces the other.
 
-The magic is in that "glance at the summary" step. At startup, the AI **reads only the name and summary of every Skill**, not the full text. When a task actually matches, it loads the whole manual. This is called **progressive disclosure** — which is why you can install dozens or hundreds of Skills with almost no cost to its working memory (context).
+The trick is that "glance at the summary" step. At startup, the AI **reads only the name and summary of every Skill**, not the full text. When a task actually matches, it loads the whole manual. That's called **progressive disclosure** — in plain terms, only open the book when you need it — which is why you can install dozens or hundreds of Skills with almost no cost to its working memory (context).
 
 A Skill's folder looks like this:
 
@@ -50,9 +50,9 @@ Whatever the folder is called, the `name` inside `SKILL.md` must match exactly. 
 
 So `Commit Message Writer`, `-commit`, and `commit--writer` are all invalid. `commit-message-writer` is correct.
 
-### 2.2 Two required frontmatter fields, the rest optional
+### 2.2 The header block: two required fields, the rest optional
 
-`SKILL.md` starts with a YAML frontmatter block wrapped in `---`. Only two fields are required:
+`SKILL.md` starts with a short YAML block wrapped in `---` (officially called frontmatter). Only two fields are required:
 
 ```yaml
 ---
@@ -62,7 +62,7 @@ description: Generates commit messages that follow Conventional Commits based on
 ```
 
 - `name`: covered above.
-- `description`: **the single most important field** — we'll come back to it. It decides whether the AI ever uses your Skill.
+- `description`: **the one that matters most** — we'll come back to it. It decides whether the AI ever uses your Skill.
 
 Optional fields: `license`, `compatibility` (environment requirements, e.g. "requires Python 3.14 and uv"), `metadata` (custom key-values), and `allowed-tools` (pre-approved tools; experimental, support varies). **Most Skills need none of these — don't pad it out.**
 
@@ -70,17 +70,17 @@ Optional fields: `license`, `compatibility` (environment requirements, e.g. "req
 
 The classic beginner mistake is writing a dry feature line like `description: generates commit messages`. Then the AI never thinks to use it.
 
-A good description answers three things: **what it does + when to use it + how the user will phrase it.** And the official docs are blunt about a known AI weakness called "undertriggering" — it fails to use a Skill when it should. So write the description a little "sticky," listing the various phrasings:
+A good description answers three things: **what it does + when to use it + how the user will phrase it.** The official docs also point out a common AI habit: it fails to use a Skill when it should. So write the description a little "sticky," listing the various phrasings:
 
 ```yaml
 description: Generates commit messages that follow Conventional Commits based on staged git changes. Use when the user needs to write a commit message, commit code, describe a change, or mentions git commit. Even if the user doesn't say "follow the format," trigger this whenever they say "help me commit" or "write a commit message."
 ```
 
-One official caveat: **for very simple one-step tasks like "read this file," the AI usually won't trigger a Skill** — it can just do it directly. That doesn't mean your Skill is broken; complex, multi-step tasks trigger reliably. Pick substantial tasks when you test.
+One more heads-up: **for very simple one-step tasks like "read this file," the AI usually won't bother with a Skill** — it can just do it directly. That doesn't mean your Skill is broken; complex, multi-step tasks trigger reliably. Pick substantial tasks when you test.
 
 ### 2.4 How to write the body: explain the why, don't stack MUSTs
 
-Below the frontmatter is a Markdown body of written instructions. A few battle-tested habits:
+Below that header block is a Markdown body of written instructions. A few habits worth using:
 
 - **Use the imperative**: "Run `git diff`," "determine the change type" — not "you should run...".
 - **Explain the reason instead of piling on MUSTs.** Modern models are smart; telling them *why* beats ten bolded "MUST"s. A page full of `ALWAYS`/`NEVER` is a red flag.
@@ -89,7 +89,7 @@ Below the frontmatter is a Markdown body of written instructions. A few battle-t
 
 ### 2.5 Three loading levels — don't bloat the manual
 
-Progressive disclosure has three tiers, with rough "weights":
+The three levels, with rough "weights":
 
 | Tier | Content | When loaded | Budget |
 | --- | --- | --- | --- |
@@ -107,7 +107,7 @@ Enough rules. Let's build for real. Follow along and it'll click.
 
 ### Step 1: Get clear first (don't start writing yet)
 
-Answer four questions before you touch a file. This is the official skill-creator's first move, "capture intent":
+Answer four questions before you touch a file. This is the official skill-creator's first move — just getting clear on what you want:
 
 1. **What should it do?** — Generate a commit message from git changes.
 2. **When should it trigger?** — When the user says "help me commit," "write a commit," or "describe this change."
@@ -171,7 +171,7 @@ Team conventions vary by project; stuffing them into the body bloats `SKILL.md`.
 - Put the linked ticket on its own line at the end of the body: `Refs: #1234`.
 ```
 
-If a step is **deterministic, repetitive work** — formatting output, parsing a diff — write it as a script in `scripts/` and let the AI run it, rather than generating it token by token. The official docs are emphatic: executing code is cheaper, more reliable, and more deterministic than asking a language model to produce the same text. Such scripts should be self-contained, have helpful error messages, and handle edge cases gracefully.
+If a step is **fixed, repetitive work** — formatting output, parsing a diff — write it as a script in `scripts/` and let the AI run it, rather than generating it word by word. The official docs make the point: running code is cheaper and more reliable than asking a model to produce the same text. Such scripts should run on their own, give helpful error messages, and not fall over on edge cases.
 
 Your folder now looks like this:
 
@@ -182,7 +182,7 @@ commit-message-writer/
     └── conventions.md
 ```
 
-That's a minimal, well-structured, usable Skill. But **don't ship it yet — test it.**
+That's a usable Skill, put together cleanly. But **don't ship it yet — test it.**
 
 ## 4. Testing: how do you know it actually works?
 
@@ -222,7 +222,7 @@ Why the control? If "without the Skill" does just as well, your Skill adds nothi
 
 (If you're improving an existing Skill, the baseline should be the **old version** — snapshot it before you edit.)
 
-In Claude Code, the official skill-creator spins these up for you. In an environment without subagents like Claude.ai, run them by hand: read through `SKILL.md`, complete the test task following its instructions, and save results to a workspace.
+In Claude Code, the official skill-creator spins these up for you. In an environment without subagents to help, like Claude.ai, run them by hand: read through `SKILL.md`, complete the test task following its instructions, and save results to a workspace.
 
 ### Step 3: Draft assertions while runs are in progress
 
@@ -243,7 +243,7 @@ Once runs finish:
 3. **Generate a review page**: the official `generate_review.py` builds a web page with outputs and feedback on one side, quantitative comparison on the other. From iteration two onward it also shows the previous round.
 4. **Read feedback, improve, rerun** into `iteration-2/`, `iteration-3/`, and so on. Repeat until you're satisfied.
 
-The official docs stress one mindset here: **generalize from concrete feedback instead of patching individual tests.** A Skill is meant to be used thousands of times — if it only works for your handful of cases, it's useless. Did the AI independently write the same helper script in every test? Bake it into `scripts/`. Did a certain instruction make it take a detour? Delete that instruction.
+The official docs stress one thing here: **look for the common pattern in concrete feedback instead of patching individual tests.** A Skill is meant to be used thousands of times — if it only works for your handful of cases, it's useless. Did the AI independently write the same helper script in every test? Bake it into `scripts/`. Did a certain instruction make it take a detour? Delete that instruction.
 
 ### Step 5: Tune trigger accuracy separately
 
@@ -251,7 +251,7 @@ Once quality is good, there's one more dedicated job: **optimizing the descripti
 
 Create **20 queries**, half "should trigger" and half "should not" (official guidance: 8–10 each). The trick is to pick **near misses** for the negatives — queries that share keywords with your Skill but actually need something else. For the commit-message Skill, a good negative: "show me who changed this git log the most" — it mentions git but doesn't need a commit message. An absurd negative ("write a Fibonacci function") tests nothing.
 
-Split the set **60% train / 40% held-out**, run each query 3 times for a reliable trigger rate, let the AI rewrite the description based on failures, iterate up to 5 rounds, and finally **pick the best description by the held-out score** to avoid overfitting. In Claude Code this whole loop runs automatically via the `run_loop` script.
+Split the set **60% for tuning / 40% kept back to test with**, run each query 3 times for a reliable trigger rate, let the AI rewrite the description based on failures, iterate up to 5 rounds, and finally **pick the best description by the kept-back score** — so it learns the pattern instead of memorizing these few questions. In Claude Code this whole loop runs automatically via the `run_loop` script.
 
 ### When you can skip testing
 
@@ -261,7 +261,7 @@ If your Skill's output is **subjective** — writing style, design taste — obj
 
 Finish strong:
 
-**Validate the format.** Use the official `skills-ref` library to check that the frontmatter is valid and the naming is compliant:
+**Validate the format.** Use the official `skills-ref` library to check that the header block is valid and the naming is compliant:
 
 ```bash
 skills-ref validate ./commit-message-writer
@@ -273,9 +273,9 @@ skills-ref validate ./commit-message-writer
 python -m scripts.package_skill ./commit-message-writer
 ```
 
-**Audit before installing.** The official docs are firm on this: Skills can carry instructions *and* code, so a malicious Skill could introduce vulnerabilities or quietly exfiltrate data. **Install only from trusted sources**, and before installing, read through the files — especially code dependencies, bundled scripts, and any instruction to connect to external network addresses.
+**Take a look before you install.** The official docs make a point of this: Skills can carry instructions *and* code, so a malicious Skill could introduce vulnerabilities or quietly send your data out. **Install only from sources you trust**, and before installing, read through the files — especially code dependencies, bundled scripts, and any instruction to connect to external network addresses.
 
-## Final thoughts
+## Bottom line
 
 The main line of building a Skill from zero:
 
@@ -283,7 +283,7 @@ The main line of building a Skill from zero:
 2. **Write `SKILL.md`** — compliant `name`, sticky `description`, body that explains why and gives examples, under 500 lines;
 3. **Split resources** — detailed docs into `references/`, deterministic work into `scripts/`, templates into `assets/`;
 4. **Test twice** — with Skill vs without, write assertions, aggregate a benchmark, read feedback, iterate;
-5. **Tune triggering** — 20 queries to optimize the description, held-out set to prevent overfitting;
+5. **Tune triggering** — 20 queries to optimize the description, kept-back set so it doesn't just memorize;
 6. **Validate & package** — run `validate`, produce a `.skill`, and audit before sharing.
 
 One line to remember: **treat a Skill as a job manual for a smart new colleague who doesn't know your team yet** — explain the why, give plenty of examples, skip the fluff. The rest is handled by progressive disclosure and the testing loop.
@@ -292,6 +292,6 @@ One line to remember: **treat a Skill as a job manual for a smart new colleague 
 
 **Further reading**
 
-- [Agent Skills specification](https://agentskills.io/specification) — the authoritative source for fields and directory structure
+- [Agent Skills specification](https://agentskills.io/specification) — the authoritative source for how to write the fields and lay out the folder
 - [Anthropic's official skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator) — where this guide's testing workflow comes from, with the full scripts
-- [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) — engineering blog on progressive disclosure and iteration
+- [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) — engineering blog on progressive disclosure and iterating
