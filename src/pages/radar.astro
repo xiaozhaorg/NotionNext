@@ -1,0 +1,285 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import RightSidebar from "@/components/RightSidebar.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+
+const API = "https://radar.xiaozha.org";
+
+// 构建时拉取首屏数据（SEO 友好）；失败时降级为空，页面由客户端实时补齐
+let items: any[] = [];
+let stats: any = null;
+try {
+  const [itemsRes, statsRes] = await Promise.all([
+    fetch(`${API}/api/items?limit=24`),
+    fetch(`${API}/api/stats`),
+  ]);
+  if (itemsRes.ok) items = (await itemsRes.json()).items ?? [];
+  if (statsRes.ok) stats = await statsRes.json();
+} catch {
+  // 网络不可达时保留空首屏，客户端 fetch 会重试
+}
+
+const categoryNames: Record<string, string> = {
+  ai: "AI", game: "游戏", news: "资讯", vps: "主机", pan: "网盘", tech: "技术",
+  software: "软件", media: "媒体", lottery: "抽奖", goods: "好物", opensource: "开源",
+  finance: "金融", stock: "股票", hardware: "硬件", domain: "域名", cloud: "云计算",
+  offline: "线下", edu: "教育", invite: "邀请码", carpool: "拼车", dev: "开发",
+  trade: "交易", design: "设计", security: "安全", other: "其他",
+};
+const categories = (stats?.byCategory ?? []).map((c: any) => ({
+  key: c.category,
+  label: categoryNames[c.category] ?? c.category,
+  n: c.n,
+}));
+
+const total = stats?.totals?.total ?? 0;
+const last24h = stats?.totals?.last24h ?? 0;
+---
+
+<Layout
+  title={`福利雷达 | ${SITE.title}`}
+  description="每天自动抓取全网 AI 工具、优惠码、免费额度、VPS、网盘等福利资源，按分类整理，实时更新。"
+  altURL="/en/radar/"
+>
+  <Header />
+  <div class="layout">
+    <main>
+      <div class="radar-head">
+        <h1 class="page-title">🎁 福利雷达</h1>
+        <p class="page-desc">全网 AI 工具、优惠码、免费额度、VPS、网盘等福利，每天自动抓取整理。</p>
+        <div class="stat-row">
+          <span><strong>{total || "—"}</strong> 条收录</span>
+          <span class="dot"></span>
+          <span><strong>{last24h || "—"}</strong> 条 / 24 小时</span>
+          <span class="dot"></span>
+          <span>{categories.length || 25} 个分类</span>
+        </div>
+        <p class="source-note">数据来源：<a href={API} target="_blank" rel="noopener noreferrer">资源雷达</a> · 每 30 分钟自动更新</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="category-tabs" id="cat-tabs">
+          <button class="cat-tab active" data-cat="">全部</button>
+          {categories.map((c) => (
+            <button class="cat-tab" data-cat={c.key}>{c.label} <span class="cat-n">{c.n}</span></button>
+          ))}
+        </div>
+        <div class="search-row">
+          <input id="radar-search" type="search" placeholder="搜索标题、摘要或标签…" autocomplete="off" />
+          <span id="result-count" class="result-count"></span>
+        </div>
+      </div>
+
+      <div id="radar-list" class="radar-list">
+        {items.map((it) => (
+          <article class="deal-card" data-cat={it.category}>
+            <div class="deal-body">
+              <div class="deal-meta">
+                <span class="deal-cat">{categoryNames[it.category] ?? it.category}</span>
+                {it.is_free === 1 && <span class="badge-free">免费</span>}
+                {it.price && <span class="deal-price">{it.price}</span>}
+                <span class="dot"></span>
+                <span>{it.source_id}</span>
+                {it.published_at && <><span class="dot"></span><time>{new Date(it.published_at).toLocaleDateString("zh-CN", { month: "numeric", day: "numeric" })}</time></>}
+              </div>
+              <h2><a href={it.url} target="_blank" rel="noopener noreferrer">{it.title}</a></h2>
+              {it.summary && <p class="deal-desc">{it.summary}</p>}
+              {it.tags?.length > 0 && (
+                <div class="deal-tags">{it.tags.slice(0, 5).map((tag: string) => <span class="deal-tag">#{tag}</span>)}</div>
+              )}
+              {it.codes?.length > 0 && (
+                <div class="deal-codes">{it.codes.map((code: string) => <code>{code}</code>)}</div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div id="empty" class="empty" style={items.length ? "display:none" : ""}>暂无匹配结果，换个关键词试试。</div>
+      <div class="load-more-wrap">
+        <button id="load-more" class="load-more" disabled>加载更多</button>
+      </div>
+    </main>
+    <RightSidebar />
+  </div>
+  <Footer />
+</Layout>
+
+<script define:vars={{ API, categoryNames }}>
+  const listEl = document.getElementById("radar-list");
+  const tabsEl = document.getElementById("cat-tabs");
+  const searchEl = document.getElementById("radar-search");
+  const countEl = document.getElementById("result-count");
+  const emptyEl = document.getElementById("empty");
+  const moreBtn = document.getElementById("load-more");
+
+  const state = { cat: "", keyword: "", offset: 0, total: 0, loading: false };
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const catName = (k) => categoryNames[k] || k;
+
+  function cardHTML(it) {
+    const tags = (it.tags || []).slice(0, 5).map((t) => `<span class="deal-tag">#${esc(t)}</span>`).join("");
+    const codes = (it.codes || []).map((c) => `<code>${esc(c)}</code>`).join("");
+    const date = it.published_at ? new Date(it.published_at).toLocaleDateString("zh-CN", { month: "numeric", day: "numeric" }) : "";
+    return `<article class="deal-card" data-cat="${esc(it.category)}">
+      <div class="deal-body">
+        <div class="deal-meta">
+          <span class="deal-cat">${catName(it.category)}</span>
+          ${it.is_free === 1 ? '<span class="badge-free">免费</span>' : ""}
+          ${it.price ? `<span class="deal-price">${esc(it.price)}</span>` : ""}
+          <span class="dot"></span><span>${esc(it.source_id)}</span>
+          ${date ? `<span class="dot"></span><time>${date}</time>` : ""}
+        </div>
+        <h2><a href="${esc(it.url)}" target="_blank" rel="noopener noreferrer">${esc(it.title)}</a></h2>
+        ${it.summary ? `<p class="deal-desc">${esc(it.summary)}</p>` : ""}
+        ${tags ? `<div class="deal-tags">${tags}</div>` : ""}
+        ${codes ? `<div class="deal-codes">${codes}</div>` : ""}
+      </div>
+    </article>`;
+  }
+
+  function match(it) {
+    if (!state.keyword) return true;
+    const hay = [it.title, it.summary, (it.tags || []).join(" ")].join(" ").toLowerCase();
+    return hay.includes(state.keyword);
+  }
+
+  function render(items, append) {
+    const visible = items.filter(match);
+    if (!append) listEl.innerHTML = visible.map(cardHTML).join("");
+    else listEl.insertAdjacentHTML("beforeend", visible.map(cardHTML).join(""));
+    emptyEl.style.display = listEl.children.length ? "none" : "block";
+    countEl.textContent = state.total ? `共 ${state.total} 条` : "";
+    moreBtn.disabled = state.offset >= state.total;
+    moreBtn.textContent = state.offset >= state.total ? "已全部加载" : "加载更多";
+  }
+
+  async function load(append = false) {
+    if (state.loading) return;
+    state.loading = true;
+    moreBtn.disabled = true;
+    moreBtn.textContent = "加载中…";
+    try {
+      const params = new URLSearchParams({ limit: "24", offset: String(state.offset) });
+      if (state.cat) params.set("category", state.cat);
+      const res = await fetch(`${API}/api/items?${params}`);
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      state.total = data.total;
+      state.offset += (data.items || []).length;
+      render(data.items || [], append);
+    } catch {
+      if (!append) {
+        emptyEl.style.display = "block";
+        emptyEl.textContent = "实时数据暂不可用，显示的是最近一次构建时的快照。";
+      }
+    } finally {
+      state.loading = false;
+      moreBtn.disabled = state.offset >= state.total;
+      if (state.offset < state.total) moreBtn.textContent = "加载更多";
+      else if (state.total) moreBtn.textContent = "已全部加载";
+    }
+  }
+
+  tabsEl.addEventListener("click", (e) => {
+    const btn = e.target.closest(".cat-tab");
+    if (!btn || btn.dataset.cat === state.cat) return;
+    tabsEl.querySelectorAll(".cat-tab").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.cat = btn.dataset.cat;
+    state.offset = 0;
+    load(false);
+  });
+
+  let timer;
+  searchEl.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      state.keyword = searchEl.value.trim().toLowerCase();
+      const cards = [...listEl.children];
+      cards.forEach((c) => {
+        const t = c.querySelector("h2")?.textContent || "";
+        const d = c.querySelector(".deal-desc")?.textContent || "";
+        const tags = [...c.querySelectorAll(".deal-tag")].map((x) => x.textContent).join(" ");
+        c.style.display = !state.keyword || (t + d + tags).toLowerCase().includes(state.keyword) ? "" : "none";
+      });
+      emptyEl.style.display = cards.some((c) => c.style.display !== "none") ? "none" : "block";
+    }, 200);
+  });
+
+  moreBtn.addEventListener("click", () => load(true));
+
+  // 客户端实时刷新首屏（构建快照可能被 Cloudflare 缓存）
+  load(false);
+</script>
+
+<style>
+  .radar-head { margin-bottom: 1.5rem; }
+  .page-title { font-size: 1.35rem; font-weight: 700; margin: 0 0 0.5rem; }
+  .page-desc { color: var(--color-text-secondary); font-size: 0.9rem; margin: 0 0 0.75rem; line-height: 1.6; }
+  .stat-row { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--color-text-muted); }
+  .stat-row strong { color: var(--color-primary); font-size: 0.95rem; }
+  .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--color-text-disabled); }
+  .source-note { font-size: 0.75rem; color: var(--color-text-muted); margin: 0.5rem 0 0; }
+  .source-note a { color: var(--color-primary); text-decoration: none; }
+  .source-note a:hover { text-decoration: underline; }
+
+  .toolbar { margin-bottom: 1rem; }
+  .category-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.875rem; }
+  .cat-tab {
+    font-size: 0.78rem; padding: 0.3rem 0.7rem; border-radius: var(--radius-full);
+    border: 1px solid var(--color-border); background: var(--color-card);
+    color: var(--color-text-secondary); cursor: pointer; transition: all var(--transition-base);
+  }
+  .cat-tab:hover { border-color: rgba(var(--color-primary-rgb), 0.4); color: var(--color-primary); }
+  .cat-tab.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+  .cat-n { opacity: 0.7; font-size: 0.7rem; }
+  .search-row { display: flex; align-items: center; gap: 0.75rem; }
+  #radar-search {
+    flex: 1; max-width: 420px; padding: 0.5rem 0.875rem; font-size: 0.85rem;
+    border: 1px solid var(--color-border); border-radius: var(--radius-full);
+    background: var(--color-card); color: var(--color-text); outline: none;
+    transition: border-color var(--transition-base);
+  }
+  #radar-search:focus { border-color: var(--color-primary); }
+  .result-count { font-size: 0.75rem; color: var(--color-text-muted); }
+
+  .radar-list { display: flex; flex-direction: column; gap: 0.625rem; }
+  .deal-card {
+    background: var(--color-card); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-xs);
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-base);
+  }
+  .deal-card:hover { border-color: rgba(var(--color-primary-rgb), 0.3); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .deal-body { padding: 0.85rem 1.1rem; }
+  .deal-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 0.4rem; }
+  .deal-cat { color: var(--color-primary); font-weight: 600; }
+  .badge-free { background: rgba(34, 197, 94, 0.12); color: #16a34a; padding: 0.05rem 0.4rem; border-radius: var(--radius-full); font-weight: 600; }
+  .deal-price { color: #e11d48; font-weight: 600; }
+  .deal-card h2 { font-size: 0.95rem; font-weight: 700; line-height: 1.5; margin: 0 0 0.35rem; }
+  .deal-card h2 a { color: var(--color-text); text-decoration: none; transition: color var(--transition-base); }
+  .deal-card h2 a:hover { color: var(--color-primary); }
+  .deal-desc { font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.6; margin: 0 0 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .deal-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .deal-tag { font-size: 0.7rem; color: var(--color-text-muted); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 0.05rem 0.45rem; }
+  .deal-codes { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .deal-codes code { font-size: 0.72rem; background: rgba(var(--color-primary-rgb), 0.08); color: var(--color-primary); padding: 0.1rem 0.45rem; border-radius: var(--radius-sm); }
+
+  .empty { text-align: center; color: var(--color-text-muted); padding: 2rem 0; font-size: 0.85rem; }
+  .load-more-wrap { display: flex; justify-content: center; padding: 1.25rem 0 0.5rem; }
+  .load-more {
+    padding: 0.5rem 1.5rem; font-size: 0.85rem; border-radius: var(--radius-full);
+    border: 1px solid var(--color-border); background: var(--color-card); color: var(--color-text-secondary);
+    cursor: pointer; transition: all var(--transition-base);
+  }
+  .load-more:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+  .load-more:disabled { opacity: 0.55; cursor: default; }
+
+  @media (max-width: 640px) {
+    .page-desc { font-size: 0.83rem; }
+    .deal-body { padding: 0.75rem 0.875rem; }
+    .deal-card h2 { font-size: 0.9rem; }
+  }
+</style>
