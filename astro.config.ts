@@ -6,6 +6,8 @@ import { defineConfig } from "astro/config";
 import sitemap, { ChangeFreqEnum } from "@astrojs/sitemap";
 import type { SitemapItem } from "@astrojs/sitemap";
 import pagefind from "astro-pagefind";
+import { satteri } from "@astrojs/markdown-satteri";
+import { defineHastPlugin } from "satteri";
 import { SITE } from "./src/config";
 
 const SRC = path.join(path.dirname(fileURLToPath(import.meta.url)), "src", "content");
@@ -67,9 +69,35 @@ for (const [dir, prefix] of [
   }
 }
 
+/** 给正文里指向外部站点的链接统一加 target="_blank" 与安全 rel；站内相对链接不动 */
+const externalLinks = defineHastPlugin({
+  name: "external-links",
+  element: {
+    filter: ["a"],
+    visit(node, ctx) {
+      const href = node.properties?.href;
+      if (typeof href !== "string" || !/^https?:\/\//i.test(href)) return;
+      ctx.setProperty(node, "target", "_blank");
+      const rel = node.properties?.rel;
+      const list: string[] = Array.isArray(rel)
+        ? rel.map(String)
+        : rel
+          ? String(rel).split(/\s+/)
+          : [];
+      for (const token of ["noopener", "noreferrer"]) {
+        if (!list.includes(token)) list.push(token);
+      }
+      ctx.setProperty(node, "rel", list.join(" "));
+    },
+  },
+});
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.url,
+  markdown: {
+    processor: satteri({ hastPlugins: [externalLinks] }),
+  },
   i18n: {
     defaultLocale: "zh",
     locales: ["zh", "en"],
