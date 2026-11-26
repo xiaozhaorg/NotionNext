@@ -650,5 +650,13 @@
   "build-your-own-skill-en": {
     "headline": "Build Your First Skill",
     "subhead": "Definition, spec, testing — end to end"
+  },
+  "freebie-radar": {
+    "headline": "全网福利，一页刷完",
+    "subhead": "8000+ 条 · 卖号帖自动踢出"
+  },
+  "freebie-radar-en": {
+    "headline": "All the Freebies, One Page",
+    "subhead": "8,000+ deals · resellers filtered"
   }
 }
