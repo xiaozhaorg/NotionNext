@@ -115,6 +115,13 @@ const last24h = stats?.totals?.last24h ?? 0;
   const emptyEl = document.getElementById("empty");
   const moreBtn = document.getElementById("load-more");
 
+  // Dynamically rendered cards lack Astro's scoped attribute; restore it to reuse this page's styles.
+  const cidAttr = [...listEl.attributes].find((a) => a.name.startsWith("data-astro-cid-"));
+  function applyScoped(root) {
+    if (!cidAttr) return;
+    [root, ...root.querySelectorAll("*")].forEach((n) => n.setAttribute(cidAttr.name, cidAttr.value));
+  }
+
   const state = { cat: "", keyword: "", offset: 0, total: 0, loading: false };
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const catName = (k) => categoryNames[k] || k;
@@ -141,8 +148,14 @@ const last24h = stats?.totals?.last24h ?? 0;
   }
 
   function render(items, append) {
-    if (!append) listEl.innerHTML = items.map(cardHTML).join("");
-    else listEl.insertAdjacentHTML("beforeend", items.map(cardHTML).join(""));
+    if (!append) {
+      listEl.innerHTML = items.map(cardHTML).join("");
+      applyScoped(listEl);
+    } else {
+      const before = listEl.children.length;
+      listEl.insertAdjacentHTML("beforeend", items.map(cardHTML).join(""));
+      for (let i = before; i < listEl.children.length; i++) applyScoped(listEl.children[i]);
+    }
     emptyEl.style.display = listEl.children.length ? "none" : "block";
     countEl.textContent = state.total ? `${state.total} deals` : "";
     moreBtn.disabled = state.offset >= state.total;
