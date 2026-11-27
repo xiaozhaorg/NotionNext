@@ -18,7 +18,7 @@ const zh = {
   nav_home: "首页",
   nav_tags: "标签",
   nav_archive: "归档",
-  nav_radar: "福利雷达",
+  nav_radar: "福利",
   nav_about: "关于",
 
   // Home
@@ -95,7 +95,7 @@ const en = {
   nav_home: "Home",
   nav_tags: "Tags",
   nav_archive: "Archive",
-  nav_radar: "Deal Radar",
+  nav_radar: "Deals",
   nav_about: "About",
 
   // Home
