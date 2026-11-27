@@ -37,7 +37,7 @@ It loads 24 items at a time — click "Load more" for the next batch. The build 
 
 Under the hood is the open-source [freebie-radar](https://github.com/ZiChuanLan/freebie-radar) project, around 2,900 stars at the time of writing. Its collectors watch 100+ sources and run every 30 minutes, pulling deals out of forums, communities, and vendor pages, then removing duplicates and garbage text and sorting everything into categories.
 
-There are over 8,000 items in the database now.
+What you see on the page is the latest collection round, refreshed every 30 minutes.
 
 ## Where it stops
 
@@ -47,7 +47,7 @@ There are over 8,000 items in the database now.
 
 ## One last thing
 
-The upstream project also supports Telegram push notifications — I left that off, because 8,000+ items a day would bury your phone.
+The upstream project also supports Telegram push notifications — I left that off, because that much data would bury your phone.
 
 If you want to build your own, start with the official repo's deployment docs. If you just want the freebies, the blog page is enough.
 
